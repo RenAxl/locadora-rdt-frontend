@@ -6,17 +6,19 @@ import { AppComponent } from './app.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TableModule } from 'primeng/table';
+import { SharedModule } from './shared/shared.module';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
      BrowserAnimationsModule, 
-    TableModule 
+    TableModule ,
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]

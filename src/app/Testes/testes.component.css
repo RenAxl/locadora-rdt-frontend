@@ -1,0 +1,185 @@
+/* ============================== */
+/*         NAVBAR (TOPBAR)        */
+/* ============================== */
+
+.topbar {
+  padding: 0.55rem 1.2rem; /* navbar compacta */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, #0a1d4d, #0f2d73, #12398a);
+  backdrop-filter: blur(10px);
+}
+
+/* CONTORNO PRETO + TEXTO BRANCO */
+.topbar-title,
+.topbar-subtitle,
+.user-name,
+.user-role {
+  color: #fff;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000,
+    -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+/* ============================== */
+/*          ÁREA ESQUERDA         */
+/* ============================== */
+
+.topbar-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.topbar-title {
+  font-size: 1.05rem;
+  margin: 0;
+  font-weight: 700;
+}
+
+.topbar-subtitle {
+  margin: 0;
+  font-size: 0.75rem;
+}
+
+/* ============================== */
+/*          ÁREA DIREITA          */
+/* ============================== */
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+}
+
+/* ============================== */
+/*        BLOCO DO USUÁRIO        */
+/* ============================== */
+
+.user-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.28rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-size: 0.8rem;
+}
+
+.user-role {
+  font-size: 0.65rem;
+  opacity: 0.9;
+}
+
+/* ============================== */
+/*      VISIBILIDADE DESKTOP      */
+/* ============================== */
+
+.user-mobile-block {
+  display: none;
+}
+
+.desktop-only {
+  display: flex;
+}
+
+/* ============================== */
+/*    RESPONSIVIDADE — CELULAR    */
+/* ============================== */
+/* SOMENTE TELAS <= 600px         */
+/* ============================== */
+
+@media (max-width: 600px) {
+  .topbar {
+    padding: 0.7rem;
+    flex-wrap: wrap;
+
+    /* CENTRALIZA TUDO NO CELULAR */
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* RIGHT primeiro — AGORA CENTRALIZADO */
+  .topbar-right {
+    order: 1;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    justify-content: center; /* CENTRALIZA bloco */
+  }
+
+  /* LEFT embaixo — CENTRALIZADO */
+  .topbar-left {
+    order: 2;
+    width: 100%;
+    align-items: center;   /* CENTRALIZA os textos */
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* mostrar usuário no topo no mobile */
+  .user-mobile-block {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+    width: 100%;
+  }
+
+  /* esconde o chip do desktop */
+  .desktop-only {
+    display: none;
+  }
+
+  .topbar-title {
+    font-size: 1rem;
+  }
+
+  .topbar-subtitle {
+    font-size: 0.7rem;
+  }
+}
+
+/* ============================== */
+/*  RESPONSIVIDADE — CELULAR PEQ  */
+/* ============================== */
+
+@media (max-width: 480px) {
+  .topbar {
+    padding: 0.6rem;
+  }
+
+  .avatar {
+    width: 24px;
+    height: 24px;
+    font-size: 0.7rem;
+  }
+
+  .user-name {
+    font-size: 0.75rem;
+  }
+
+  .user-role {
+    font-size: 0.6rem;
+  }
+}

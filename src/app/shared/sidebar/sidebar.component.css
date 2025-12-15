@@ -6,9 +6,13 @@
   left: 0;
   top: 0;
   bottom: 0;
-  z-index: 100;
+  z-index: 1050;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.4);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.sidebar-mobile {
+  --bs-offcanvas-width: 220px;
 }
 
 .sidebar-header {
@@ -16,6 +20,8 @@
   padding: 0 1rem;
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex-direction: row;
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
@@ -34,11 +40,21 @@
   font-weight: 700;
   white-space: nowrap;
   color: #fff;
+  margin-bottom: 0;
   text-shadow:
     -1px -1px 0 #000,
      1px -1px 0 #000,
     -1px  1px 0 #000,
      1px  1px 0 #000;
+}
+
+.sidebar-toggle {
+  display: none;
+  align-self: flex-start;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.9rem;
+  border-color: rgba(255, 255, 255, 0.6);
+  color: #fff;
 }
 
 .sidebar-menu .header {
@@ -79,8 +95,9 @@
   );
   font-size: 0.72rem;
   letter-spacing: 0.16em;
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.15),
-              0 4px 10px rgba(0,0,0,0.45);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.15),
+    0 4px 10px rgba(0,0,0,0.45);
   color: #fff;
   text-shadow:
     -1px -1px 0 #000,
@@ -104,16 +121,16 @@
   padding-left: 1.2rem;
 }
 
-.sidebar-menu .treeview > a:hover span,
-.sidebar-menu .treeview > a:hover i {
+.sidebar-menu .treeview > a:hover :is(span, i),
+.treeview-menu a:hover :is(span, i) {
   color: #ffffff !important;
   text-shadow:
-      0 0 4px rgba(255, 255, 255, 0.8),
-      0 0 6px rgba(255, 255, 255, 0.5),
-      -1px -1px 0 #000,
-       1px -1px 0 #000,
-      -1px  1px 0 #000,
-       1px  1px 0 #000;
+    0 0 4px rgba(255, 255, 255, 0.8),
+    0 0 6px rgba(255, 255, 255, 0.5),
+    -1px -1px 0 #000,
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000;
 }
 
 .treeview-menu {
@@ -134,18 +151,6 @@
   border-left: 2px solid rgba(255,255,255,0.7);
 }
 
-.treeview-menu a:hover span,
-.treeview-menu a:hover i {
-  color: #ffffff !important;
-  text-shadow:
-      0 0 4px rgba(255, 255, 255, 0.8),
-      0 0 6px rgba(255, 255, 255, 0.5),
-      -1px -1px 0 #000,
-       1px -1px 0 #000,
-      -1px  1px 0 #000,
-       1px  1px 0 #000;
-}
-
 .submenu-toggle-icon {
   font-size: 0.9rem;
   transition: opacity 0.2s ease;
@@ -156,11 +161,60 @@ a:not(.collapsed) .submenu-toggle-icon.closed { opacity: 0; }
 a.collapsed .submenu-toggle-icon.open { opacity: 0; }
 a:not(.collapsed) .submenu-toggle-icon.open { opacity: 1; }
 
-@media (max-width: 991.98px) {
-  .sidebar { width: 220px !important; }
-}
-
 @media (max-width: 767.98px) {
-  .sidebar { width: 220px !important; }
-  .sidebar-nav { max-height: calc(100vh - 56px); overflow-y: auto; }
+  #sidebarOffcanvas.offcanvas {
+    top: 56px;
+    height: calc(100vh - 56px);
+    position: fixed;
+  }
+
+  #sidebarOffcanvas .sidebar-header {
+    height: auto;
+    padding: 14px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+  }
+
+  #sidebarOffcanvas .sidebar-header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      rgba(255,255,255,0.05),
+      rgba(255,255,255,0.35),
+      rgba(255,255,255,0.05)
+    );
+  }
+
+  #sidebarOffcanvas .sidebar-header > .d-flex.align-items-center.mb-1.w-100 {
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.06);
+    min-width: 0;
+  }
+
+  #sidebarOffcanvas .system-name {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.98rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  #sidebarOffcanvas .btn-close {
+    margin-left: 10px;
+    transform: scale(0.9);
+  }
+
+  #sidebarOffcanvas .sidebar-nav {
+    max-height: calc(100vh - 56px - 120px);
+    overflow-y: auto;
+  }
 }

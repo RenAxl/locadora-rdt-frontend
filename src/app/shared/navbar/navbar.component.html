@@ -1,54 +1,61 @@
 <nav class="navbar main-navbar shadow">
-  <div class="container-fluid h-100 d-flex justify-content-end align-items-center">
+  <div class="container-fluid h-100 d-flex align-items-center">
 
-    <ul class="navbar-nav align-items-center mb-0 h-100">
+    <button
+      class="btn navbar-hamburger"
+      type="button"
+      aria-label="Menu"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#sidebarOffcanvas"
+      aria-controls="sidebarOffcanvas"
+    >
+      <i class="fa-solid fa-bars"></i>
+    </button>
 
-      <li class="nav-item dropdown profile-area h-100">
+    <a
+      class="profile-trigger ms-auto d-flex align-items-center h-100"
+      href="javascript:void(0)"
+      (click)="userMenu.toggle($event)"
+      aria-haspopup="true"
+      aria-expanded="false"
+    >
+      <span class="profile-img-wrapper me-2">
+        <img src="assets/images/Axl93.jpeg" alt="Foto" class="profile-img">
+      </span>
 
-        <a 
-          class="nav-link dropdown-toggle d-flex align-items-center h-100"
-          href="#"
-          id="userDropdown"
-          role="button"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          <div class="profile-img-wrapper me-2">
-            <img src="assets/images/Axl93.jpeg" alt="Foto" class="profile-img">
-          </div>
+      <span class="user-details text-start">
+        <span class="user-name">Renan</span>
+        <span class="user-role">Administrador</span>
+      </span>
 
-          <div class="user-details text-start">
-            <div class="user-name">Renan</div>
-            <div class="user-role">Administrador</div>
-          </div>
+      <i class="fa fa-caret-down ms-2 dropdown-arrow" aria-hidden="true"></i>
+    </a>
 
-          <i class="fa fa-caret-down ms-2 dropdown-arrow"></i>
+    <p-overlayPanel
+      #userMenu
+      [dismissable]="true"
+      [appendTo]="'body'"
+      styleClass="user-overlay user-overlay-small"
+    >
+      <nav class="overlay-menu" aria-label="Menu do usuário">
+        <a class="overlay-item" href="#" data-bs-toggle="modal" data-bs-target="#modalConfig">
+          <i class="fa fa-cog" aria-hidden="true"></i>
+          <span>Configurações</span>
         </a>
 
-        <ul class="dropdown-menu dropdown-menu-end user-dropdown" aria-labelledby="userDropdown">
-          <li>
-            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalConfig">
-              <i class="fa fa-cog me-2"></i> Configurações
-            </a>
-          </li>
+        <a class="overlay-item" href="#" data-bs-toggle="modal" data-bs-target="#modalPerfil">
+          <i class="fa fa-user" aria-hidden="true"></i>
+          <span>Perfil</span>
+        </a>
 
-          <li>
-            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalPerfil">
-              <i class="fa fa-user me-2"></i> Perfil
-            </a>
-          </li>
+        <div class="overlay-divider" role="separator"></div>
 
-          <li><hr class="dropdown-divider"></li>
-
-          <li>
-            <a class="dropdown-item" href="logout.php">
-              <i class="fa fa-sign-out me-2"></i> Sair
-            </a>
-          </li>
-        </ul>
-
-      </li>
-    </ul>
+        <a class="overlay-item logout" href="logout.php">
+          <i class="fa fa-sign-out" aria-hidden="true"></i>
+          <span>Sair</span>
+        </a>
+      </nav>
+    </p-overlayPanel>
 
   </div>
 </nav>

@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+
 
 
 
@@ -11,7 +13,8 @@ import { NavbarComponent } from './navbar/navbar.component';
     NavbarComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    OverlayPanelModule
   ],
     exports:[
     SidebarComponent,

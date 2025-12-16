@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -14,7 +15,9 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
   ],
   imports: [
     CommonModule,
-    OverlayPanelModule
+    OverlayPanelModule,
+    
+    RouterModule
   ],
     exports:[
     SidebarComponent,

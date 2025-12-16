@@ -115,14 +115,20 @@
   transition: all 0.25s ease-in-out;
 }
 
-.sidebar-menu .treeview > a:hover {
+.sidebar-menu .treeview > a:hover,
+.sidebar-menu .treeview > a.active,
+.sidebar-menu .treeview > a[aria-current="page"] {
   background: rgba(255, 255, 255, 0.18);
   border-left-color: rgba(255, 255, 255, 0.85);
   padding-left: 1.2rem;
 }
 
 .sidebar-menu .treeview > a:hover :is(span, i),
-.treeview-menu a:hover :is(span, i) {
+.sidebar-menu .treeview > a.active :is(span, i),
+.sidebar-menu .treeview > a[aria-current="page"] :is(span, i),
+.treeview-menu a:hover :is(span, i),
+.treeview-menu a.active :is(span, i),
+.treeview-menu a[aria-current="page"] :is(span, i) {
   color: #ffffff !important;
   text-shadow:
     0 0 4px rgba(255, 255, 255, 0.8),
@@ -145,7 +151,9 @@
   transition: all 0.25s ease-in-out;
 }
 
-.treeview-menu a:hover {
+.treeview-menu a:hover,
+.treeview-menu a.active,
+.treeview-menu a[aria-current="page"] {
   background: rgba(255, 255, 255, 0.20);
   padding-left: 1.6rem;
   border-left: 2px solid rgba(255,255,255,0.7);

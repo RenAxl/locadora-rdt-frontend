@@ -1,0 +1,100 @@
+<div class="user-card">
+  <div class="grid">
+    <div class="col-12">
+
+      <p-table [value]="users">
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>Permissão</th>
+            <th>Foto</th>
+            <th class="actions"></th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-user>
+          <tr>
+
+            <td class="columns">
+              <span class="p-column-title">Nome:</span>
+              {{ user.name }}
+            </td>
+
+            <td class="columns">
+              <span class="p-column-title">E-mail:</span>
+              {{ user.email }}
+            </td>
+
+            <td class="columns">
+              <span class="p-column-title">Permissões:</span>
+              <div *ngFor="let role of user.roles">
+                {{ role.authority }}
+              </div>
+            </td>
+
+            <td class="columns col-photo">
+              <span class="p-column-title">Foto:</span>
+              <img
+                [src]="user.photo"
+                alt="Foto do usuário"
+                class="user-photo"
+              />
+            </td>
+
+            <td class="col-actions">
+              <div class="actions-wrap">
+
+                <a
+                  pButton
+                  class="p-button-rounded p-button-text"
+                  icon="pi pi-pencil"
+                  pTooltip="Editar usuário"
+                  tooltipPosition="top"
+                  [routerLink]="['/admin/users', user.id]"
+                ></a>
+
+                <button
+                  pButton
+                  class="p-button-rounded p-button-text p-button-danger"
+                  icon="pi pi-trash"
+                  pTooltip="Excluir usuário"
+                  tooltipPosition="top"
+                ></button>
+
+                <button
+                  pButton
+                  class="p-button-rounded p-button-text"
+                  icon="pi pi-eye"
+                  pTooltip="Detalhamento do usuário"
+                  tooltipPosition="top"
+                ></button>
+
+                <button
+                  pButton
+                  class="p-button-rounded p-button-text p-button-warning"
+                  [icon]="user.active ? 'pi pi-ban' : 'pi pi-check'"
+                  pTooltip="Ativar / Desativar Usuário"
+                  tooltipPosition="top"
+                ></button>
+
+                <button
+                  pButton
+                  class="p-button-rounded p-button-text"
+                  icon="pi pi-key"
+                  pTooltip="Dar permissões"
+                  tooltipPosition="top"
+                ></button>
+
+              </div>
+            </td>
+
+          </tr>
+        </ng-template>
+
+      </p-table>
+
+    </div>
+  </div>
+</div>

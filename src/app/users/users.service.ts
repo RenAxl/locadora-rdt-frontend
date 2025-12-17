@@ -1,20 +1,23 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { AppConstants } from '../app-constant';
+import { Pagination } from '../core/models/Pagination';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UsersService {
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
+  list(pagination: Pagination): Observable<any> {
+    let params = new HttpParams()
+      .set('page', pagination.page)
+      .set('linesPerPage', pagination.linesPerPage)
+      .set('direction', String(pagination.direction))
+      .set('orderBy', String(pagination.orderBy));
 
-    list(): Observable<any> {
-
- 
-    return this.http.get<any>(AppConstants.backendServer + 'users');
+    return this.http.get<any>(AppConstants.backendServer + 'users', { params });
   }
-
 }

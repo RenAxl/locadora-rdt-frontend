@@ -23,6 +23,5 @@ import { UsersService } from './users.service';
 
     UsersRoutingModule
   ],
-  providers: [UsersService],
 })
 export class UsersModule { }

@@ -4,6 +4,12 @@
 
       <p-table 
         [value]="users"
+        [responsive]="true"
+        [paginator]="true"
+        [rows]="pagination.linesPerPage"
+        [lazy]="true"
+        [totalRecords]="totalElements"
+        (onLazyLoad)="changePage($event)"
         #userTable
         >
 

@@ -2,7 +2,10 @@
   <div class="grid">
     <div class="col-12">
 
-      <p-table [value]="users">
+      <p-table 
+        [value]="users"
+        #userTable
+        >
 
         <ng-template pTemplate="header">
           <tr>
@@ -28,16 +31,14 @@
             </td>
 
             <td class="columns">
-              <span class="p-column-title">Permissões:</span>
-              <div *ngFor="let role of user.roles">
-                {{ role.authority }}
-              </div>
+              <span class="p-column-title">Permissão:</span>
+                {{ user.profile }}
             </td>
 
             <td class="columns col-photo">
               <span class="p-column-title">Foto:</span>
               <img
-                [src]="user.photo"
+                src="assets/images/sem-foto.jpg"
                 alt="Foto do usuário"
                 class="user-photo"
               />
@@ -52,7 +53,6 @@
                   icon="pi pi-pencil"
                   pTooltip="Editar usuário"
                   tooltipPosition="top"
-                  [routerLink]="['/admin/users', user.id]"
                 ></a>
 
                 <button

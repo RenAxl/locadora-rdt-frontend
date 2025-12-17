@@ -1,5 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+
+import { UsersService } from '../users.service';
+import { User } from 'src/app/core/models/User';
 import { Table } from 'primeng/table';
+
 
 @Component({
   selector: 'app-user-list',
@@ -8,58 +12,24 @@ import { Table } from 'primeng/table';
 })
 export class UserListComponent implements OnInit {
 
-  users = [
-    {
-      id: 1,
-      name: 'Renan Duarte',
-      email: 'renan.duarte@locagames.com',
-      photo: 'assets/images/sem-foto.jpg',
-      roles: [
-        { authority: 'ADMIN' }
-      ]
-    },
-    {
-      id: 2,
-      name: 'Larissa Menezes',
-      email: 'larissa.menezes@locagames.com',
-      photo: 'assets/images/sem-foto.jpg',
-      roles: [
-        { authority: 'ATENDENTE' }
-      ]
-    },
-    {
-      id: 3,
-      name: 'João Pedro Silva',
-      email: 'joao.pedro@locagames.com',
-      photo: 'assets/images/sem-foto.jpg',
-      roles: [
-        { authority: 'OPERADOR' }
-      ]
-    },
-    {
-      id: 4,
-      name: 'Ana Martins',
-      email: 'ana.martins@locagames.com',
-      photo: 'assets/images/sem-foto.jpg',
-      roles: [
-        { authority: 'GERENTE' }
-      ]
-    },
-    {
-      id: 5,
-      name: 'Bruno Rocha',
-      email: 'bruno.rocha@locagames.com',
-      photo: 'assets/images/sem-foto.jpg',
-      roles: [
-        { authority: 'CAIXA' }
-      ]
-    }
-  ];
+  users: User[] = [];
 
+   @ViewChild('userTable') grid!: Table;
 
-  constructor() { }
+  constructor(private userService: UsersService) { }
 
   ngOnInit(): void {
+    this.list();
+  }
+
+    list(): void {
+    
+    this.userService
+      .list()
+      .subscribe((data) => {
+        console.log(data);
+        this.users = data;
+      });
   }
 
 }

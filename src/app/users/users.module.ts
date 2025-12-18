@@ -8,6 +8,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { UsersRoutingModule } from './users-routing.module';
 import { UserListComponent } from './user-list/user-list.component';
 import { UsersService } from './users.service';
+import { SharedModule } from '../shared/shared.module';
 
 
 
@@ -20,6 +21,7 @@ import { UsersService } from './users.service';
     TableModule,
      ButtonModule,
      TooltipModule,
+     SharedModule,
 
     UsersRoutingModule
   ],

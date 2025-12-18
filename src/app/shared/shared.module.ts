@@ -1,9 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
-import { RouterModule } from '@angular/router';
+import { NameFilterComponent } from './name-filter/name-filter.component';
 
 
 
@@ -11,17 +14,20 @@ import { RouterModule } from '@angular/router';
 @NgModule({
   declarations: [
     SidebarComponent,
-    NavbarComponent
+    NavbarComponent,
+    NameFilterComponent
   ],
   imports: [
     CommonModule,
     OverlayPanelModule,
+    FormsModule,
     
     RouterModule
   ],
     exports:[
     SidebarComponent,
-    NavbarComponent
+    NavbarComponent, 
+    NameFilterComponent
   ]
 })
 export class SharedModule { }

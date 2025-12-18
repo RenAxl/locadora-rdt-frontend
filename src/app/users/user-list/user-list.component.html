@@ -1,8 +1,14 @@
+<div class="user-filter-container">
+<app-name-filter 
+ text="Digite o nome do usuário"
+> 
+</app-name-filter>
+</div>
+
 <div class="user-card">
   <div class="grid">
     <div class="col-12">
-
-      <p-table 
+      <p-table
         [value]="users"
         [responsive]="true"
         [paginator]="true"
@@ -11,8 +17,7 @@
         [totalRecords]="totalElements"
         (onLazyLoad)="changePage($event)"
         #userTable
-        >
-
+      >
         <ng-template pTemplate="header">
           <tr>
             <th>Nome</th>
@@ -25,7 +30,6 @@
 
         <ng-template pTemplate="body" let-user>
           <tr>
-
             <td class="columns">
               <span class="p-column-title">Nome:</span>
               {{ user.name }}
@@ -38,7 +42,7 @@
 
             <td class="columns">
               <span class="p-column-title">Permissão:</span>
-                {{ user.profile }}
+              {{ user.profile }}
             </td>
 
             <td class="columns col-photo">
@@ -52,7 +56,6 @@
 
             <td class="col-actions">
               <div class="actions-wrap">
-
                 <a
                   pButton
                   class="p-button-rounded p-button-text"
@@ -92,15 +95,11 @@
                   pTooltip="Dar permissões"
                   tooltipPosition="top"
                 ></button>
-
               </div>
             </td>
-
           </tr>
         </ng-template>
-
       </p-table>
-
     </div>
   </div>
 </div>

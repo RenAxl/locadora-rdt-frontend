@@ -18,6 +18,8 @@ export class UserListComponent implements OnInit {
 
   totalElements: number = 0;
 
+  filterName: string = '';
+
   @ViewChild('userTable') grid!: Table;
 
   constructor(private userService: UsersService) {}
@@ -28,7 +30,7 @@ export class UserListComponent implements OnInit {
     this.pagination.page = page;
 
     this.userService
-      .list(this.pagination)
+      .list(this.pagination, this.filterName)
       .subscribe((data) => {
         this.users = data.content;
         this.totalElements = data.totalElements;
@@ -39,4 +41,11 @@ export class UserListComponent implements OnInit {
     const page = event!.first! / event!.rows!;
     this.list(page);
   }
+
+    searchUser(name: string) {
+    this.filterName = name;
+    this.list();
+  }
+
+  
 }

@@ -11,8 +11,9 @@ import { Pagination } from '../core/models/Pagination';
 export class UsersService {
   constructor(private http: HttpClient) {}
 
-  list(pagination: Pagination): Observable<any> {
+  list(pagination: Pagination, filterName: string): Observable<any> {
     let params = new HttpParams()
+      .set('name', filterName)
       .set('page', pagination.page)
       .set('linesPerPage', pagination.linesPerPage)
       .set('direction', String(pagination.direction))

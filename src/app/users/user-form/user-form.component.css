@@ -26,6 +26,21 @@
   font-weight: bold;
 }
 
+.select-wrapper {
+  position: relative;
+}
+
+.select-arrow {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 40px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23666' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 5.5l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 14px;
+}
+
 @media (min-width: 992px) {
   .user-form-buttons {
     justify-content: flex-end;

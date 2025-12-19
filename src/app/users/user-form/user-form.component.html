@@ -39,14 +39,19 @@
           />
         </div>
 
-        <div class="col-12 col-lg-6">
-          <input
-            pInputText
-            placeholder="Perfil"
-            type="text"
+        <div class="col-12 col-lg-6 select-wrapper">
+          <select
             name="profile"
-            class="form-control"
-          />
+            class="form-control select-arrow"
+            required
+            [(ngModel)]="user.profile"
+          >
+            <option value="" disabled>Selecione o perfil</option>
+
+            <option *ngFor="let profile of profiles" [value]="profile.value">
+              {{ profile.label }}
+            </option>
+          </select>
         </div>
 
         <div class="col-12">
@@ -65,7 +70,7 @@
           SALVAR
         </button>
 
-        <a routerLink="/admin/users/list" class="ms-3">
+        <a routerLink="/users/" class="ms-3">
           <button type="button" class="btn btn-outline-danger user-form-button">
             CANCELAR
           </button>

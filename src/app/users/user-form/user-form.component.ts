@@ -7,6 +7,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserFormComponent implements OnInit {
 
+  user: any = {
+    profile: '' // importante começar vazio
+  };
+
+  profiles = [
+    { label: 'Administrador', value: 'ADMINISTRADOR' },
+    { label: 'Gerente', value: 'GERENTE' },
+    { label: 'Atendente', value: 'ATENDENTE' },
+    { label: 'Financeiro', value: 'FINANCEIRO' },
+    { label: 'Cliente', value: 'CLIENTE' }
+  ];
+
   constructor() { }
 
   ngOnInit(): void {

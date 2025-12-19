@@ -1,9 +1,13 @@
 <div class="user-filter-container">
-<app-name-filter 
- text="Digite o nome do usuário"
- (search)="searchUser($event)"
-> 
-</app-name-filter>
+  <a routerLink="/users/create">
+    <button class="btn btn-primary text-white btn-crud-new">
+      NOVO USUÁRIO
+    </button>
+  </a>
+  <app-name-filter
+  text="Digite o nome do usuário"
+  (search)="searchUser($event)"
+></app-name-filter>
 </div>
 
 <div class="user-card">

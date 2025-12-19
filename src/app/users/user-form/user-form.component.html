@@ -1,0 +1,76 @@
+<div class="user-form-container">
+  <div class="user-card">
+    <form>
+      <div class="col-12">
+        <h1>Dados do Usuário</h1>
+      </div>
+
+      <div class="row g-3 user-form-inputs mt-2">
+        <div class="col-12 col-lg-6">
+          <input
+            pInputText
+            placeholder="Nome"
+            type="text"
+            name="name"
+            required
+            minlength="5"
+            class="form-control"
+          />
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <input
+            pInputText
+            placeholder="E-mail"
+            type="email"
+            name="email"
+            required
+            class="form-control"
+          />
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <input
+            pInputText
+            placeholder="Telefone"
+            type="text"
+            name="telephone"
+            class="form-control"
+          />
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <input
+            pInputText
+            placeholder="Perfil"
+            type="text"
+            name="profile"
+            class="form-control"
+          />
+        </div>
+
+        <div class="col-12">
+          <input
+            pInputText
+            placeholder="Endereço"
+            type="text"
+            name="address"
+            class="form-control"
+          />
+        </div>
+      </div>
+
+      <div class="user-form-buttons mt-4">
+        <button type="submit" class="btn btn-primary user-form-button">
+          SALVAR
+        </button>
+
+        <a routerLink="/admin/users/list" class="ms-3">
+          <button type="button" class="btn btn-outline-danger user-form-button">
+            CANCELAR
+          </button>
+        </a>
+      </div>
+    </form>
+  </div>
+</div>

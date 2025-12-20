@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { User } from 'src/app/core/models/User';
 
 @Component({
   selector: 'app-user-form',
@@ -7,8 +8,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserFormComponent implements OnInit {
 
-  user: any = {
-    profile: '' // importante começar vazio
+  user: User = {
+    profile: '' // começa vazio
   };
 
   profiles = [

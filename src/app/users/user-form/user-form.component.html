@@ -1,21 +1,35 @@
 <div class="user-form-container">
   <div class="user-card">
     <form>
-      <div class="col-12">
+      <div class="col-12 mb-3">
         <h1>Dados do Usuário</h1>
       </div>
 
-      <div class="row g-3 user-form-inputs mt-2">
+      <div class="row g-3 user-form-inputs">
         <div class="col-12 col-lg-6">
           <input
             pInputText
             placeholder="Nome"
             type="text"
             name="name"
+            [(ngModel)]="user.name"
+            #name="ngModel"
             required
             minlength="5"
             class="form-control"
           />
+
+          <app-message
+            [control]="name"
+            error="required"
+            text="Informe o nome completo do usuário"
+          ></app-message>
+
+          <app-message
+            [control]="name"
+            error="minlength"
+            text="Mínimo de {{ name.errors?.['minlength']?.requiredLength }} caracteres. Você digitou apenas {{ name.errors?.['minlength']?.actualLength }}"
+          ></app-message>
         </div>
 
         <div class="col-12 col-lg-6">
@@ -24,9 +38,17 @@
             placeholder="E-mail"
             type="email"
             name="email"
+            [(ngModel)]="user.email"
+            #email="ngModel"
             required
             class="form-control"
           />
+
+          <app-message
+            [control]="email"
+            error="required"
+            text="Informe o e-mail do usuário"
+          ></app-message>
         </div>
 
         <div class="col-12 col-lg-6">
@@ -35,23 +57,39 @@
             placeholder="Telefone"
             type="text"
             name="telephone"
+            [(ngModel)]="user.telephone"
+            #telephone="ngModel"
+            required
             class="form-control"
           />
+
+          <app-message
+            [control]="telephone"
+            error="required"
+            text="Informe o telefone do usuário"
+          ></app-message>
         </div>
 
         <div class="col-12 col-lg-6 select-wrapper">
           <select
             name="profile"
             class="form-control select-arrow"
-            required
             [(ngModel)]="user.profile"
+            #profile="ngModel"
+            required
           >
-            <option value="" disabled>Selecione o perfil</option>
+            <option value="" disabled selected>Selecione o perfil</option>
 
             <option *ngFor="let profile of profiles" [value]="profile.value">
               {{ profile.label }}
             </option>
           </select>
+
+          <app-message
+            [control]="profile"
+            error="required"
+            text="Selecione o perfil do usuário"
+          ></app-message>
         </div>
 
         <div class="col-12">
@@ -60,8 +98,17 @@
             placeholder="Endereço"
             type="text"
             name="address"
+            [(ngModel)]="user.address"
+            #address="ngModel"
+            required
             class="form-control"
           />
+
+          <app-message
+            [control]="address"
+            error="required"
+            text="Informe o endereço do usuário"
+          ></app-message>
         </div>
       </div>
 
@@ -70,7 +117,7 @@
           SALVAR
         </button>
 
-        <a routerLink="/users/" class="ms-3">
+        <a routerLink="/users/">
           <button type="button" class="btn btn-outline-danger user-form-button">
             CANCELAR
           </button>

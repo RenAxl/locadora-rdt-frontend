@@ -54,3 +54,13 @@
     margin-bottom: 0;
   }
 }
+
+@media (max-width: 767px) {
+  .btn-crud-new {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.85rem;
+    line-height: 1.1;
+    width: auto;
+    height: 40px;
+  }
+}

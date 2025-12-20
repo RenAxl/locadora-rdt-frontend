@@ -7,6 +7,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { NameFilterComponent } from './name-filter/name-filter.component';
+import { MessageComponent } from './message/message.component';
 
 
 
@@ -15,7 +16,8 @@ import { NameFilterComponent } from './name-filter/name-filter.component';
   declarations: [
     SidebarComponent,
     NavbarComponent,
-    NameFilterComponent
+    NameFilterComponent,
+    MessageComponent
   ],
   imports: [
     CommonModule,
@@ -27,7 +29,8 @@ import { NameFilterComponent } from './name-filter/name-filter.component';
     exports:[
     SidebarComponent,
     NavbarComponent, 
-    NameFilterComponent
+    NameFilterComponent,
+    MessageComponent
   ]
 })
 export class SharedModule { }

@@ -1,15 +1,20 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
+
 import { User } from 'src/app/core/models/User';
+import { UsersService } from '../users.service';
+import { MessageService } from 'primeng/api';
+import { ErrorHandlerService } from 'src/app/shared/error-handler.service';
 
 @Component({
   selector: 'app-user-form',
   templateUrl: './user-form.component.html',
-  styleUrls: ['./user-form.component.css']
+  styleUrls: ['./user-form.component.css'],
 })
 export class UserFormComponent implements OnInit {
-
   user: User = {
-    profile: '' // começa vazio
+    profile: '', // começa vazio
   };
 
   profiles = [
@@ -17,12 +22,33 @@ export class UserFormComponent implements OnInit {
     { label: 'Gerente', value: 'GERENTE' },
     { label: 'Atendente', value: 'ATENDENTE' },
     { label: 'Financeiro', value: 'FINANCEIRO' },
-    { label: 'Cliente', value: 'CLIENTE' }
+    { label: 'Cliente', value: 'CLIENTE' },
   ];
 
-  constructor() { }
+  constructor(
+    private userService: UsersService,
+    private messageService: MessageService,
+    private router: Router,
+    private errorHandler: ErrorHandlerService
+  ) {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  save(form: NgForm) {
+    this.insert();
   }
 
+  insert() {
+    console.log(this.user);
+    this.userService.insert(this.user).subscribe(
+      () => {
+        this.router.navigate(['/users/']);
+        this.messageService.add({
+          severity: 'success',
+          detail: 'Usuário cadastrado com sucesso!',
+        });
+      },
+      (error) => this.errorHandler.handle(error)
+    );
+  }
 }

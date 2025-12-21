@@ -4,6 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AppConstants } from '../app-constant';
 import { Pagination } from '../core/models/Pagination';
+import { User } from '../core/models/User';
 
 @Injectable({
   providedIn: 'root',
@@ -21,4 +22,9 @@ export class UsersService {
 
     return this.http.get<any>(AppConstants.backendServer + 'users', { params });
   }
+
+    insert(user: User) : Observable<any> {
+     return this.http.post<any>(AppConstants.backendServer + 'users', user);
+   }
+   
 }

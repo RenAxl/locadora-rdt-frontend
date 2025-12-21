@@ -1,6 +1,6 @@
 <div class="user-form-container">
   <div class="user-card">
-    <form>
+    <form #userForm="ngForm" (ngSubmit)="save(userForm)">
       <div class="col-12 mb-3">
         <h1>Dados do Usuário</h1>
       </div>
@@ -113,7 +113,11 @@
       </div>
 
       <div class="user-form-buttons mt-4">
-        <button type="submit" class="btn btn-primary user-form-button">
+        <button
+          type="submit"
+          [disabled]="userForm.invalid"
+          class="btn btn-primary user-form-button"
+        >
           SALVAR
         </button>
 

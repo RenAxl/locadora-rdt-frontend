@@ -3,15 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { NameFilterComponent } from './name-filter/name-filter.component';
 import { MessageComponent } from './message/message.component';
-
-
 
 
 @NgModule({
@@ -25,7 +21,6 @@ import { MessageComponent } from './message/message.component';
     CommonModule,
     OverlayPanelModule,
     FormsModule,
-    ToastModule,
     
     RouterModule
   ],
@@ -34,8 +29,6 @@ import { MessageComponent } from './message/message.component';
     NavbarComponent, 
     NameFilterComponent,
     MessageComponent,
-    ToastModule
   ],
-    providers: [MessageService ]
 })
 export class SharedModule { }

@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { User } from 'src/app/core/models/User';
 import { UsersService } from '../users.service';
 import { MessageService } from 'primeng/api';
-import { ErrorHandlerService } from 'src/app/shared/error-handler.service';
+import { ErrorHandlerService } from 'src/app/core/error-handler.service';
 
 @Component({
   selector: 'app-user-form',

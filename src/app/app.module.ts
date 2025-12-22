@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TableModule } from 'primeng/table';
 import { SharedModule } from './shared/shared.module';
+import { CoreModule } from './core/core.module';
 
 
 @NgModule({
@@ -15,10 +16,11 @@ import { SharedModule } from './shared/shared.module';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     BrowserAnimationsModule, 
     TableModule ,
     SharedModule,
-    HttpClientModule,
+    CoreModule,
   
     AppRoutingModule
   ],

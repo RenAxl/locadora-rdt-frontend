@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { User } from 'src/app/core/models/User';
 import { UsersService } from '../users.service';
@@ -29,18 +29,43 @@ export class UserFormComponent implements OnInit {
     private userService: UsersService,
     private messageService: MessageService,
     private router: Router,
+    private route: ActivatedRoute,
     private errorHandler: ErrorHandlerService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('userId');
+
+    if (id != null) {
+      this.userService.findById(id).subscribe((data) => {
+        this.user = data;
+      });
+    }
+  }
 
   save(form: NgForm) {
-    this.insert();
+    if (this.user.id != null && this.user.id.toString().trim() != null) {
+      this.update();
+    } else {
+      this.insert();
+    }
   }
 
   insert() {
-    console.log(this.user);
     this.userService.insert(this.user).subscribe(
+      () => {
+        this.router.navigate(['/users/']);
+        this.messageService.add({
+          severity: 'success',
+          detail: 'Usuário cadastrado com sucesso!',
+        });
+      },
+      (error) => this.errorHandler.handle(error)
+    );
+  }
+
+  update() {
+    this.userService.update(this.user).subscribe(
       () => {
         this.router.navigate(['/users/']);
         this.messageService.add({

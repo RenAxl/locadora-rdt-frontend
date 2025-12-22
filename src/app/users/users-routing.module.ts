@@ -8,14 +8,18 @@ const routes: Routes = [
     path: '',
     component: UserListComponent,
   },
-    {
+  {
     path: 'create',
     component: UserFormComponent,
-  }
+  },
+  {
+    path: ':userId',
+    component: UserFormComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class UsersRoutingModule { }
+export class UsersRoutingModule {}

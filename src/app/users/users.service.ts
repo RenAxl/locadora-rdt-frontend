@@ -23,8 +23,19 @@ export class UsersService {
     return this.http.get<any>(AppConstants.backendServer + 'users', { params });
   }
 
-    insert(user: User) : Observable<any> {
-     return this.http.post<any>(AppConstants.backendServer + 'users', user);
-   }
-   
+  insert(user: User): Observable<any> {
+    return this.http.post<any>(AppConstants.backendServer + 'users', user);
+  }
+
+  findById(id: any): Observable<any> {
+    return this.http.get<any>(AppConstants.backendServer + 'users/' + id);
+  }
+
+  update(user: User): Observable<any> {
+    console.log(user);
+    return this.http.put<any>(
+      AppConstants.backendServer + 'users/' + user.id,
+      user
+    );
+  }
 }

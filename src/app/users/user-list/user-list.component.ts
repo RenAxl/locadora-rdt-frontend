@@ -4,7 +4,8 @@ import { UsersService } from '../users.service';
 import { User } from 'src/app/core/models/User';
 import { Table } from 'primeng/table';
 import { Pagination } from 'src/app/core/models/Pagination';
-import { LazyLoadEvent } from 'primeng/api';
+import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
+import { ErrorHandlerService } from 'src/app/core/error-handler.service';
 
 @Component({
   selector: 'app-user-list',
@@ -22,7 +23,12 @@ export class UserListComponent implements OnInit {
 
   @ViewChild('userTable') grid!: Table;
 
-  constructor(private userService: UsersService) {}
+  constructor(
+    private userService: UsersService,
+    private messageService: MessageService,
+    private errorHandler: ErrorHandlerService,
+    private confirmationService: ConfirmationService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -47,5 +53,22 @@ export class UserListComponent implements OnInit {
     this.list();
   }
 
+    delete(user: any) {
+    this.confirmationService.confirm({
+      message: 'Tem certeza que deseja excluir?',
+      accept: () => {
+        this.userService.delete(user.id).subscribe(
+          () => {
+            this.grid.reset();
+            this.messageService.add({
+              severity: 'success',
+              detail: 'Usuário excluído com sucesso!',
+            });
+          },
+          (error) => this.errorHandler.handle(error)
+        );
+      },
+    });
+  }
   
 }

@@ -38,4 +38,9 @@ export class UsersService {
       user
     );
   }
+
+  delete(id: Number): Observable<any> {
+    return this.http.delete(AppConstants.backendServer + 'users/' + id);
+  }
+  
 }

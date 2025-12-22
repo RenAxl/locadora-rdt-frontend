@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ErrorHandlerService } from './error-handler.service';
 
@@ -23,6 +23,7 @@ import { ErrorHandlerService } from './error-handler.service';
   providers: [
     MessageService,
     ErrorHandlerService,
+    ConfirmationService
   ]
 })
 export class CoreModule {}

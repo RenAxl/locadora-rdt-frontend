@@ -37,6 +37,7 @@
         [lazy]="true"
         [totalRecords]="totalElements"
         (onLazyLoad)="changePage($event)"
+        #userTable
       >
         <ng-template pTemplate="header">
           <tr>

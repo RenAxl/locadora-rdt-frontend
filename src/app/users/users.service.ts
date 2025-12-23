@@ -42,5 +42,12 @@ export class UsersService {
   delete(id: Number): Observable<any> {
     return this.http.delete(AppConstants.backendServer + 'users/' + id);
   }
+
+  deleteAll(ids: number[]): Observable<void> {
+  return this.http.delete<void>(AppConstants.backendServer + 'users/all', {
+    body: ids,
+  });
+}
+
   
 }

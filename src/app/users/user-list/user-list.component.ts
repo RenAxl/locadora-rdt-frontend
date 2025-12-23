@@ -104,14 +104,32 @@ export class UserListComponent implements OnInit {
     console.log('IDs selecionados:', this.selectedUserIds);
   }
 
-  updateSelectedIds(): void {
-    this.selectedUserIds = (this.selectedUsers || [])
-      .map((u) => u.id!)
-      .filter((id) => id != null);
-    console.log('IDs selecionados:', this.selectedUserIds);
-  }
 
-  deleteSelectedUsers(): void {
-    console.log('IDs selecionados para exclusão:', this.selectedUserIds);
-  }
+deleteSelectedUsers(): void {
+  if (!this.selectedUserIds || this.selectedUserIds.length === 0) return;
+
+  const ids = [...this.selectedUserIds];
+
+  this.confirmationService.confirm({
+    message: `Tem certeza que deseja excluir ${ids.length} usuário(s)?`,
+    accept: () => {
+      this.userService.deleteAll(ids).subscribe(
+        () => {
+          this.selectedUserIds = [];
+          this.selectedUsers = [];
+
+          this.grid.reset();
+
+          this.messageService.add({
+            severity: 'success',
+            detail: 'Usuários excluídos com sucesso!',
+          });
+        },
+        (error) => this.errorHandler.handle(error)
+      );
+    },
+  });
+}
+
+
 }

@@ -14,7 +14,7 @@ import { ErrorHandlerService } from 'src/app/core/error-handler.service';
 })
 export class UserFormComponent implements OnInit {
   user: User = {
-    profile: '', // começa vazio
+    profile: '', 
   };
 
   profiles = [

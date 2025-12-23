@@ -21,6 +21,8 @@ export class UserListComponent implements OnInit {
 
   filterName: string = '';
 
+  selectedUsers: User[] = [];
+
   @ViewChild('userTable') grid!: Table;
 
   constructor(

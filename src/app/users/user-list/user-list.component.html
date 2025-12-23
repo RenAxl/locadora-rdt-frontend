@@ -1,13 +1,20 @@
 <div class="user-filter-container">
-  <a routerLink="/users/create">
-    <button class="btn btn-primary text-white btn-crud-new">
-      NOVO USUÁRIO
+  <div class="user-actions-group">
+    <a routerLink="/users/create" class="action-link">
+      <button class="btn btn-primary text-white btn-crud-action">
+        NOVO USUÁRIO
+      </button>
+    </a>
+
+    <button class="btn btn-danger text-white btn-crud-action" type="button">
+      EXCLUIR USUÁRIOS
     </button>
-  </a>
+  </div>
+
   <app-name-filter
-  text="Digite o nome do usuário"
-  (search)="searchUser($event)"
-></app-name-filter>
+    text="Digite o nome do usuário"
+    (search)="searchUser($event)"
+  ></app-name-filter>
 </div>
 
 <div class="user-card">
@@ -15,16 +22,18 @@
     <div class="col-12">
       <p-table
         [value]="users"
+        [(selection)]="selectedUsers"
+        dataKey="id"
         [responsive]="true"
         [paginator]="true"
         [rows]="pagination.linesPerPage"
         [lazy]="true"
         [totalRecords]="totalElements"
         (onLazyLoad)="changePage($event)"
-        #userTable
       >
         <ng-template pTemplate="header">
           <tr>
+            <th style="width: 3rem"></th>
             <th>Nome</th>
             <th>E-mail</th>
             <th>Permissão</th>
@@ -35,6 +44,10 @@
 
         <ng-template pTemplate="body" let-user>
           <tr>
+            <td>
+              <p-tableCheckbox [value]="user"></p-tableCheckbox>
+            </td>
+
             <td class="columns">
               <span class="p-column-title">Nome:</span>
               {{ user.name }}

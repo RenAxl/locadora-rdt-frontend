@@ -6,7 +6,12 @@
       </button>
     </a>
 
-    <button class="btn btn-danger text-white btn-crud-action" type="button">
+    <button
+      *ngIf="selectedUserIds.length > 0"
+      class="btn btn-danger text-white btn-crud-action"
+      type="button"
+      (click)="deleteSelectedUsers()"
+    >
       EXCLUIR USUÁRIOS
     </button>
   </div>
@@ -24,6 +29,8 @@
         [value]="users"
         [(selection)]="selectedUsers"
         dataKey="id"
+        (onRowSelect)="onRowSelect($event)"
+        (onRowUnselect)="onRowUnselect($event)"
         [responsive]="true"
         [paginator]="true"
         [rows]="pagination.linesPerPage"

@@ -4,7 +4,11 @@ import { UsersService } from '../users.service';
 import { User } from 'src/app/core/models/User';
 import { Table } from 'primeng/table';
 import { Pagination } from 'src/app/core/models/Pagination';
-import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
+import {
+  ConfirmationService,
+  LazyLoadEvent,
+  MessageService,
+} from 'primeng/api';
 import { ErrorHandlerService } from 'src/app/core/error-handler.service';
 
 @Component({
@@ -22,6 +26,8 @@ export class UserListComponent implements OnInit {
   filterName: string = '';
 
   selectedUsers: User[] = [];
+
+  selectedUserIds: number[] = [];
 
   @ViewChild('userTable') grid!: Table;
 
@@ -42,6 +48,11 @@ export class UserListComponent implements OnInit {
       .subscribe((data) => {
         this.users = data.content;
         this.totalElements = data.totalElements;
+
+        // Reaplica seleção na página atual com base no array global
+        this.selectedUsers = this.users.filter(
+          (u) => u.id != null && this.selectedUserIds.includes(u.id)
+        );
       });
   }
 
@@ -50,12 +61,12 @@ export class UserListComponent implements OnInit {
     this.list(page);
   }
 
-    searchUser(name: string) {
+  searchUser(name: string) {
     this.filterName = name;
     this.list();
   }
 
-    delete(user: any) {
+  delete(user: any) {
     this.confirmationService.confirm({
       message: 'Tem certeza que deseja excluir?',
       accept: () => {
@@ -72,5 +83,35 @@ export class UserListComponent implements OnInit {
       },
     });
   }
-  
+
+  onRowSelect(event: any): void {
+    const id = event?.data?.id;
+    if (id == null) return;
+
+    if (!this.selectedUserIds.includes(id)) {
+      this.selectedUserIds.push(id);
+    }
+
+    console.log('IDs selecionados:', this.selectedUserIds);
+  }
+
+  onRowUnselect(event: any): void {
+    const id = event?.data?.id;
+    if (id == null) return;
+
+    this.selectedUserIds = this.selectedUserIds.filter((x) => x !== id);
+
+    console.log('IDs selecionados:', this.selectedUserIds);
+  }
+
+  updateSelectedIds(): void {
+    this.selectedUserIds = (this.selectedUsers || [])
+      .map((u) => u.id!)
+      .filter((id) => id != null);
+    console.log('IDs selecionados:', this.selectedUserIds);
+  }
+
+  deleteSelectedUsers(): void {
+    console.log('IDs selecionados para exclusão:', this.selectedUserIds);
+  }
 }

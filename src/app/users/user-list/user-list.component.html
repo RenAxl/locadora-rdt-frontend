@@ -108,12 +108,6 @@
                   tooltipPosition="top"
                   (click)="openDetails(user)"
                 ></button>
-                <app-user-details
-                  [visible]="detailsVisible"
-                  (visibleChange)="detailsVisible = $event"
-                  [title]="'Detalhamento do Usuário'"
-                  [user]="userDetails"
-                ></app-user-details>
 
                 <button
                   pButton
@@ -135,6 +129,14 @@
           </tr>
         </ng-template>
       </p-table>
+
+      <app-user-details
+        [visible]="detailsVisible"
+        (visibleChange)="detailsVisible = $event"
+        [title]="'Detalhamento do Usuário'"
+        [user]="userDetails"
+      ></app-user-details>
+      
     </div>
   </div>
 </div>

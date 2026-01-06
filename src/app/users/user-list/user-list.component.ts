@@ -136,8 +136,22 @@ deleteSelectedUsers(): void {
 }
 
 openDetails(user: User): void {
-  this.userDetails = user;
+  const id = user?.id;
+  if (id == null) return;
+
+  
   this.detailsVisible = true;
+  this.userDetails = null;
+
+  this.userService.findById(id).subscribe({
+    next: (details: User) => {
+      this.userDetails = details;
+    },
+    error: (error) => {
+      this.detailsVisible = false;
+      this.errorHandler.handle(error);
+    },
+  });
 }
 
 }

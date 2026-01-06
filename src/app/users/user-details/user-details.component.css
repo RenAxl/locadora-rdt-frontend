@@ -7,7 +7,7 @@
   padding: 0 6px;
 }
 
-:host ::ng-deep .php-like-dialog .p-dialog-header {
+:host ::ng-deep .like-dialog .p-dialog-header {
   padding: 1rem 1rem 0.75rem 1rem;
 }
 

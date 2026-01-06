@@ -106,7 +106,14 @@
                   icon="pi pi-eye"
                   pTooltip="Detalhamento do usuário"
                   tooltipPosition="top"
+                  (click)="openDetails(user)"
                 ></button>
+                <app-user-details
+                  [visible]="detailsVisible"
+                  (visibleChange)="detailsVisible = $event"
+                  [title]="'Detalhamento do Usuário'"
+                  [user]="userDetails"
+                ></app-user-details>
 
                 <button
                   pButton

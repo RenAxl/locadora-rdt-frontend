@@ -4,7 +4,7 @@ export class User {
   email?: string;
   password?: string;
   profile?: string;
-  active?: string;
+  active?: boolean;
   telephone?: string;
   address?: string;
   photo?: string;

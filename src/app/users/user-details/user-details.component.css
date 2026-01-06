@@ -1,0 +1,16 @@
+.close-btn {
+  background: transparent;
+  border: none;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 6px;
+}
+
+:host ::ng-deep .php-like-dialog .p-dialog-header {
+  padding: 1rem 1rem 0.75rem 1rem;
+}
+
+:host ::ng-deep .php-like-dialog .p-dialog-content {
+  padding: 1rem;
+}

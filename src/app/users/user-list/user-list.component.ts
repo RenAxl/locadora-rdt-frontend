@@ -31,6 +31,10 @@ export class UserListComponent implements OnInit {
 
   @ViewChild('userTable') grid!: Table;
 
+  detailsVisible = false;
+
+  userDetails: User | null = null;
+
   constructor(
     private userService: UsersService,
     private messageService: MessageService,
@@ -131,5 +135,9 @@ deleteSelectedUsers(): void {
   });
 }
 
+openDetails(user: User): void {
+  this.userDetails = user;
+  this.detailsVisible = true;
+}
 
 }

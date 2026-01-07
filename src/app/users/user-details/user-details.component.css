@@ -1,16 +1,102 @@
+/* Estado de loading */
+.loading {
+  padding: 10px;
+  opacity: 0.8;
+}
+
+/* Header do diálogo */
+.dlg-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+}
+
+.dlg-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* Botão fechar */
 .close-btn {
   background: transparent;
-  border: none;
+  border: 0;
   font-size: 28px;
   line-height: 1;
   cursor: pointer;
   padding: 0 6px;
+  opacity: 0.8;
+}
+.close-btn:hover {
+  opacity: 1;
+}
+
+/* Grid do conteúdo */
+.dlg-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 14px;
+}
+
+/* Item (label + valor) */
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.label {
+  font-size: 0.8rem;
+  opacity: 0.75;
+}
+
+.value {
+  font-weight: 600;
+}
+
+/* Span de duas colunas */
+.span-2 {
+  grid-column: 1 / -1;
+}
+
+/* Área da foto */
+.photo {
+  text-align: center;
+  padding-top: 6px;
+}
+
+.photo img {
+  width: 200px;
+  max-width: 100%;
+  border-radius: 14px;
+  display: block;
+  margin: 0 auto;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.hint {
+  display: inline-block;
+  margin-top: 6px;
+  opacity: 0.7;
+}
+
+/* ============================= */
+/* PrimeNG Dialog (arredondado) */
+/* ============================= */
+
+:host ::ng-deep .like-dialog .p-dialog {
+  border-radius: 18px;
+  overflow: hidden;
 }
 
 :host ::ng-deep .like-dialog .p-dialog-header {
-  padding: 1rem 1rem 0.75rem 1rem;
+  padding: 1rem 1rem 0.75rem;
+  border-radius: 18px 18px 0 0;
 }
 
-:host ::ng-deep .php-like-dialog .p-dialog-content {
+:host ::ng-deep .like-dialog .p-dialog-content {
   padding: 1rem;
+  border-radius: 0 0 18px 18px;
 }

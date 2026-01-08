@@ -49,5 +49,11 @@ export class UsersService {
   });
 }
 
+changeActive(id: number, active: boolean): Observable<any> {
+  return this.http.patch(
+    AppConstants.backendServer + 'users/' + id + '/active',
+    active
+  );
+}
   
 }

@@ -154,4 +154,22 @@ openDetails(user: User): void {
   });
 }
 
+toggleActive(user: User): void {
+  if (!user?.id) return;
+
+  const newStatus = !user.active;
+
+  this.userService.changeActive(user.id, newStatus).subscribe({
+    next: () => {
+      user.active = newStatus;
+
+      this.messageService.add({
+        severity: 'success',
+        detail: `Usuário ${newStatus ? 'ativado' : 'desativado'} com sucesso!`,
+      });
+    },
+    error: (error) => this.errorHandler.handle(error),
+  });
+}
+
 }

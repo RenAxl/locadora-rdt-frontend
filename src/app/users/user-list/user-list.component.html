@@ -51,7 +51,7 @@
         </ng-template>
 
         <ng-template pTemplate="body" let-user>
-          <tr>
+          <tr [ngClass]="{ 'row-inactive': user?.active === false }">
             <td>
               <p-tableCheckbox [value]="user"></p-tableCheckbox>
             </td>
@@ -115,6 +115,7 @@
                   [icon]="user.active ? 'pi pi-ban' : 'pi pi-check'"
                   pTooltip="Ativar / Desativar Usuário"
                   tooltipPosition="top"
+                  (click)="toggleActive(user)"
                 ></button>
 
                 <button
@@ -136,7 +137,6 @@
         [title]="'Detalhamento do Usuário'"
         [user]="userDetails"
       ></app-user-details>
-      
     </div>
   </div>
 </div>

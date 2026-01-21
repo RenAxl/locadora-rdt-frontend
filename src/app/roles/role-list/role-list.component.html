@@ -1,1 +1,97 @@
-<h1>Lista de Perfis</h1>
+<div class="role-filter-container">
+  <div class="role-actions-group">
+    <a class="action-link">
+      <button class="btn btn-primary text-white btn-crud-action" type="button">
+        NOVO PERFIL
+      </button>
+    </a>
+
+    <button class="btn btn-danger text-white btn-crud-action" type="button">
+      EXCLUIR PERFIS
+    </button>
+  </div>
+
+  <app-name-filter
+    text="Digite o nome do perfil"
+  ></app-name-filter>
+</div>
+
+<div class="role-card">
+  <div class="grid">
+    <div class="col-12">
+      <p-table
+        [value]="roles"
+        [(selection)]="selectedRoles"
+        dataKey="id"
+        [responsive]="true"
+        [paginator]="true"
+        [rows]="5"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3rem"></th>
+            <th>Nome</th>
+            <th>Descrição</th>
+            <th>Qtd. Permissões</th>
+            <th class="actions"></th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-role>
+          <tr>
+            <td>
+              <p-tableCheckbox [value]="role"></p-tableCheckbox>
+            </td>
+
+            <td class="columns">
+              <span class="p-column-title">Nome:</span>
+              {{ role.name }}
+            </td>
+
+            <td class="columns">
+              <span class="p-column-title">Descrição:</span>
+              {{ role.description }}
+            </td>
+
+            <td class="columns">
+              <span class="p-column-title">Qtd. Permissões:</span>
+              {{ role.permissionsCount }}
+            </td>
+
+            <td class="col-actions">
+              <div class="actions-wrap">
+                <!-- Somente layout (sem rotas/eventos) -->
+                <button
+                  pButton
+                  type="button"
+                  class="p-button-rounded p-button-text"
+                  icon="pi pi-pencil"
+                  pTooltip="Editar perfil"
+                  tooltipPosition="top"
+                ></button>
+
+                <button
+                  pButton
+                  type="button"
+                  class="p-button-rounded p-button-text p-button-danger"
+                  icon="pi pi-trash"
+                  pTooltip="Excluir perfil"
+                  tooltipPosition="top"
+                ></button>
+
+                <button
+                  pButton
+                  type="button"
+                  class="p-button-rounded p-button-text"
+                  icon="pi pi-key"
+                  pTooltip="Gerenciar permissões"
+                  tooltipPosition="top"
+                ></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

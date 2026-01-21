@@ -6,6 +6,7 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { DialogModule } from 'primeng/dialog';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 import { UsersRoutingModule } from './users-routing.module';
 import { UserListComponent } from './user-list/user-list.component';
@@ -29,6 +30,7 @@ import { UserDetailsComponent } from './user-details/user-details.component';
     TooltipModule,
     SharedModule,
     DialogModule,
+    MultiSelectModule,
 
     UsersRoutingModule
   ],

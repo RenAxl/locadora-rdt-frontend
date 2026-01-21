@@ -23,6 +23,10 @@ export class UsersService {
     return this.http.get<any>(AppConstants.backendServer + 'users', { params });
   }
 
+  getRoles(): Observable<any[]> {
+    return this.http.get<any[]>(AppConstants.backendServer + 'roles');
+  }
+
   insert(user: User): Observable<any> {
     return this.http.post<any>(AppConstants.backendServer + 'users', user);
   }
@@ -35,7 +39,7 @@ export class UsersService {
     console.log(user);
     return this.http.put<any>(
       AppConstants.backendServer + 'users/' + user.id,
-      user
+      user,
     );
   }
 
@@ -44,16 +48,15 @@ export class UsersService {
   }
 
   deleteAll(ids: number[]): Observable<void> {
-  return this.http.delete<void>(AppConstants.backendServer + 'users/all', {
-    body: ids,
-  });
-}
+    return this.http.delete<void>(AppConstants.backendServer + 'users/all', {
+      body: ids,
+    });
+  }
 
-changeActive(id: number, active: boolean): Observable<any> {
-  return this.http.patch(
-    AppConstants.backendServer + 'users/' + id + '/active',
-    active
-  );
-}
-  
+  changeActive(id: number, active: boolean): Observable<any> {
+    return this.http.patch(
+      AppConstants.backendServer + 'users/' + id + '/active',
+      active,
+    );
+  }
 }

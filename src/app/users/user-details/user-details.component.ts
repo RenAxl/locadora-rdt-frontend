@@ -4,10 +4,9 @@ import { User } from 'src/app/core/models/User';
 @Component({
   selector: 'app-user-details',
   templateUrl: './user-details.component.html',
-  styleUrls: ['./user-details.component.css']
+  styleUrls: ['./user-details.component.css'],
 })
 export class UserDetailsComponent {
-
   @Input() visible = false;
   @Output() visibleChange = new EventEmitter<boolean>();
 
@@ -18,19 +17,19 @@ export class UserDetailsComponent {
     this.visibleChange.emit(false);
   }
 
-getActiveLabel(active?: boolean): string {
-  if (active === undefined || active === null) return '-';
-  return active ? 'Sim' : 'Não';
+  getActiveLabel(active?: boolean): string {
+    if (active === undefined || active === null) return '-';
+    return active ? 'Sim' : 'Não';
+  }
+
+  getPhotoUrl(photo?: string): string {
+    const DEFAULT_PHOTO = 'assets/images/sem-foto.jpg';
+
+    return DEFAULT_PHOTO;
+  }
+
+  stripRolePrefix(authority?: string): string {
+    if (!authority) return '-';
+    return authority.startsWith('ROLE_') ? authority.substring(5) : authority;
+  }
 }
-
-getPhotoUrl(photo?: string): string {
-  const DEFAULT_PHOTO = 'assets/images/sem-foto.jpg';
-
-  return DEFAULT_PHOTO;
-}
-
-
-}
-
-
-

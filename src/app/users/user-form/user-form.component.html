@@ -28,7 +28,11 @@
           <app-message
             [control]="name"
             error="minlength"
-            text="Mínimo de {{ name.errors?.['minlength']?.requiredLength }} caracteres. Você digitou apenas {{ name.errors?.['minlength']?.actualLength }}"
+            text="Mínimo de {{
+              name.errors?.['minlength']?.requiredLength
+            }} caracteres. Você digitou apenas {{
+              name.errors?.['minlength']?.actualLength
+            }}"
           ></app-message>
         </div>
 
@@ -70,25 +74,28 @@
           ></app-message>
         </div>
 
-        <div class="col-12 col-lg-6 select-wrapper">
-          <select
-            name="profile"
-            class="form-control select-arrow"
-            [(ngModel)]="user.profile"
-            #profile="ngModel"
+        <div class="col-12 col-lg-6">
+          <p-multiSelect
+            name="roles"
+            [(ngModel)]="roleSelectedIds"
+            [options]="roles"
+            optionLabel="label"
+            optionValue="id"
+            placeholder="Selecione os perfis"
+            [filter]="true"
+            filterPlaceholder="Buscar perfil..."
+            display="chip"
+            [showClear]="true"
+            [style]="{ width: '100%' }"
+            [panelStyle]="{ 'min-width': '100%' }"
             required
           >
-            <option value="" disabled selected>Selecione o perfil</option>
-
-            <option *ngFor="let profile of profiles" [value]="profile.value">
-              {{ profile.label }}
-            </option>
-          </select>
+          </p-multiSelect>
 
           <app-message
-            [control]="profile"
+            [control]="userForm.controls['roles']"
             error="required"
-            text="Selecione o perfil do usuário"
+            text="Selecione pelo menos um perfil para o usuário"
           ></app-message>
         </div>
 

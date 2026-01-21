@@ -47,6 +47,21 @@
   background-size: 14px;
 }
 
+.select-multi {
+  height: 120px !important;
+}
+
+:host ::ng-deep .p-multiselect {
+  height: 46px;
+  border-radius: 10px;
+}
+
+:host ::ng-deep .p-multiselect-label {
+  display: flex;
+  align-items: center;
+}
+
+
 @media (min-width: 992px) {
   .user-form-buttons {
     justify-content: flex-end;

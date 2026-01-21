@@ -89,3 +89,19 @@
   padding: 1rem;
   border-radius: 0 0 18px 18px;
 }
+
+.roles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.role-chip {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  background: rgba(0, 0, 0, 0.06);
+}
+

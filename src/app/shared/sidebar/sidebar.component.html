@@ -1,5 +1,4 @@
 <aside class="sidebar sidebar-desktop d-none d-md-flex flex-column">
-
   <div class="sidebar-header d-flex flex-column">
     <div class="d-flex align-items-center mb-1">
       <div class="system-icon me-2">
@@ -22,47 +21,25 @@
     </button>
   </div>
 
-  <nav id="sidebarNavCollapseDesktop" class="sidebar-nav flex-grow-1 collapse show">
+  <nav
+    id="sidebarNavCollapseDesktop"
+    class="sidebar-nav flex-grow-1 collapse show"
+  >
     <ul class="sidebar-menu list-unstyled mb-0">
-
       <li class="header">
         <span class="header-chip">MENU NAVEGAÇÃO</span>
       </li>
 
       <li class="treeview">
-        <a routerLink="/home" routerLinkActive="active"  class="d-flex align-items-center nav-link px-3">
+        <a
+          routerLink="/home"
+          routerLinkActive="active"
+          class="d-flex align-items-center nav-link px-3"
+        >
           <i class="fa-solid fa-gauge me-2"></i>
           <span>Home</span>
         </a>
       </li>
-
-      <li class="treeview">
-        <a
-          class="d-flex align-items-center justify-content-between nav-link px-3 collapsed"
-          data-bs-toggle="collapse"
-          data-bs-target="#submenuPessoasDesktop"
-        >
-          <span class="d-flex align-items-center">
-            <i class="fa-solid fa-users me-2"></i>
-            <span>Pessoas</span>
-          </span>
-
-          <span>
-            <i class="fa-solid fa-caret-right submenu-toggle-icon closed"></i>
-            <i class="fa-solid fa-caret-down submenu-toggle-icon open"></i>
-          </span>
-        </a>
-
-        <ul class="treeview-menu collapse list-unstyled mb-0" id="submenuPessoasDesktop">
-          <li>
-            <a routerLink="/users" routerLinkActive="active"  class="d-flex align-items-center nav-link px-4">
-              <i class="fa-solid fa-user me-2"></i>
-              <span>Usuários</span>
-            </a>
-          </li>
-        </ul>
-      </li>
-
       <li class="treeview">
         <a
           class="d-flex align-items-center justify-content-between nav-link px-3 collapsed"
@@ -80,26 +57,34 @@
           </span>
         </a>
 
-        <ul class="treeview-menu collapse list-unstyled mb-0" id="submenuCadastrosDesktop">
+        <ul
+          class="treeview-menu collapse list-unstyled mb-0"
+          id="submenuCadastrosDesktop"
+        >
           <li>
-            <a routerLink="/groups" routerLinkActive="active" class="d-flex align-items-center nav-link px-4">
-              <i class="fa-solid fa-users-gear me-2"></i>
-              <span>Grupos</span>
+            <a
+              routerLink="/users"
+              routerLinkActive="active"
+              class="d-flex align-items-center nav-link px-4"
+            >
+              <i class="fa-solid fa-user me-2"></i>
+              <span>Usuários</span>
             </a>
           </li>
-
           <li>
-            <a routerLink="/access" routerLinkActive="active" class="d-flex align-items-center nav-link px-4">
-              <i class="fa-solid fa-key me-2"></i>
-              <span>Acessos</span>
+            <a
+              routerLink="/roles"
+              routerLinkActive="active"
+              class="d-flex align-items-center nav-link px-4"
+            >
+              <i class="fa-solid fa-user-shield me-2"></i>
+              <span>Perfis</span>
             </a>
           </li>
         </ul>
       </li>
-
     </ul>
   </nav>
-
 </aside>
 
 <aside
@@ -108,7 +93,6 @@
   tabindex="-1"
   aria-labelledby="sidebarOffcanvasLabel"
 >
-
   <div class="sidebar-header d-flex flex-column">
     <div class="d-flex align-items-center mb-1 w-100">
       <div class="system-icon me-2">
@@ -128,43 +112,19 @@
 
   <nav class="sidebar-nav flex-grow-1">
     <ul class="sidebar-menu list-unstyled mb-0">
-
       <li class="header">
         <span class="header-chip">MENU NAVEGAÇÃO</span>
       </li>
 
       <li class="treeview">
-        <a routerLink="/home" routerLinkActive="active" class="d-flex align-items-center nav-link px-3">
+        <a
+          routerLink="/home"
+          routerLinkActive="active"
+          class="d-flex align-items-center nav-link px-3"
+        >
           <i class="fa-solid fa-gauge me-2"></i>
           <span>Home</span>
         </a>
-      </li>
-
-      <li class="treeview">
-        <a
-          class="d-flex align-items-center justify-content-between nav-link px-3 collapsed"
-          data-bs-toggle="collapse"
-          data-bs-target="#submenuPessoasMobile"
-        >
-          <span class="d-flex align-items-center">
-            <i class="fa-solid fa-users me-2"></i>
-            <span>Pessoas</span>
-          </span>
-
-          <span>
-            <i class="fa-solid fa-caret-right submenu-toggle-icon closed"></i>
-            <i class="fa-solid fa-caret-down submenu-toggle-icon open"></i>
-          </span>
-        </a>
-
-        <ul class="treeview-menu collapse list-unstyled mb-0" id="submenuPessoasMobile">
-          <li>
-            <a routerLink="/users" routerLinkActive="active" class="d-flex align-items-center nav-link px-4">
-              <i class="fa-solid fa-user me-2"></i>
-              <span>Usuários</span>
-            </a>
-          </li>
-        </ul>
       </li>
 
       <li class="treeview">
@@ -184,24 +144,32 @@
           </span>
         </a>
 
-        <ul class="treeview-menu collapse list-unstyled mb-0" id="submenuCadastrosMobile">
+        <ul
+          class="treeview-menu collapse list-unstyled mb-0"
+          id="submenuCadastrosMobile"
+        >
           <li>
-            <a routerLink="/groups" routerLinkActive="active" class="d-flex align-items-center nav-link px-4">
-              <i class="fa-solid fa-users-gear me-2"></i>
-              <span>Grupos</span>
+            <a
+              routerLink="/users"
+              routerLinkActive="active"
+              class="d-flex align-items-center nav-link px-4"
+            >
+              <i class="fa-solid fa-user me-2"></i>
+              <span>Usuários</span>
             </a>
           </li>
-
           <li>
-            <a routerLink="/access" routerLinkActive="active" class="d-flex align-items-center nav-link px-4">
-              <i class="fa-solid fa-key me-2"></i>
-              <span>Acessos</span>
+            <a
+              routerLink="/roles"
+              routerLinkActive="active"
+              class="d-flex align-items-center nav-link px-4"
+            >
+              <i class="fa-solid fa-user-shield me-2"></i>
+              <span>Perfis</span>
             </a>
           </li>
         </ul>
       </li>
-
     </ul>
   </nav>
-
 </aside>

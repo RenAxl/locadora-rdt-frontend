@@ -18,16 +18,10 @@ const routes: Routes = [
       import('../app/users/users.module').then((m) => m.UsersModule)
   },
   {
-    path: 'groups',
+    path: 'roles',
     loadChildren: () =>
-      import('../app/groups/groups.module').then((m) => m.GroupsModule)
+      import('../app/roles/roles.module').then((m) => m.RolesModule)
   },
-    {
-    path: 'access',
-    loadChildren: () =>
-      import('../app/access/access.module').then((m) => m.AccessModule)
-  },
-
 ];
 
 @NgModule({

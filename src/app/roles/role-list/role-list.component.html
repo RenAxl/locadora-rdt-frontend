@@ -24,14 +24,11 @@
         [(selection)]="selectedRoles"
         dataKey="id"
         [responsive]="true"
-        [paginator]="true"
-        [rows]="5"
       >
         <ng-template pTemplate="header">
           <tr>
             <th style="width: 3rem"></th>
             <th>Nome</th>
-            <th>Descrição</th>
             <th>Qtd. Permissões</th>
             <th class="actions"></th>
           </tr>
@@ -45,13 +42,9 @@
 
             <td class="columns">
               <span class="p-column-title">Nome:</span>
-              {{ role.name }}
+              {{ role.authority }}
             </td>
 
-            <td class="columns">
-              <span class="p-column-title">Descrição:</span>
-              {{ role.description }}
-            </td>
 
             <td class="columns">
               <span class="p-column-title">Qtd. Permissões:</span>
@@ -60,7 +53,7 @@
 
             <td class="col-actions">
               <div class="actions-wrap">
-                <!-- Somente layout (sem rotas/eventos) -->
+                
                 <button
                   pButton
                   type="button"

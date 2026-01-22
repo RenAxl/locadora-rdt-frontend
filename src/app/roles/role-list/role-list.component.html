@@ -11,8 +11,9 @@
     </button>
   </div>
 
-  <app-name-filter
-    text="Digite o nome do perfil"
+  <app-name-filter 
+  text="Digite o nome do perfil"
+  (search)="searchRole($event)"
   ></app-name-filter>
 </div>
 
@@ -21,9 +22,13 @@
     <div class="col-12">
       <p-table
         [value]="roles"
-        [(selection)]="selectedRoles"
-        dataKey="id"
         [responsive]="true"
+        [paginator]="true"
+        [rows]="pagination.linesPerPage"
+        [lazy]="true"
+        [totalRecords]="totalElements"
+        (onLazyLoad)="changePage($event)"
+        #roleTable
       >
         <ng-template pTemplate="header">
           <tr>
@@ -45,7 +50,6 @@
               {{ role.authority }}
             </td>
 
-
             <td class="columns">
               <span class="p-column-title">Qtd. Permissões:</span>
               {{ role.permissionsCount }}
@@ -53,7 +57,6 @@
 
             <td class="col-actions">
               <div class="actions-wrap">
-                
                 <button
                   pButton
                   type="button"

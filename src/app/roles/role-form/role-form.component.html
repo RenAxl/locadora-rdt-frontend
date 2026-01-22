@@ -1,6 +1,6 @@
 <div class="role-form-container">
   <div class="role-card">
-    <form #roleForm="ngForm">
+    <form #roleForm="ngForm" (ngSubmit)="save(roleForm)">
       <div class="col-12 mb-3">
         <h1>Dados do Perfil</h1>
       </div>

@@ -33,15 +33,7 @@ export class RoleFormComponent implements OnInit {
     }
   }
 
-  save(form: NgForm) {
-    if (this.role.id != null && this.role.id.toString().trim() != null) {
-      this.update();
-    } else {
-      this.insert();
-    }
-  }
-
-  insert() {
+  save() {
     if (this.role.authority) {
       this.role.authority = this.formatRole(this.role.authority);
     }
@@ -52,23 +44,6 @@ export class RoleFormComponent implements OnInit {
         this.messageService.add({
           severity: 'success',
           detail: 'Perfil cadastrado com sucesso!',
-        });
-      },
-      error: (error) => this.errorHandler.handle(error),
-    });
-  }
-
-  update() {
-    if (this.role.authority) {
-      this.role.authority = this.formatRole(this.role.authority);
-    }
-
-    this.roleService.update(this.role).subscribe({
-      next: () => {
-        this.router.navigate(['/roles']);
-        this.messageService.add({
-          severity: 'success',
-          detail: 'Perfil alterado com sucesso!',
         });
       },
       error: (error) => this.errorHandler.handle(error),

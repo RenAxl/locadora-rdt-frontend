@@ -31,11 +31,4 @@ export class RolesService {
     return this.http.get<any>(AppConstants.backendServer + 'roles/' + id);
   }
 
-  update(role: Role): Observable<any> {
-    console.log(role);
-    return this.http.put<any>(
-      AppConstants.backendServer + 'roles/' + role.id,
-      role,
-    );
-  }
 }

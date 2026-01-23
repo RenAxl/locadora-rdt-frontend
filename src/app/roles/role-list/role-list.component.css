@@ -13,6 +13,17 @@ td:first-child {
   padding: 20px;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
+
+  /* ✅ Ajuste principal: limita a largura no desktop */
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ✅ Em telas muito grandes, deixa um pouco mais largo (opcional) */
+@media (min-width: 1400px) {
+  .role-card {
+    max-width: 1300px;
+  }
 }
 
 .btn-crud-action {
@@ -44,6 +55,23 @@ td:first-child {
   font-weight: 600;
 }
 
+/* ✅ Ajuste fino das colunas */
+th:nth-child(1),
+td:nth-child(1) {
+  width: auto;
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+  width: 180px;
+  text-align: center;
+}
+
+th:nth-child(3),
+td:nth-child(3) {
+  width: 140px;
+}
+
 .actions {
   width: 140px;
 }
@@ -57,6 +85,12 @@ td:first-child {
   justify-content: flex-end;
   gap: 8px;
   align-items: center;
+}
+
+/* ✅ Acabamento opcional: arredonda/recorta a tabela dentro do card */
+:host ::ng-deep .p-datatable {
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 @media (min-width: 768px) {

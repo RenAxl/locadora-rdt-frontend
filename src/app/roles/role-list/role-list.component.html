@@ -5,15 +5,11 @@
         NOVO PERFIL
       </button>
     </a>
-
-    <button class="btn btn-danger text-white btn-crud-action" type="button">
-      EXCLUIR PERFIS
-    </button>
   </div>
 
-  <app-name-filter 
-  text="Digite o nome do perfil"
-  (search)="searchRole($event)"
+  <app-name-filter
+    text="Digite o nome do perfil"
+    (search)="searchRole($event)"
   ></app-name-filter>
 </div>
 
@@ -32,7 +28,6 @@
       >
         <ng-template pTemplate="header">
           <tr>
-            <th style="width: 3rem"></th>
             <th>Nome</th>
             <th>Qtd. Permissões</th>
             <th class="actions"></th>
@@ -41,10 +36,6 @@
 
         <ng-template pTemplate="body" let-role>
           <tr>
-            <td>
-              <p-tableCheckbox [value]="role"></p-tableCheckbox>
-            </td>
-
             <td class="columns">
               <span class="p-column-title">Nome:</span>
               {{ role.authority }}
@@ -57,25 +48,6 @@
 
             <td class="col-actions">
               <div class="actions-wrap">
-                <button
-                  pButton
-                  type="button"
-                  class="p-button-rounded p-button-text"
-                  icon="pi pi-pencil"
-                  pTooltip="Editar perfil"
-                  tooltipPosition="top"
-                  [routerLink]="['/roles/', role.id, 'edit']"
-                ></button>
-
-                <button
-                  pButton
-                  type="button"
-                  class="p-button-rounded p-button-text p-button-danger"
-                  icon="pi pi-trash"
-                  pTooltip="Excluir perfil"
-                  tooltipPosition="top"
-                ></button>
-
                 <button
                   pButton
                   type="button"

@@ -11,6 +11,10 @@ const routes: Routes = [
   {
     path: 'create',
     component: RoleFormComponent,
+  },
+  {
+    path: ':roleId/edit',
+    component: RoleFormComponent,
   }
 ];
 

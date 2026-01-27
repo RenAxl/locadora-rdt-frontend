@@ -1,4 +1,5 @@
 export class Permission {
   id?: number;
-  name?: string;
+  name?: string;      
+  groupName?: string; 
 }

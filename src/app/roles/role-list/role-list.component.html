@@ -54,7 +54,9 @@
                   class="p-button-rounded p-button-text"
                   icon="pi pi-key"
                   pTooltip="Gerenciar permissões"
+                  [tooltipOptions]="{ showDelay: 300 }"
                   tooltipPosition="top"
+                  (click)="openPermissions(role); $event.stopPropagation()"
                 ></button>
               </div>
             </td>
@@ -64,3 +66,10 @@
     </div>
   </div>
 </div>
+
+<app-permission
+  [(visible)]="permissionsDialogVisible"
+  [roleId]="selectedRoleId"
+  [roleAuthority]="selectedRoleAuthority"
+  (saved)="reloadRoles()"
+></app-permission>

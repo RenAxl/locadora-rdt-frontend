@@ -18,6 +18,9 @@ export class RoleListComponent implements OnInit {
   pagination: Pagination = new Pagination(0, 4, 'ASC', 'authority');
   totalElements: number = 0;
   filterName: string = '';
+  permissionsDialogVisible: boolean = false;
+  selectedRoleId?: number;
+  selectedRoleAuthority?: string;
 
   @ViewChild('roleTable') grid!: Table;
 
@@ -44,5 +47,15 @@ export class RoleListComponent implements OnInit {
   searchRole(name: string) {
     this.filterName = name;
     this.list();
+  }
+
+  openPermissions(role: any): void {
+    this.selectedRoleId = Number(role.id);
+    this.selectedRoleAuthority = role.authority;
+    this.permissionsDialogVisible = true;
+  }
+
+  reloadRoles(): void {
+    this.list(); 
   }
 }

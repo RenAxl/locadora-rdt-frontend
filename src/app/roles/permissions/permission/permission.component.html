@@ -1,0 +1,112 @@
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [dismissableMask]="true"
+  [style]="{ width: '860px', maxWidth: '95vw' }"
+  styleClass="like-dialog"
+  (onHide)="close()"
+>
+  <ng-template pTemplate="header">
+    <div class="dlg-header">
+      <div>
+        <h4 class="dlg-title">Gerenciar permissões</h4>
+        <div class="dlg-subtitle">
+          Perfil: <strong>{{ roleAuthority || "ID " + roleId }}</strong>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <div class="dlg-content">
+    <div class="topbar">
+      <div class="group-select">
+        <label class="label">Grupo</label>
+        <p-dropdown
+          [options]="groups"
+          [ngModel]="selectedGroup"
+          (ngModelChange)="selectedGroup = $event"
+          (onChange)="onGroupChange()"
+          [disabled]="loading || groups.length === 0"
+          placeholder="Selecione um grupo"
+          [style]="{ width: '100%' }"
+          appendTo="body"
+        ></p-dropdown>
+      </div>
+
+      <div class="filter">
+        <label class="label">Filtrar</label>
+        <span class="p-input-icon-left w-100">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            type="text"
+            class="w-100"
+            placeholder="Ex: USER_READ"
+            [ngModel]="filterText"
+            (ngModelChange)="filterText = $event"
+            (input)="onFilterChange()"
+            [disabled]="loading"
+          />
+        </span>
+      </div>
+    </div>
+
+    <div class="bulk-actions" *ngIf="!loading">
+      <p-checkbox
+        [binary]="true"
+        [ngModel]="allCheckedCurrentGroup()"
+        (onChange)="toggleAllCurrentGroup(!!$event.checked)"
+        label="Selecionar/Desmarcar todas (do grupo atual / filtradas)"
+      ></p-checkbox>
+
+      <span class="count">
+        Marcadas neste grupo: {{ selectedCountInView }} / {{ filteredCount }}
+      </span>
+    </div>
+
+    <div class="loading-wrap" *ngIf="loading">
+      <p-progressSpinner></p-progressSpinner>
+      <div class="loading-text">Carregando...</div>
+    </div>
+
+    <div class="perm-grid" *ngIf="!loading">
+      <div class="perm-item" *ngFor="let p of filteredPermissions()">
+        <p-checkbox
+          [binary]="true"
+          [ngModel]="isChecked(p.id)"
+          (onChange)="toggle(p.id, !!$event.checked)"
+          [label]="p.name || ''"
+        ></p-checkbox>
+      </div>
+
+      <div class="empty" *ngIf="filteredPermissions().length === 0">
+        Nenhuma permissão para este grupo (ou com o filtro atual).
+      </div>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="dlg-footer">
+      <button
+        pButton
+        type="button"
+        class="p-button-outlined p-button-secondary"
+        label="Cancelar"
+        (click)="close()"
+        [disabled]="loading || saving"
+      ></button>
+
+      <button
+        pButton
+        type="button"
+        class="p-button-primary"
+        label="Salvar"
+        icon="pi pi-save"
+        (click)="save()"
+        [disabled]="loading || saving || !roleId"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>

@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { AppConstants } from '../app-constant';
 import { Pagination } from '../core/models/Pagination';
 import { Role } from '../core/models/Role';
+import { RolePermissionsUpdateDTO } from '../core/models/RolePermissionsUpdateDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -31,4 +32,10 @@ export class RolesService {
     return this.http.get<any>(AppConstants.backendServer + 'roles/' + id);
   }
 
+  updatePermissions(id: number,dto: RolePermissionsUpdateDTO,): Observable<any> {
+    return this.http.put<any>(
+      AppConstants.backendServer + 'roles/' + id + '/permissions',
+      dto,
+    );
+  }
 }

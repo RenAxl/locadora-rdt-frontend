@@ -1,0 +1,101 @@
+.dlg-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dlg-title {
+  margin: 0;
+  font-weight: 700;
+}
+
+.dlg-subtitle {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.close-btn {
+  border: none;
+  background: transparent;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 8px;
+}
+
+.dlg-content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.topbar {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 12px;
+}
+
+.label {
+  display: block;
+  font-size: 0.85rem;
+  opacity: 0.85;
+  margin-bottom: 6px;
+}
+
+.bulk-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.count {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.loading-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 28px 0;
+}
+
+.loading-text {
+  opacity: 0.8;
+}
+
+.perm-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 16px;
+}
+
+.perm-item {
+  display: flex;
+  align-items: center;
+}
+
+.empty {
+  grid-column: 1 / -1;
+  opacity: 0.75;
+  padding: 8px 0;
+}
+
+.dlg-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+@media (max-width: 720px) {
+  .topbar {
+    grid-template-columns: 1fr;
+  }
+
+  .perm-grid {
+    grid-template-columns: 1fr;
+  }
+}

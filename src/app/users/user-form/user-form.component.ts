@@ -69,16 +69,11 @@ export class UserFormComponent implements OnInit {
         this.roles = rolesArray.map((r: any) => ({
           id: r.id,
           authority: r.authority,
-          label: this.stripRolePrefix(r.authority),
+          label: r.authority,
         }));
       },
       error: (error) => this.errorHandler.handle(error),
     });
-  }
-
-  stripRolePrefix(authority?: string): string {
-    if (!authority) return '';
-    return authority.startsWith('ROLE_') ? authority.substring(5) : authority;
   }
 
   private applySelectedRolesToUser(): void {

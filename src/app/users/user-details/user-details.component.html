@@ -65,7 +65,7 @@
 
         <div class="roles" *ngIf="user?.roles?.length; else noRolesTpl">
           <span class="role-chip" *ngFor="let r of user?.roles">
-            {{ stripRolePrefix(r?.authority) }}
+            {{ r?.authority || '-' }}
           </span>
         </div>
 

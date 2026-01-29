@@ -28,8 +28,4 @@ export class UserDetailsComponent {
     return DEFAULT_PHOTO;
   }
 
-  stripRolePrefix(authority?: string): string {
-    if (!authority) return '-';
-    return authority.startsWith('ROLE_') ? authority.substring(5) : authority;
-  }
 }

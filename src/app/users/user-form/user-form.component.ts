@@ -6,12 +6,13 @@ import { User } from 'src/app/core/models/User';
 import { UsersService } from '../users.service';
 import { MessageService } from 'primeng/api';
 import { ErrorHandlerService } from 'src/app/core/error-handler.service';
-
+import { RolesService } from 'src/app/roles/roles.service';
+import { Pagination } from 'src/app/core/models/Pagination';
 
 type RoleOption = {
   id: number;
   authority: string;
-  label: string; 
+  label: string;
 };
 
 @Component({
@@ -31,7 +32,8 @@ export class UserFormComponent implements OnInit {
     private messageService: MessageService,
     private router: Router,
     private route: ActivatedRoute,
-    private errorHandler: ErrorHandlerService
+    private errorHandler: ErrorHandlerService,
+    private rolesService: RolesService,
   ) {}
 
   ngOnInit(): void {
@@ -48,7 +50,7 @@ export class UserFormComponent implements OnInit {
 
           console.log(
             'Usuário carregado:',
-            JSON.parse(JSON.stringify(this.user))
+            JSON.parse(JSON.stringify(this.user)),
           );
           console.log('Roles selecionadas (IDs):', this.roleSelectedIds);
         },
@@ -57,50 +59,38 @@ export class UserFormComponent implements OnInit {
     }
   }
 
-
   private loadRoles(): void {
-    this.userService.getRoles().subscribe({
-      next: (roles: any[]) => {
-        this.roles = (roles || []).map((r) => ({
+    const pagination = new Pagination(0, 1000, 'ASC', 'authority');
+
+    this.rolesService.list(pagination, '').subscribe({
+      next: (page: any) => {
+        const rolesArray = Array.isArray(page?.content) ? page.content : [];
+
+        this.roles = rolesArray.map((r: any) => ({
           id: r.id,
           authority: r.authority,
           label: this.stripRolePrefix(r.authority),
         }));
-
-        console.log(
-          'Roles do backend (formatados):',
-          JSON.parse(JSON.stringify(this.roles))
-        );
       },
       error: (error) => this.errorHandler.handle(error),
     });
   }
 
-
   stripRolePrefix(authority?: string): string {
     if (!authority) return '';
-    return authority.startsWith('ROLE_')
-      ? authority.substring(5)
-      : authority;
+    return authority.startsWith('ROLE_') ? authority.substring(5) : authority;
   }
 
   private applySelectedRolesToUser(): void {
     const uniqueIds = Array.from(new Set(this.roleSelectedIds)).filter(
-      (id) => typeof id === 'number'
+      (id) => typeof id === 'number',
     );
 
-    this.user.roles = uniqueIds.map((id) => ({ id } as any));
+    this.user.roles = uniqueIds.map((id) => ({ id }) as any);
   }
 
   save(form: NgForm) {
-    console.log('Submit disparado. Form:', form);
-
     this.applySelectedRolesToUser();
-
-    console.log(
-      'Payload final do usuário:',
-      JSON.parse(JSON.stringify(this.user))
-    );
 
     if (this.user.id != null && this.user.id.toString().trim() !== '') {
       this.update();
@@ -110,17 +100,15 @@ export class UserFormComponent implements OnInit {
   }
 
   insert() {
-    console.log(
-      'Insert payload:',
-      JSON.parse(JSON.stringify(this.user))
-    );
+    console.log('Insert payload:', JSON.parse(JSON.stringify(this.user)));
 
     this.userService.insert(this.user).subscribe({
       next: () => {
         this.router.navigate(['/users/']);
         this.messageService.add({
           severity: 'success',
-          detail: 'Usuário cadastrado com sucesso!',
+          detail:
+            'Usuário cadastrado com sucesso!. Para ativar a conta acesse o E-mail cadastrado',
         });
       },
       error: (error) => this.errorHandler.handle(error),
@@ -128,10 +116,7 @@ export class UserFormComponent implements OnInit {
   }
 
   update() {
-    console.log(
-      'Update payload:',
-      JSON.parse(JSON.stringify(this.user))
-    );
+    console.log('Update payload:', JSON.parse(JSON.stringify(this.user)));
 
     this.userService.update(this.user).subscribe({
       next: () => {

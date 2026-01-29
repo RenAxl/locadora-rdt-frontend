@@ -23,10 +23,6 @@ export class UsersService {
     return this.http.get<any>(AppConstants.backendServer + 'users', { params });
   }
 
-  getRoles(): Observable<any[]> {
-    return this.http.get<any[]>(AppConstants.backendServer + 'roles');
-  }
-
   insert(user: User): Observable<any> {
     return this.http.post<any>(AppConstants.backendServer + 'users', user);
   }
@@ -59,4 +55,13 @@ export class UsersService {
       active,
     );
   }
+
+  activateAccount(token: string, password: string): Observable<void> {
+  return this.http.post<void>(
+    `${AppConstants.backendServer}users/activate`,
+    { password },
+    { params: { token } }
+  );
+}
+
 }

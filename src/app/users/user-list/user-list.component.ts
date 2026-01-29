@@ -53,7 +53,6 @@ export class UserListComponent implements OnInit {
         this.users = data.content;
         this.totalElements = data.totalElements;
 
-        // Reaplica seleção na página atual com base no array global
         this.selectedUsers = this.users.filter(
           (u) => u.id != null && this.selectedUserIds.includes(u.id)
         );

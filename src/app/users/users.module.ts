@@ -13,6 +13,7 @@ import { UserListComponent } from './user-list/user-list.component';
 import { SharedModule } from '../shared/shared.module';
 import { UserFormComponent } from './user-form/user-form.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 
 
@@ -20,7 +21,8 @@ import { UserDetailsComponent } from './user-details/user-details.component';
   declarations: [
     UserListComponent,
     UserFormComponent,
-    UserDetailsComponent
+    UserDetailsComponent,
+    UserProfileComponent
   ],
   imports: [
     CommonModule,

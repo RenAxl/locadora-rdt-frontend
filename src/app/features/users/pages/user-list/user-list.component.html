@@ -1,0 +1,135 @@
+<div class="user-filter-container">
+  <div class="user-actions-group">
+    <a routerLink="/users/create" class="action-link">
+      <button class="btn btn-primary text-white btn-crud-action">
+        NOVO USUÁRIO
+      </button>
+    </a>
+
+    <button
+      *ngIf="selectedUserIds.length > 0"
+      class="btn btn-danger text-white btn-crud-action"
+      type="button"
+      (click)="deleteSelectedUsers()"
+    >
+      EXCLUIR USUÁRIOS
+    </button>
+  </div>
+
+  <app-name-filter
+    text="Digite o nome do usuário"
+    (search)="searchUser($event)"
+  ></app-name-filter>
+</div>
+
+<div class="user-card">
+  <div class="grid">
+    <div class="col-12">
+      <p-table
+        [value]="users"
+        [(selection)]="selectedUsers"
+        dataKey="id"
+        (onRowSelect)="onRowSelect($event)"
+        (onRowUnselect)="onRowUnselect($event)"
+        [responsive]="true"
+        [paginator]="true"
+        [rows]="pagination.linesPerPage"
+        [lazy]="true"
+        [totalRecords]="totalElements"
+        (onLazyLoad)="changePage($event)"
+        #userTable
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3rem"></th>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>Telefone</th>
+            <th>Foto</th>
+            <th class="actions"></th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-user>
+          <tr [ngClass]="{ 'row-inactive': user?.active === false }">
+            <td>
+              <p-tableCheckbox [value]="user"></p-tableCheckbox>
+            </td>
+
+            <td class="columns">
+              <span class="p-column-title">Nome:</span>
+              {{ user.name }}
+            </td>
+
+            <td class="columns">
+              <span class="p-column-title">E-mail:</span>
+              {{ user.email }}
+            </td>
+
+            <td class="columns">
+              <span class="p-column-title">Telefone:</span>
+              {{ user.telephone }}
+            </td>
+
+            <td class="columns col-photo">
+              <span class="p-column-title">Foto:</span>
+              <img
+                src="assets/images/sem-foto.jpg"
+                alt="Foto do usuário"
+                class="user-photo"
+              />
+            </td>
+
+            <td class="col-actions">
+              <div class="actions-wrap">
+                <a
+                  pButton
+                  class="p-button-rounded p-button-text"
+                  icon="pi pi-pencil"
+                  pTooltip="Editar usuário"
+                  tooltipPosition="top"
+                  [routerLink]="['/users/', user.id, 'edit']"
+                ></a>
+
+                <button
+                  pButton
+                  class="p-button-rounded p-button-text p-button-danger"
+                  icon="pi pi-trash"
+                  pTooltip="Excluir usuário"
+                  tooltipPosition="top"
+                  (click)="delete(user)"
+                ></button>
+
+                <button
+                  pButton
+                  class="p-button-rounded p-button-text"
+                  icon="pi pi-eye"
+                  pTooltip="Detalhamento do usuário"
+                  tooltipPosition="top"
+                  (click)="openDetails(user)"
+                ></button>
+
+                <button
+                  pButton
+                  class="p-button-rounded p-button-text p-button-warning"
+                  [icon]="user.active ? 'pi pi-ban' : 'pi pi-check'"
+                  pTooltip="Ativar / Desativar Usuário"
+                  tooltipPosition="top"
+                  (click)="toggleActive(user)"
+                ></button>
+
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <app-user-details-modal
+        [visible]="detailsVisible"
+        (visibleChange)="detailsVisible = $event"
+        [title]="'Detalhamento do Usuário'"
+        [user]="userDetails"
+      ></app-user-details-modal>
+    </div>
+  </div>
+</div>

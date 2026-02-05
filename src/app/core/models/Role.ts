@@ -1,5 +1,4 @@
-import { Permission } from "./Permission";
-
+import { Permission } from "../../features/roles/models/Permission";
 
 export class Role {
   id?: number;

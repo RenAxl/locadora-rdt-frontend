@@ -1,31 +1,57 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthComponent } from './shell/auth/auth.component';
+import { MainComponent } from './shell/main/main.component';
 
 const routes: Routes = [
   {
-    path: 'home',
-    loadChildren: () =>
-      import('../app/home/home.module').then((m) => m.HomeModule),
-  },
-  {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'auth/login',
     pathMatch: 'full',
   },
   {
-    path: 'users',
-    loadChildren: () =>
-      import('../app/users/users.module').then((m) => m.UsersModule),
+    path: '',
+    component: AuthComponent,
+    children: [
+      {
+        path: 'auth',
+        loadChildren: () =>
+          import('./features/auth/auth.module').then((m) => m.AuthModule),
+      },
+    ],
   },
   {
-    path: 'roles',
-    loadChildren: () =>
-      import('../app/roles/roles.module').then((m) => m.RolesModule),
+    path: '',
+    component: MainComponent,
+    children: [
+      {
+        path: 'home',
+        loadChildren: () =>
+          import('./features/home/home.module').then((m) => m.HomeModule),
+      },
+    ],
   },
   {
-    path: 'auth',
-    loadChildren: () =>
-      import('../app/auth/auth.module').then((m) => m.AuthModule),
+    path: '',
+    component: MainComponent,
+    children: [
+      {
+        path: 'users',
+        loadChildren: () =>
+          import('./features/users/users.module').then((m) => m.UsersModule),
+      },
+    ],
+  },
+  {
+    path: '',
+    component: MainComponent,
+    children: [
+      {
+        path: 'roles',
+        loadChildren: () =>
+          import('./features/roles/roles.module').then((m) => m.RolesModule),
+      },
+    ],
   },
 ];
 

@@ -1,0 +1,76 @@
+<div class="role-filter-container">
+  <div class="role-actions-group">
+    <a routerLink="/roles/create" class="action-link">
+      <button class="btn btn-primary text-white btn-crud-action" type="button">
+        NOVO PERFIL
+      </button>
+    </a>
+  </div>
+
+  <app-name-filter
+    text="Digite o nome do perfil"
+    (search)="searchRole($event)"
+  ></app-name-filter>
+</div>
+
+<div class="role-card">
+  <div class="grid">
+    <div class="col-12">
+      <p-table
+        [value]="roles"
+        [responsive]="true"
+        [paginator]="true"
+        [rows]="pagination.linesPerPage"
+        [lazy]="true"
+        [totalRecords]="totalElements"
+        (onLazyLoad)="changePage($event)"
+        #roleTable
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Nome</th>
+            <th>Qtd. Permissões</th>
+            <th class="actions"></th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-role>
+          <tr>
+            <td class="columns">
+              <span class="p-column-title">Nome:</span>
+              {{ role.authority }}
+            </td>
+
+            <td class="columns">
+              <span class="p-column-title">Qtd. Permissões:</span>
+              {{ role.permissionsCount }}
+            </td>
+
+            <td class="col-actions">
+              <div class="actions-wrap">
+                <button
+                  pButton
+                  type="button"
+                  class="p-button-rounded p-button-text"
+                  icon="pi pi-key"
+                  pTooltip="Gerenciar permissões"
+                  [tooltipOptions]="{ showDelay: 300 }"
+                  tooltipPosition="top"
+                  (click)="openPermissions(role); $event.stopPropagation()"
+                ></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>
+
+<app-role-permissions-modal
+  [(visible)]="permissionsDialogVisible"
+  [roleId]="selectedRoleId"
+  [roleAuthority]="selectedRoleAuthority"
+  (saved)="reloadRoles()"
+></app-role-permissions-modal>
+

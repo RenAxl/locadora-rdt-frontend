@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { TableModule } from 'primeng/table';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
+import { ShellModule } from './shell/shell.module';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { CoreModule } from './core/core.module';
     TableModule ,
     SharedModule,
     CoreModule,
+    ShellModule,
   
     AppRoutingModule
   ],

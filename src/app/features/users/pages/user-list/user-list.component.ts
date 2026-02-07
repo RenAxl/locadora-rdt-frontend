@@ -7,7 +7,7 @@ import {
   LazyLoadEvent,
   MessageService,
 } from 'primeng/api';
-import { ErrorHandlerService } from 'src/app/core/error-handler.service';
+import { ErrorHandlerService } from 'src/app/core/services/error-handler.service';
 import { UsersService } from '../../services/users.service';
 import { User } from '../../../../core/models/User';
 
@@ -81,7 +81,6 @@ export class UserListComponent implements OnInit {
               detail: 'Usuário excluído com sucesso!',
             });
           },
-          (error) => this.errorHandler.handle(error)
         );
       },
     });
@@ -128,7 +127,6 @@ deleteSelectedUsers(): void {
             detail: 'Usuários excluídos com sucesso!',
           });
         },
-        (error) => this.errorHandler.handle(error)
       );
     },
   });
@@ -145,10 +143,6 @@ openDetails(user: User): void {
   this.userService.findById(id).subscribe({
     next: (details: User) => {
       this.userDetails = details;
-    },
-    error: (error) => {
-      this.detailsVisible = false;
-      this.errorHandler.handle(error);
     },
   });
 }
@@ -167,7 +161,6 @@ toggleActive(user: User): void {
         detail: `Usuário ${newStatus ? 'ativado' : 'desativado'} com sucesso!`,
       });
     },
-    error: (error) => this.errorHandler.handle(error),
   });
 }
 

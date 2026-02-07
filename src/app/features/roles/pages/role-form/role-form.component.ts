@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { MessageService } from 'primeng/api';
-import { ErrorHandlerService } from 'src/app/core/error-handler.service';
+import { ErrorHandlerService } from 'src/app/core/services/error-handler.service';
 import { Role } from 'src/app/core/models/Role';
 import { RolesService } from '../../services/roles.service';
 
@@ -46,7 +46,6 @@ export class RoleFormComponent implements OnInit {
           detail: 'Perfil cadastrado com sucesso!',
         });
       },
-      error: (error) => this.errorHandler.handle(error),
     });
   }
 

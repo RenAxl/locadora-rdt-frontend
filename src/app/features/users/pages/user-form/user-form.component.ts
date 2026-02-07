@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { MessageService } from 'primeng/api';
-import { ErrorHandlerService } from 'src/app/core/error-handler.service';
+import { ErrorHandlerService } from 'src/app/core/services/error-handler.service';
 import { Pagination } from 'src/app/core/models/Pagination';
 import { UsersService } from '../../services/users.service';
 import { User } from '../../../../core/models/User';
@@ -50,7 +50,6 @@ export class UserFormComponent implements OnInit {
           );
           console.log('Roles selecionadas (IDs):', this.roleSelectedIds);
         },
-        error: (error) => this.errorHandler.handle(error),
       });
     }
   }
@@ -68,7 +67,6 @@ export class UserFormComponent implements OnInit {
           label: r.authority,
         }));
       },
-      error: (error) => this.errorHandler.handle(error),
     });
   }
 
@@ -102,7 +100,6 @@ export class UserFormComponent implements OnInit {
             'Usuário cadastrado com sucesso!. Para ativar a conta acesse o E-mail cadastrado',
         });
       },
-      error: (error) => this.errorHandler.handle(error),
     });
   }
 
@@ -117,7 +114,6 @@ export class UserFormComponent implements OnInit {
           detail: 'Usuário atualizado com sucesso!',
         });
       },
-      error: (error) => this.errorHandler.handle(error),
     });
   }
 }

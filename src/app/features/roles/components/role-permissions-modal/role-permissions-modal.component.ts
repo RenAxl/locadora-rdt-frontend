@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { MessageService } from 'primeng/api';
 
-import { ErrorHandlerService } from 'src/app/core/error-handler.service';
+import { ErrorHandlerService } from 'src/app/core/services/error-handler.service';
 import { PermissionsService } from '../../services/permissions.service';
 import { Permission } from 'src/app/features/roles/models/Permission';
 import { RolePermissionsUpdateDTO } from 'src/app/features/roles/models/RolePermissionsUpdateDTO';
@@ -92,15 +92,7 @@ export class PermissionComponent implements OnChanges {
               this.loading = false;
             }
           },
-          error: (err) => {
-            this.loading = false;
-            this.errorHandler.handle(err);
-          },
         });
-      },
-      error: (err) => {
-        this.loading = false;
-        this.errorHandler.handle(err);
       },
     });
   }
@@ -126,10 +118,6 @@ export class PermissionComponent implements OnChanges {
         this.permissions = list || [];
         this.loading = false;
         this.recalcCounters();
-      },
-      error: (err) => {
-        this.loading = false;
-        this.errorHandler.handle(err);
       },
     });
   }
@@ -212,10 +200,6 @@ export class PermissionComponent implements OnChanges {
         });
         this.saved.emit();
         this.close();
-      },
-      error: (err) => {
-        this.saving = false;
-        this.errorHandler.handle(err);
       },
     });
   }

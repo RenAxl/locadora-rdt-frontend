@@ -1,94 +1,98 @@
-<div class="activate-form-container">
-  <div class="activate-card">
-    <form #activateForm="ngForm" (ngSubmit)="activate(activateForm)">
-      <div class="col-12 mb-3">
-        <h1>Criar senha</h1>
-      </div>
+<div class="login-page">
+  <div class="login-card">
+    <div class="login-header">
+      <h1>Criar senha</h1>
+    </div>
 
-      <div class="row g-3 activate-form-inputs">
-        <div class="col-12">
+    <form #activateForm="ngForm" class="login-form" (ngSubmit)="activate(activateForm)">
+      <div class="field">
+        <label for="password">Nova senha</label>
+
+        <span class="p-input-icon-left w-100">
+          <i class="pi pi-lock"></i>
           <input
+            id="password"
             pInputText
-            placeholder="Nova senha"
             type="password"
+            class="form-control w-100"
+            placeholder="Digite sua nova senha"
             name="password"
             [(ngModel)]="password"
             #passwordCtrl="ngModel"
             required
             minlength="8"
-            class="form-control"
             [disabled]="loading"
           />
+        </span>
 
-          <app-message
-            [control]="passwordCtrl"
-            error="required"
-            text="Informe uma senha"
-          ></app-message>
+        <app-message
+          [control]="passwordCtrl"
+          error="required"
+          text="Informe uma senha"
+        ></app-message>
 
-          <app-message
-            [control]="passwordCtrl"
-            error="minlength"
-            text="Mínimo de {{
-              passwordCtrl.errors?.['minlength']?.requiredLength
-            }} caracteres. Você digitou apenas {{
-              passwordCtrl.errors?.['minlength']?.actualLength
-            }}"
-          ></app-message>
-        </div>
+        <app-message
+          [control]="passwordCtrl"
+          error="minlength"
+          text="Mínimo de {{
+            passwordCtrl.errors?.['minlength']?.requiredLength
+          }} caracteres."
+        ></app-message>
+      </div>
 
-        <div class="col-12">
+      <div class="field">
+        <label for="confirmPassword">Confirmar senha</label>
+
+        <span class="p-input-icon-left w-100">
+          <i class="pi pi-lock"></i>
           <input
+            id="confirmPassword"
             pInputText
-            placeholder="Confirmar senha"
             type="password"
+            class="form-control w-100"
+            placeholder="Confirme sua senha"
             name="confirmPassword"
             [(ngModel)]="confirmPassword"
             #confirmPasswordCtrl="ngModel"
             required
             minlength="8"
-            class="form-control"
             [disabled]="loading"
           />
+        </span>
 
-          <app-message
-            [control]="confirmPasswordCtrl"
-            error="required"
-            text="Confirme a senha"
-          ></app-message>
+        <app-message
+          [control]="confirmPasswordCtrl"
+          error="required"
+          text="Confirme a senha"
+        ></app-message>
 
-          <app-message
-            [control]="confirmPasswordCtrl"
-            error="mismatch"
-            text="As senhas não conferem"
-          ></app-message>
-        </div>
-
-        <div class="col-12" *ngIf="!token">
-          <div class="token-warning">
-            Token não encontrado na URL. Abra novamente o link do e-mail.
-          </div>
-        </div>
+        <app-message
+          [control]="confirmPasswordCtrl"
+          error="mismatch"
+          text="As senhas não conferem"
+        ></app-message>
       </div>
 
-      <div class="activate-form-buttons mt-4">
-        <button
-          type="submit"
-          [disabled]="activateForm.invalid || loading || !token"
-          class="btn btn-primary activate-form-button"
-        >
-          {{ loading ? 'ENVIANDO...' : 'CONFIRMAR' }}
-        </button>
-
-        <button
-          type="button"
-          class="btn btn-outline-danger activate-form-button"
-          (click)="cancel()"
-          [disabled]="loading"
-        >
-          CANCELAR
-        </button>
+      <div class="token-warning" *ngIf="!token">
+        Token não encontrado na URL. Abra novamente o link do e-mail.
       </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary login-form-button"
+        [disabled]="activateForm.invalid || loading || !token"
+      >
+        {{ loading ? 'ENVIANDO...' : 'Confirmar' }}
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-outline-danger cancel-button"
+        (click)="cancel()"
+        [disabled]="loading"
+      >
+        Cancelar
+      </button>
     </form>
   </div>
 </div>

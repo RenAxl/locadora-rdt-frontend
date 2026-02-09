@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { MessageService } from 'primeng/api';
-import { ErrorHandlerService } from 'src/app/core/services/error-handler.service';
+import { ErrorHandlerService } from 'src/app/core/error/services/error-handler.service';
 import { Role } from 'src/app/core/models/Role';
 import { RolesService } from '../../services/roles.service';
 

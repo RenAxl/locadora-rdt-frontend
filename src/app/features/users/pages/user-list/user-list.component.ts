@@ -7,7 +7,7 @@ import {
   LazyLoadEvent,
   MessageService,
 } from 'primeng/api';
-import { ErrorHandlerService } from 'src/app/core/services/error-handler.service';
+import { ErrorHandlerService } from 'src/app/core/error/services/error-handler.service';
 import { UsersService } from '../../services/users.service';
 import { User } from '../../../../core/models/User';
 

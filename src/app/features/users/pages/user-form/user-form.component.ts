@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { MessageService } from 'primeng/api';
-import { ErrorHandlerService } from 'src/app/core/services/error-handler.service';
+import { ErrorHandlerService } from 'src/app/core/error/services/error-handler.service';
 import { Pagination } from 'src/app/core/models/Pagination';
 import { UsersService } from '../../services/users.service';
 import { User } from '../../../../core/models/User';

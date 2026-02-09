@@ -1,4 +1,3 @@
-/* Fundo igual ao login da imagem */
 .login-page {
   min-height: calc(100vh - 56px);
   display: grid;
@@ -18,7 +17,6 @@
     #f3f1ff;
 }
 
-/* Card branco arredondado e sombra suave */
 .login-card {
   width: 100%;
   max-width: 520px;
@@ -29,7 +27,6 @@
   border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-/* Título central e mais “forte” */
 .login-header {
   text-align: center;
   margin-bottom: 18px;
@@ -42,7 +39,6 @@
   color: #141a2a;
 }
 
-/* Form espaçado */
 .login-form {
   display: grid;
   gap: 18px;
@@ -56,7 +52,6 @@
   font-size: 0.95rem;
 }
 
-/* Inputs com fundo azul claro, bem arredondados, iguais ao print */
 .form-control {
   height: 52px;
   border-radius: 14px;
@@ -78,7 +73,6 @@
   font-size: 1.05rem;
 }
 
-/* botão roxo grande e arredondado (igual o da imagem) */
 .login-form-button {
   height: 54px;
   border-radius: 14px;
@@ -100,7 +94,6 @@
   box-shadow: none;
 }
 
-/* botão cancelar discreto */
 .cancel-button {
   height: 46px;
   border-radius: 14px;
@@ -108,7 +101,6 @@
   width: 100%;
 }
 
-/* alerta token */
 .token-warning {
   padding: 12px 14px;
   border-radius: 14px;
@@ -117,7 +109,6 @@
   color: #856404;
 }
 
-/* mensagens */
 .field app-message {
   display: block;
   margin-top: 6px;

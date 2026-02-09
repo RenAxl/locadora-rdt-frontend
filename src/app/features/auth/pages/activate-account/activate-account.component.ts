@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 
 import { MessageService } from 'primeng/api';
-import { ErrorHandlerService } from 'src/app/core/services/error-handler.service';
+import { ErrorHandlerService } from 'src/app/core/error/services/error-handler.service';
 import { UsersService } from 'src/app/features/users/services/users.service';
 
 @Component({

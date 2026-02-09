@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { MessageService } from 'primeng/api';
 
-import { ErrorHandlerService } from 'src/app/core/services/error-handler.service';
+import { ErrorHandlerService } from 'src/app/core/error/services/error-handler.service';
 import { PermissionsService } from '../../services/permissions.service';
 import { Permission } from 'src/app/features/roles/models/Permission';
 import { RolePermissionsUpdateDTO } from 'src/app/features/roles/models/RolePermissionsUpdateDTO';

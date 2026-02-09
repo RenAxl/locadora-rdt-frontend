@@ -57,6 +57,7 @@
         type="submit"
         class="btn btn-primary login-form-button"
         [disabled]="loginForm.invalid"
+        (click)="save()"
       >
         Entrar
       </button>

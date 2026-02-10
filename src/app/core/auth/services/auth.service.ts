@@ -59,4 +59,11 @@ export class AuthService {
       })
     );
   }
+
+
+  logout(): void {
+    this.tokenService.clearToken();
+
+  }
+
 }

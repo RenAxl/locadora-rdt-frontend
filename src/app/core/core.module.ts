@@ -7,10 +7,10 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MessageService, ConfirmationService } from 'primeng/api';
 
 import { ErrorHandlerService } from './error/services/error-handler.service';
-import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { JwtModule } from '@auth0/angular-jwt';
 import { tokenGetter } from './auth/utils/token-getter';
 import { API } from './config/api.config';
+import { ErrorInterceptor } from './http/interceptors/error.interceptor';
 
 
 @NgModule({

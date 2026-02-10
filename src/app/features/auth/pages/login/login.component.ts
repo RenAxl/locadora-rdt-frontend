@@ -23,7 +23,6 @@ export class LoginComponent implements OnInit {
   save(): void {
     this.authService.login(this.user).subscribe({
       next: (data) => {
-        console.log('Token retornado:', data.access_token);
         
         this.messageService.add({
           severity: 'success',

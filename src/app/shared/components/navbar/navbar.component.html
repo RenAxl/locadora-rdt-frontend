@@ -1,6 +1,5 @@
 <nav class="navbar main-navbar shadow">
   <div class="container-fluid h-100 d-flex align-items-center">
-
     <button
       class="btn navbar-hamburger"
       type="button"
@@ -20,7 +19,7 @@
       aria-expanded="false"
     >
       <span class="profile-img-wrapper me-2">
-        <img src="assets/images/Axl93.jpeg" alt="Foto" class="profile-img">
+        <img src="assets/images/Axl93.jpeg" alt="Foto" class="profile-img" />
       </span>
 
       <span class="user-details text-start">
@@ -38,24 +37,37 @@
       styleClass="user-overlay user-overlay-small"
     >
       <nav class="overlay-menu" aria-label="Menu do usuário">
-        <a class="overlay-item" href="#" data-bs-toggle="modal" data-bs-target="#modalConfig">
+        <a
+          class="overlay-item"
+          href="#"
+          data-bs-toggle="modal"
+          data-bs-target="#modalConfig"
+        >
           <i class="fa fa-cog" aria-hidden="true"></i>
           <span>Configurações</span>
         </a>
 
-        <a class="overlay-item" href="#" data-bs-toggle="modal" data-bs-target="#modalPerfil">
+        <a
+          class="overlay-item"
+          href="#"
+          data-bs-toggle="modal"
+          data-bs-target="#modalPerfil"
+        >
           <i class="fa fa-user" aria-hidden="true"></i>
           <span>Perfil</span>
         </a>
 
         <div class="overlay-divider" role="separator"></div>
 
-        <a class="overlay-item logout" href="logout.php">
+        <a
+          class="overlay-item logout"
+          href="javascript:void(0)"
+          (click)="logout()"
+        >
           <i class="fa fa-sign-out" aria-hidden="true"></i>
           <span>Sair</span>
         </a>
       </nav>
     </p-overlayPanel>
-
   </div>
 </nav>

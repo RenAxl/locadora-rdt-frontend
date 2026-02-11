@@ -1,0 +1,60 @@
+.profile-form-container {
+  width: 100%;
+}
+
+.profile-card {
+  padding: 20px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+}
+
+.profile-form-inputs .form-control {
+  height: 46px;
+}
+
+.profile-form-inputs app-message {
+  display: block;
+  margin-top: 4px;
+  margin-bottom: -4px;
+}
+
+.profile-form-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.profile-form-button {
+  height: 50px;
+  width: 110px;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+.field-help {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.file-wrapper {
+  width: 100%;
+}
+
+.file-label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.file-input {
+  padding-top: 9px; 
+}
+
+@media (min-width: 992px) {
+  .profile-form-buttons {
+    justify-content: flex-end;
+  }
+}

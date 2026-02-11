@@ -1,0 +1,178 @@
+<div class="profile-form-container">
+  <div class="profile-card">
+    <form #profileForm="ngForm">
+      <div class="col-12 mb-3">
+        <h1>Meu Perfil</h1>
+      </div>
+
+      <div class="row g-3 profile-form-inputs">
+        <div class="col-12 col-lg-6">
+          <input
+            pInputText
+            placeholder="Nome"
+            type="text"
+            name="name"
+            [(ngModel)]="profile.name"
+            #name="ngModel"
+            required
+            minlength="5"
+            class="form-control"
+          />
+
+          <app-message
+            [control]="name"
+            error="required"
+            text="Informe seu nome completo"
+          ></app-message>
+
+          <app-message
+            [control]="name"
+            error="minlength"
+            text="Mínimo de {{
+              name.errors?.['minlength']?.requiredLength
+            }} caracteres. Você digitou apenas {{
+              name.errors?.['minlength']?.actualLength
+            }}"
+          ></app-message>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <input
+            pInputText
+            placeholder="E-mail"
+            type="email"
+            name="email"
+            [(ngModel)]="profile.email"
+            #email="ngModel"
+            required
+            class="form-control"
+          />
+
+          <app-message
+            [control]="email"
+            error="required"
+            text="Informe seu e-mail"
+          ></app-message>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <input
+            pInputText
+            placeholder="Telefone"
+            type="text"
+            name="telephone"
+            [(ngModel)]="profile.telephone"
+            #telephone="ngModel"
+            required
+            class="form-control"
+          />
+
+          <app-message
+            [control]="telephone"
+            error="required"
+            text="Informe seu telefone"
+          ></app-message>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <input
+            pInputText
+            placeholder="Endereço"
+            type="text"
+            name="address"
+            [(ngModel)]="profile.address"
+            #address="ngModel"
+            required
+            class="form-control"
+          />
+
+          <app-message
+            [control]="address"
+            error="required"
+            text="Informe seu endereço"
+          ></app-message>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <input
+            pInputText
+            placeholder="Senha"
+            type="password"
+            name="password"
+            [(ngModel)]="profile.password"
+            #password="ngModel"
+            minlength="6"
+            class="form-control"
+          />
+
+          <app-message
+            [control]="password"
+            error="minlength"
+            text="Mínimo de {{
+              password.errors?.['minlength']?.requiredLength
+            }} caracteres. Você digitou apenas {{
+              password.errors?.['minlength']?.actualLength
+            }}"
+          ></app-message>
+
+          <small class="field-help">
+            Se não quiser alterar a senha, deixe em branco.
+          </small>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <input
+            pInputText
+            placeholder="Confirmar Senha"
+            type="password"
+            name="confirmPassword"
+            [(ngModel)]="profile.confirmPassword"
+            #confirmPassword="ngModel"
+            minlength="6"
+            class="form-control"
+          />
+
+          <small class="field-help">
+            Deve ser igual à senha informada acima.
+          </small>
+        </div>
+
+        <div class="col-12">
+          <div class="file-wrapper">
+            <label class="file-label" for="photo">
+              Foto (qualquer formato)
+            </label>
+
+            <input
+              id="photo"
+              type="file"
+              name="photo"
+              (change)="onPhotoSelected($event)"
+              class="form-control file-input"
+            />
+
+            <small class="field-help" *ngIf="selectedPhotoName">
+              Arquivo selecionado: <b>{{ selectedPhotoName }}</b>
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-form-buttons mt-4">
+        <button
+          type="submit"
+          [disabled]="profileForm.invalid"
+          class="btn btn-primary profile-form-button"
+        >
+          SALVAR
+        </button>
+
+        <a routerLink="/home">
+          <button type="button" class="btn btn-outline-danger profile-form-button">
+            CANCELAR
+          </button>
+        </a>
+      </div>
+    </form>
+  </div>
+</div>

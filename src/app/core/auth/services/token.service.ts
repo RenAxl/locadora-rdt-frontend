@@ -6,6 +6,7 @@ import { TOKEN_KEY } from '../constants/token.constants';
   providedIn: 'root',
 })
 export class TokenService {
+  
   getToken(): string | null {
     return tokenGetter();
   }

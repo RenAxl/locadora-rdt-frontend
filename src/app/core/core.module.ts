@@ -19,10 +19,11 @@ import { ErrorInterceptor } from './http/interceptors/error.interceptor';
     ToastModule,
     ConfirmDialogModule,
 
+    // AQUI O TOKEN É ADICIONADO NAS REQUISIÇÕES HTTP.
      JwtModule.forRoot({
       config: {
         tokenGetter,
-        allowedDomains: [API.BASE],
+        allowedDomains: ['localhost:8080'],
         disallowedRoutes: [API.AUTH.TOKEN]
       }
     })

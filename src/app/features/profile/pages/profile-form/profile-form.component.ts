@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { NgForm } from '@angular/forms';
 import { Profile } from '../../models/Profile';
-
+import { ProfileService } from '../../services/profile.service';
 
 @Component({
   selector: 'app-profile-form',
@@ -10,16 +8,32 @@ import { Profile } from '../../models/Profile';
   styleUrls: ['./profile-form.component.css'],
 })
 export class ProfileFormComponent implements OnInit {
-  userId!: number;
+
   profile: Profile = new Profile();
   selectedPhoto?: File;
   selectedPhotoName?: string;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private profileService: ProfileService) {}
 
   ngOnInit(): void {
-    this.userId = Number(this.route.snapshot.paramMap.get('id'));
-    console.log('User ID (rota):', this.userId);
+    this.loadProfile();
+  }
+
+  private loadProfile(): void {
+    this.profileService.getMe().subscribe({
+      next: (data) => {
+        // garante que senha/confirm não vêm preenchidas
+        this.profile = {
+          ...this.profile,
+          ...data,
+          password: '',
+          confirmPassword: '',
+        };
+      },
+      error: (err) => {
+        console.error('Erro ao carregar perfil:', err);
+      },
+    });
   }
 
   onPhotoSelected(event: any): void {
@@ -27,5 +41,4 @@ export class ProfileFormComponent implements OnInit {
     this.selectedPhoto = file;
     this.selectedPhotoName = file?.name;
   }
-
 }

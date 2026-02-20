@@ -1,7 +1,10 @@
 <div class="user-filter-container">
   <div class="user-actions-group">
     <a routerLink="/users/create" class="action-link">
-      <button class="btn btn-primary text-white btn-crud-action">
+      <button
+        class="btn btn-primary text-white btn-crud-action"
+        *ngIf="hasAuthority('USER_WRITE')"
+      >
         NOVO USUÁRIO
       </button>
     </a>
@@ -53,7 +56,10 @@
         <ng-template pTemplate="body" let-user>
           <tr [ngClass]="{ 'row-inactive': user?.active === false }">
             <td>
-              <p-tableCheckbox [value]="user"></p-tableCheckbox>
+              <p-tableCheckbox
+                [value]="user"
+                *ngIf="hasAuthority('USER_DELETE')"
+              ></p-tableCheckbox>
             </td>
 
             <td class="columns">
@@ -89,6 +95,7 @@
                   pTooltip="Editar usuário"
                   tooltipPosition="top"
                   [routerLink]="['/users/', user.id, 'edit']"
+                  *ngIf="hasAuthority('USER_WRITE')"
                 ></a>
 
                 <button
@@ -98,6 +105,7 @@
                   pTooltip="Excluir usuário"
                   tooltipPosition="top"
                   (click)="delete(user)"
+                  *ngIf="hasAuthority('USER_DELETE')"
                 ></button>
 
                 <button
@@ -107,6 +115,7 @@
                   pTooltip="Detalhamento do usuário"
                   tooltipPosition="top"
                   (click)="openDetails(user)"
+                  *ngIf="hasAuthority('USER_READ')"
                 ></button>
 
                 <button
@@ -116,8 +125,8 @@
                   pTooltip="Ativar / Desativar Usuário"
                   tooltipPosition="top"
                   (click)="toggleActive(user)"
+                  *ngIf="hasAuthority('USER_STATUS_CHANGE')"
                 ></button>
-
               </div>
             </td>
           </tr>

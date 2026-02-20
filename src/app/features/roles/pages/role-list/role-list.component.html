@@ -1,7 +1,11 @@
 <div class="role-filter-container">
   <div class="role-actions-group">
     <a routerLink="/roles/create" class="action-link">
-      <button class="btn btn-primary text-white btn-crud-action" type="button">
+      <button
+        class="btn btn-primary text-white btn-crud-action"
+        type="button"
+        *ngIf="hasAuthority('ROLE_WRITE')"
+      >
         NOVO PERFIL
       </button>
     </a>
@@ -57,6 +61,7 @@
                   [tooltipOptions]="{ showDelay: 300 }"
                   tooltipPosition="top"
                   (click)="openPermissions(role); $event.stopPropagation()"
+                  *ngIf="hasAuthority('ROLE_WRITE')"
                 ></button>
               </div>
             </td>
@@ -73,4 +78,3 @@
   [roleAuthority]="selectedRoleAuthority"
   (saved)="reloadRoles()"
 ></app-role-permissions-modal>
-

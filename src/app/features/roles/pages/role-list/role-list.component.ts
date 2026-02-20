@@ -6,6 +6,7 @@ import { LazyLoadEvent } from 'primeng/api';
 import { RoleList } from 'src/app/features/roles/models/RoleList';
 import { Pagination } from 'src/app/core/models/Pagination';
 import { RolesService } from '../../services/roles.service';
+import { AuthService } from 'src/app/core/auth/services/auth.service';
 
 @Component({
   selector: 'app-role-list',
@@ -24,7 +25,10 @@ export class RoleListComponent implements OnInit {
 
   @ViewChild('roleTable') grid!: Table;
 
-  constructor(private roleService: RolesService) {}
+  constructor(
+    private roleService: RolesService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -56,6 +60,10 @@ export class RoleListComponent implements OnInit {
   }
 
   reloadRoles(): void {
-    this.list(); 
+    this.list();
+  }
+
+  hasAuthority(role: string) {
+    return this.authService.hasAuthority(role);
   }
 }

@@ -10,6 +10,7 @@ import {
 import { ErrorHandlerService } from 'src/app/core/error/services/error-handler.service';
 import { UsersService } from '../../services/users.service';
 import { User } from '../../../../core/models/User';
+import { AuthService } from 'src/app/core/auth/services/auth.service';
 
 @Component({
   selector: 'app-user-list',
@@ -39,7 +40,8 @@ export class UserListComponent implements OnInit {
     private userService: UsersService,
     private messageService: MessageService,
     private errorHandler: ErrorHandlerService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {}
@@ -54,7 +56,7 @@ export class UserListComponent implements OnInit {
         this.totalElements = data.totalElements;
 
         this.selectedUsers = this.users.filter(
-          (u) => u.id != null && this.selectedUserIds.includes(u.id)
+          (u) => u.id != null && this.selectedUserIds.includes(u.id),
         );
       });
   }
@@ -73,15 +75,13 @@ export class UserListComponent implements OnInit {
     this.confirmationService.confirm({
       message: 'Tem certeza que deseja excluir?',
       accept: () => {
-        this.userService.delete(user.id).subscribe(
-          () => {
-            this.grid.reset();
-            this.messageService.add({
-              severity: 'success',
-              detail: 'Usuário excluído com sucesso!',
-            });
-          },
-        );
+        this.userService.delete(user.id).subscribe(() => {
+          this.grid.reset();
+          this.messageService.add({
+            severity: 'success',
+            detail: 'Usuário excluído com sucesso!',
+          });
+        });
       },
     });
   }
@@ -106,17 +106,15 @@ export class UserListComponent implements OnInit {
     console.log('IDs selecionados:', this.selectedUserIds);
   }
 
+  deleteSelectedUsers(): void {
+    if (!this.selectedUserIds || this.selectedUserIds.length === 0) return;
 
-deleteSelectedUsers(): void {
-  if (!this.selectedUserIds || this.selectedUserIds.length === 0) return;
+    const ids = [...this.selectedUserIds];
 
-  const ids = [...this.selectedUserIds];
-
-  this.confirmationService.confirm({
-    message: `Tem certeza que deseja excluir ${ids.length} usuário(s)?`,
-    accept: () => {
-      this.userService.deleteAll(ids).subscribe(
-        () => {
+    this.confirmationService.confirm({
+      message: `Tem certeza que deseja excluir ${ids.length} usuário(s)?`,
+      accept: () => {
+        this.userService.deleteAll(ids).subscribe(() => {
           this.selectedUserIds = [];
           this.selectedUsers = [];
 
@@ -126,42 +124,43 @@ deleteSelectedUsers(): void {
             severity: 'success',
             detail: 'Usuários excluídos com sucesso!',
           });
-        },
-      );
-    },
-  });
-}
+        });
+      },
+    });
+  }
 
-openDetails(user: User): void {
-  const id = user?.id;
-  if (id == null) return;
+  openDetails(user: User): void {
+    const id = user?.id;
+    if (id == null) return;
 
-  
-  this.detailsVisible = true;
-  this.userDetails = null;
+    this.detailsVisible = true;
+    this.userDetails = null;
 
-  this.userService.findById(id).subscribe({
-    next: (details: User) => {
-      this.userDetails = details;
-    },
-  });
-}
+    this.userService.findById(id).subscribe({
+      next: (details: User) => {
+        this.userDetails = details;
+      },
+    });
+  }
 
-toggleActive(user: User): void {
-  if (!user?.id) return;
+  toggleActive(user: User): void {
+    if (!user?.id) return;
 
-  const newStatus = !user.active;
+    const newStatus = !user.active;
 
-  this.userService.changeActive(user.id, newStatus).subscribe({
-    next: () => {
-      user.active = newStatus;
+    this.userService.changeActive(user.id, newStatus).subscribe({
+      next: () => {
+        user.active = newStatus;
 
-      this.messageService.add({
-        severity: 'success',
-        detail: `Usuário ${newStatus ? 'ativado' : 'desativado'} com sucesso!`,
-      });
-    },
-  });
-}
+        this.messageService.add({
+          severity: 'success',
+          detail: `Usuário ${newStatus ? 'ativado' : 'desativado'} com sucesso!`,
+        });
+      },
+    });
+  }
 
+  hasAuthority(role: string) {
+    return this.authService.hasAuthority(role);
+  }
 }

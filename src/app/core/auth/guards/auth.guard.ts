@@ -20,7 +20,7 @@ export class AuthGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
 
     if (this.auth.isAccessTokenInvalid()) {
-      this.router.navigate(['/login'], {
+      this.router.navigate(['/auth/login'], {
         queryParams: { returnUrl: state.url },
       });
       return false;

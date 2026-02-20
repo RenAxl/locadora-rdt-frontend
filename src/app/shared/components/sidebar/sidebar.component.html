@@ -76,6 +76,7 @@
               routerLink="/roles"
               routerLinkActive="active"
               class="d-flex align-items-center nav-link px-4"
+              *ngIf="hasAuthority('ROLE_READ')"
             >
               <i class="fa-solid fa-user-shield me-2"></i>
               <span>Perfis</span>
@@ -163,6 +164,7 @@
               routerLink="/roles"
               routerLinkActive="active"
               class="d-flex align-items-center nav-link px-4"
+              *ngIf="hasAuthority('ROLE_READ')"
             >
               <i class="fa-solid fa-user-shield me-2"></i>
               <span>Perfis</span>
@@ -173,3 +175,4 @@
     </ul>
   </nav>
 </aside>
+

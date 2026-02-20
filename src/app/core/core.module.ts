@@ -11,6 +11,8 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { tokenGetter } from './auth/utils/token-getter';
 import { API } from './config/api.config';
 import { ErrorInterceptor } from './http/interceptors/error.interceptor';
+import { NotAuthorizedComponent } from './pages/not-authorized/not-authorized.component';
+import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 
 
 @NgModule({
@@ -41,6 +43,10 @@ import { ErrorInterceptor } from './http/interceptors/error.interceptor';
       useClass: ErrorInterceptor,
       multi: true,
     },
+  ],
+  declarations: [
+    NotAuthorizedComponent,
+    PageNotFoundComponent
   ],
 })
 export class CoreModule {

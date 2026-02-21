@@ -41,4 +41,5 @@ export class ProfileFormComponent implements OnInit {
     this.selectedPhoto = file;
     this.selectedPhotoName = file?.name;
   }
+  
 }

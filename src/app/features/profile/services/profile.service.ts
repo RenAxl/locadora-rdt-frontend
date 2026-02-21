@@ -15,3 +15,4 @@ export class ProfileService {
     return this.http.get<Profile>(`${API.USERS.ROOT}/me`);
   }
 }
+

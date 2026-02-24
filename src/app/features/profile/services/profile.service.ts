@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API } from 'src/app/core/config/api.config';
-import { Profile } from '../models/Profile';
+import { Profile } from '../../../core/models/Profile';
 import { ChangePassword } from '../models/ChangePassword';
 
 @Injectable({

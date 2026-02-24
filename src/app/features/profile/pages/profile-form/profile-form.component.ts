@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Profile } from '../../models/Profile';
+import { Profile } from '../../../../core/models/Profile';
 import { ChangePassword } from '../../models/ChangePassword';
 import { ProfileService } from '../../services/profile.service';
 import { MessageService } from 'primeng/api';

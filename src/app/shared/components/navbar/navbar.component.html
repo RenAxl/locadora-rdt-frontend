@@ -19,12 +19,22 @@
       aria-expanded="false"
     >
       <span class="profile-img-wrapper me-2">
-        <img src="assets/images/Axl93.jpeg" alt="Foto" class="profile-img" />
+        <ng-container *ngIf="photoPreviewUrl; else noPhoto">
+          <img
+            class="profile-photo"
+            [src]="photoPreviewUrl"
+            alt="Foto do perfil"
+          />
+        </ng-container>
+        <ng-template #noPhoto>
+          <div class="profile-photo-placeholder" aria-label="Sem foto">
+            <span class="profile-photo-icon">👤</span>
+          </div>
+        </ng-template>
       </span>
 
       <span class="user-details text-start">
-        <span class="user-name">Renan</span>
-        <span class="user-role">Administrador</span>
+        <span class="user-name">{{profile.name}}</span>
       </span>
 
       <i class="fa fa-caret-down ms-2 dropdown-arrow" aria-hidden="true"></i>
@@ -37,8 +47,11 @@
       styleClass="user-overlay user-overlay-small"
     >
       <nav class="overlay-menu" aria-label="Menu do usuário">
-
-        <a class="overlay-item" routerLink="/profile/2/edit" routerLinkActive="active">
+        <a
+          class="overlay-item"
+          routerLink="/profile/2/edit"
+          routerLinkActive="active"
+        >
           <i class="fa fa-user" aria-hidden="true"></i>
           <span>Perfil</span>
         </a>

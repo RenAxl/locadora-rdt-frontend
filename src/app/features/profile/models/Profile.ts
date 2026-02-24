@@ -3,6 +3,4 @@ export class Profile {
   email: string = '';
   telephone: string = '';
   address: string = '';
-  password: string = '';
-  confirmPassword: string = '';
 }

@@ -1,8 +1,55 @@
 <div class="profile-form-container">
   <div class="profile-card">
-    <form #profileForm="ngForm">
+    <form #profileForm="ngForm" (ngSubmit)="saveProfile()">
       <div class="col-12 mb-3">
         <h1>Meu Perfil</h1>
+      </div>
+
+      <div class="profile-photo-header">
+        <div class="profile-photo-area">
+          <div class="profile-photo-frame">
+            <ng-container *ngIf="photoPreviewUrl; else noPhoto">
+              <img
+                class="profile-photo"
+                [src]="photoPreviewUrl"
+                alt="Foto do perfil"
+              />
+            </ng-container>
+
+            <ng-template #noPhoto>
+              <div class="profile-photo-placeholder" aria-label="Sem foto">
+                <span class="profile-photo-icon">👤</span>
+              </div>
+            </ng-template>
+          </div>
+
+          <div class="profile-photo-meta">
+            <div class="profile-photo-title">Foto do Perfil</div>
+            <div class="profile-photo-subtitle">
+              JPG, PNG ou WEBP • até 2MB
+            </div>
+
+            <div class="profile-photo-actions">
+              <label class="upload-btn" for="photo">
+                <span class="upload-btn-icon">⬆️</span>
+                <span>Selecionar foto</span>
+              </label>
+
+              <input
+                id="photo"
+                type="file"
+                name="photo"
+                accept="image/*"
+                (change)="onPhotoSelected($event)"
+                class="upload-input"
+              />
+
+              <span class="file-chip" *ngIf="selectedPhotoName">
+                {{ selectedPhotoName }}
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="row g-3 profile-form-inputs">
@@ -24,7 +71,6 @@
             error="required"
             text="Informe seu nome completo"
           ></app-message>
-
           <app-message
             [control]="name"
             error="minlength"
@@ -93,68 +139,49 @@
           ></app-message>
         </div>
 
-        <div class="col-12 col-lg-6">
-          <input
-            pInputText
-            placeholder="Senha"
-            type="password"
-            name="password"
-            [(ngModel)]="profile.password"
-            #password="ngModel"
-            minlength="6"
-            class="form-control"
-          />
-
-          <app-message
-            [control]="password"
-            error="minlength"
-            text="Mínimo de {{
-              password.errors?.['minlength']?.requiredLength
-            }} caracteres. Você digitou apenas {{
-              password.errors?.['minlength']?.actualLength
-            }}"
-          ></app-message>
-
+        <div class="col-12 mt-2">
+          <h5 class="mt-3">Alterar Senha</h5>
           <small class="field-help">
-            Se não quiser alterar a senha, deixe em branco.
+            Se não quiser alterar a senha, deixe os campos de nova senha em
+            branco.
           </small>
         </div>
 
         <div class="col-12 col-lg-6">
           <input
             pInputText
-            placeholder="Confirmar Senha"
+            placeholder="Senha atual"
+            type="password"
+            name="currentPassword"
+            [(ngModel)]="password.currentPassword"
+            class="form-control"
+          />
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <input
+            pInputText
+            placeholder="Nova senha"
+            type="password"
+            name="newPassword"
+            [(ngModel)]="password.newPassword"
+            minlength="6"
+            class="form-control"
+          />
+          <small class="field-help">Mínimo de 6 caracteres.</small>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <input
+            pInputText
+            placeholder="Confirmar nova senha"
             type="password"
             name="confirmPassword"
-            [(ngModel)]="profile.confirmPassword"
-            #confirmPassword="ngModel"
+            [(ngModel)]="password.confirmPassword"
             minlength="6"
             class="form-control"
           />
-
-          <small class="field-help">
-            Deve ser igual à senha informada acima.
-          </small>
-        </div>
-
-        <div class="col-12">
-          <div class="file-wrapper">
-            <label class="file-label" for="photo">
-              Foto (qualquer formato)
-            </label>
-
-            <input
-              id="photo"
-              type="file"
-              name="photo"
-              (change)="onPhotoSelected($event)"
-              class="form-control file-input"
-            />
-
-            <small class="field-help" *ngIf="selectedPhotoName">
-              Arquivo selecionado: <b>{{ selectedPhotoName }}</b>
-            </small>
-          </div>
+          <small class="field-help">Deve ser igual à nova senha.</small>
         </div>
       </div>
 
@@ -168,7 +195,10 @@
         </button>
 
         <a routerLink="/home">
-          <button type="button" class="btn btn-outline-danger profile-form-button">
+          <button
+            type="button"
+            class="btn btn-outline-danger profile-form-button"
+          >
             CANCELAR
           </button>
         </a>
@@ -176,4 +206,3 @@
     </form>
   </div>
 </div>
-

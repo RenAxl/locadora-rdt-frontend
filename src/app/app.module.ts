@@ -10,23 +10,20 @@ import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
 import { ShellModule } from './shell/shell.module';
 
-
 @NgModule({
-  declarations: [
-    AppComponent,
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
-    BrowserAnimationsModule, 
-    TableModule ,
+    BrowserAnimationsModule,
+    TableModule,
     SharedModule,
     CoreModule,
     ShellModule,
-  
-    AppRoutingModule
+
+    AppRoutingModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

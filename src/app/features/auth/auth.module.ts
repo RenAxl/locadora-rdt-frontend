@@ -9,14 +9,11 @@ import { AuthRoutingModule } from './auth-routing.module';
 import { ActivateAccountComponent } from './pages/activate-account/activate-account.component';
 import { LoginComponent } from './pages/login/login.component';
 import { SharedModule } from 'src/app/shared/shared.module';
-
-
+import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 
 @NgModule({
-  declarations: [
-    ActivateAccountComponent,
-    LoginComponent,
-  ],
+  declarations: [ActivateAccountComponent, LoginComponent, ForgotPasswordComponent, ResetPasswordComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -24,7 +21,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     ButtonModule,
     SharedModule,
 
-    AuthRoutingModule
-  ]
+    AuthRoutingModule,
+  ],
 })
-export class AuthModule { }
+export class AuthModule {}

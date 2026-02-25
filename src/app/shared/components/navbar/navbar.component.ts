@@ -64,11 +64,18 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.subs.push(sub);
   }
 
-    private loadProfile(): void {
+  private loadProfile(): void {
     const sub = this.userSessionService.getMe().subscribe({
       next: (data) => {
         console.log(data);
-        this.profile = { ...this.profile, ...data };
+
+        const firstName = data.name ? data.name.trim().split(' ')[0] : '';
+
+        this.profile = {
+          ...this.profile,
+          ...data,
+          name: firstName,
+        };
       },
       error: () => {
         this.messageService.add({

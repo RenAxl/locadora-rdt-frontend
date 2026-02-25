@@ -4,7 +4,7 @@ import { MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/core/auth/services/auth.service';
 import { UserSessionService } from '../../services/user-session.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { Subscription } from 'rxjs';
+import { catchError, EMPTY, Subscription } from 'rxjs';
 import { Profile } from 'src/app/core/models/Profile';
 
 @Component({
@@ -47,22 +47,27 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.router.navigate(['/auth/login']);
   }
 
-  private loadMyPhoto(): void {
-    const sub = this.userSessionService.getMyPhoto().subscribe({
-      next: (blob) => {
-        if (!blob || blob.size === 0) return;
+private loadMyPhoto(): void {
+  const sub = this.userSessionService
+    .getMyPhoto()
+    .pipe(
+      catchError(() => {
+        // Não tem foto → comportamento normal
+        this.photoPreviewUrl = undefined;
+        return EMPTY;
+      })
+    )
+    .subscribe((blob) => {
+      if (!blob || blob.size === 0) return;
 
-        this.cleanupObjectUrl();
-        this.objectUrl = URL.createObjectURL(blob);
-        this.photoPreviewUrl = this.sanitizer.bypassSecurityTrustUrl(
-          this.objectUrl,
-        );
-      },
-      error: () => {},
+      this.cleanupObjectUrl();
+      this.objectUrl = URL.createObjectURL(blob);
+      this.photoPreviewUrl =
+        this.sanitizer.bypassSecurityTrustUrl(this.objectUrl);
     });
 
-    this.subs.push(sub);
-  }
+  this.subs.push(sub);
+}
 
   private loadProfile(): void {
     const sub = this.userSessionService.getMe().subscribe({

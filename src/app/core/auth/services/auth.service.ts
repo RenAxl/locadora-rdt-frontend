@@ -26,7 +26,7 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private tokenService: TokenService,
-    private jwtHelper: JwtHelperService
+    private jwtHelper: JwtHelperService,
   ) {
     this.loadDecodedTokenFromStorage();
   }
@@ -43,9 +43,9 @@ export class AuthService {
       grant_type: 'password',
     }).toString();
 
-    return this.http.post<OAuthTokenResponse>(API.AUTH.TOKEN, body, { headers }).pipe(
-      catchError((err) => throwError(() => err))
-    );
+    return this.http
+      .post<OAuthTokenResponse>(API.AUTH.TOKEN, body, { headers })
+      .pipe(catchError((err) => throwError(() => err)));
   }
 
   login(user: User): Observable<OAuthTokenResponse> {
@@ -55,7 +55,7 @@ export class AuthService {
           this.tokenService.setToken(data.access_token);
           this.decodedToken = this.jwtHelper.decodeToken(data.access_token);
         }
-      })
+      }),
     );
   }
 
@@ -114,11 +114,22 @@ export class AuthService {
       .map((x: string) => x.trim());
   }
 
-forgotPassword(email: string): Observable<void> {
-  const payload = { email: (email ?? '').trim() };
-  return this.http.post<void>(API.USERS.FORGOT_PASSWORD, payload).pipe(
-    catchError((err) => throwError(() => err))
-  );
-}
+  forgotPassword(email: string): Observable<void> {
+    const payload = { email: (email ?? '').trim() };
+    return this.http
+      .post<void>(API.USERS.FORGOT_PASSWORD, payload)
+      .pipe(catchError((err) => throwError(() => err)));
+  }
 
+  resetPassword(token: string, password: string): Observable<void> {
+    const cleanToken = (token ?? '').trim();
+    const payload = { password: (password ?? '').trim() };
+
+    return this.http
+      .post<void>(
+        `${API.USERS.RESET_PASSWORD}?token=${encodeURIComponent(cleanToken)}`,
+        payload,
+      )
+      .pipe(catchError((err) => throwError(() => err)));
+  }
 }

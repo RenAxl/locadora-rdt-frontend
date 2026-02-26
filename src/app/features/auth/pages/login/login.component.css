@@ -91,6 +91,22 @@
   opacity: 0.75;
 }
 
+.forgot-password {
+  text-align: right;
+  margin-top: -4px;
+}
+
+.forgot-password a {
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: #0d6efd;
+  text-decoration: none;
+}
+
+.forgot-password a:hover {
+  text-decoration: underline;
+}
+
 @media (min-width: 576px) {
   .login-card {
     padding: 26px;

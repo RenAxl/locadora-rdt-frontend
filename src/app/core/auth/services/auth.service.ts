@@ -113,4 +113,12 @@ export class AuthService {
       .filter((x: any) => typeof x === 'string')
       .map((x: string) => x.trim());
   }
+
+forgotPassword(email: string): Observable<void> {
+  const payload = { email: (email ?? '').trim() };
+  return this.http.post<void>(API.USERS.FORGOT_PASSWORD, payload).pipe(
+    catchError((err) => throwError(() => err))
+  );
+}
+
 }

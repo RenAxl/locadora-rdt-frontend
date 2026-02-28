@@ -52,7 +52,6 @@ private loadMyPhoto(): void {
     .getMyPhoto()
     .pipe(
       catchError(() => {
-        // Não tem foto → comportamento normal
         this.photoPreviewUrl = undefined;
         return EMPTY;
       })

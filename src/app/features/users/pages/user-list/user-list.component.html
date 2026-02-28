@@ -79,11 +79,19 @@
 
             <td class="columns col-photo">
               <span class="p-column-title">Foto:</span>
-              <img
-                src="assets/images/sem-foto.jpg"
-                alt="Foto do usuário"
-                class="user-photo"
-              />
+              <ng-container *ngIf="photoMap[user.id!]; else noPhoto">
+                <img
+                  class="user-photo"
+                  [src]="photoMap[user.id!]"
+                  alt="Foto do usuário"
+                />
+              </ng-container>
+
+              <ng-template #noPhoto>
+                <div class="profile-photo-placeholder">
+                  <span class="profile-photo-icon">👤</span>
+                </div>
+              </ng-template>
             </td>
 
             <td class="col-actions">

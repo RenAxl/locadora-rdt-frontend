@@ -6,7 +6,7 @@ import {
   HttpRequest,
   HttpErrorResponse,
 } from '@angular/common/http';
-import { Observable, throwError, EMPTY } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ErrorHandlerService } from '../../error/services/error-handler.service';
 
@@ -14,19 +14,19 @@ import { ErrorHandlerService } from '../../error/services/error-handler.service'
 export class ErrorInterceptor implements HttpInterceptor {
   constructor(private errorHandler: ErrorHandlerService) {}
 
-  intercept(
-    req: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       catchError((error: unknown) => {
         if (error instanceof HttpErrorResponse) {
-          const isPhotoEndpoint = req.url.includes('/users/me/photo');
-          const isNotFound = error.status === 404;
 
-          // Não mostra mensagem de erro se não tiver foto
-          if (isPhotoEndpoint && isNotFound) {
-            return EMPTY;
+          const isUserPhotoEndpoint =
+            req.url.includes('/users/me/photo') ||
+            /\/users\/\d+\/photo(\?|$)/.test(req.url);
+
+          const isNoPhotoStatus = error.status === 404 || error.status === 204;
+
+          if (isUserPhotoEndpoint && isNoPhotoStatus) {
+            return of(null as any);
           }
 
           this.errorHandler.handle(error);

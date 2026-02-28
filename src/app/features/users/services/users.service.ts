@@ -60,4 +60,11 @@ export class UsersService {
       { params: { token } },
     );
   }
+
+  getUserPhoto(id: number): Observable<Blob> {
+    return this.http.get(API.USERS.PHOTO(id), {
+      responseType: 'blob',
+    });
+  }
+  
 }

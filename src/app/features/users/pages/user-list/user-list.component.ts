@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 import { Table } from 'primeng/table';
 import { Pagination } from 'src/app/core/models/Pagination';
@@ -11,6 +12,7 @@ import { ErrorHandlerService } from 'src/app/core/error/services/error-handler.s
 import { UsersService } from '../../services/users.service';
 import { User } from '../../../../core/models/User';
 import { AuthService } from 'src/app/core/auth/services/auth.service';
+import { catchError, EMPTY } from 'rxjs';
 
 @Component({
   selector: 'app-user-list',
@@ -36,12 +38,15 @@ export class UserListComponent implements OnInit {
 
   userDetails: User | null = null;
 
+  photoMap: { [key: number]: SafeUrl } = {};
+
   constructor(
     private userService: UsersService,
     private messageService: MessageService,
     private errorHandler: ErrorHandlerService,
     private confirmationService: ConfirmationService,
-    private authService: AuthService
+    private authService: AuthService,
+    private sanitizer: DomSanitizer,
   ) {}
 
   ngOnInit(): void {}
@@ -58,6 +63,8 @@ export class UserListComponent implements OnInit {
         this.selectedUsers = this.users.filter(
           (u) => u.id != null && this.selectedUserIds.includes(u.id),
         );
+
+        this.loadPhotos();
       });
   }
 
@@ -163,4 +170,29 @@ export class UserListComponent implements OnInit {
   hasAuthority(role: string) {
     return this.authService.hasAuthority(role);
   }
+
+  private loadPhotos(): void {
+    this.photoMap = {};
+
+    this.users.forEach((user) => {
+      if (!user?.id) return;
+
+      this.userService
+        .getUserPhoto(user.id)
+        .pipe(
+          catchError(() => {
+            // 404 = sem foto (não é erro)
+            return EMPTY;
+          }),
+        )
+        .subscribe((blob: Blob) => {
+          if (!blob || blob.size === 0) return;
+
+          const objectUrl = URL.createObjectURL(blob);
+          this.photoMap[user.id!] =
+            this.sanitizer.bypassSecurityTrustUrl(objectUrl);
+        });
+    });
+  }
+  
 }

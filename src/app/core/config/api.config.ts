@@ -15,6 +15,7 @@ export const API = {
     DELETE_ALL: `${BASE_URL}/users/all`,
     CHANGE_ACTIVE: (id: number | string) => `${BASE_URL}/users/${id}/active`,
     ACTIVATE: `${BASE_URL}/users/activate`,
+    PHOTO: (id: number) => `${BASE_URL}/users/${id}/photo`,
     FORGOT_PASSWORD: `${BASE_URL}/users/forgot-password`,
     RESET_PASSWORD: `${BASE_URL}/users/reset-password`,
   },

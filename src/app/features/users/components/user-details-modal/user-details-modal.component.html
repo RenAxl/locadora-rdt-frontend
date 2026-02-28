@@ -65,7 +65,7 @@
 
         <div class="roles" *ngIf="user?.roles?.length; else noRolesTpl">
           <span class="role-chip" *ngFor="let r of user?.roles">
-            {{ r?.authority || '-' }}
+            {{ r?.authority || "-" }}
           </span>
         </div>
 
@@ -75,12 +75,21 @@
       </div>
 
       <div class="photo span-2">
-        <img
-          [src]="getPhotoUrl(user?.photo) || 'assets/images/sem-foto.jpg'"
-          alt="Foto do usuário"
-          (error)="$any($event.target).src = 'assets/images/sem-foto.jpg'"
-        />
-        <small class="hint" *ngIf="!user?.photo">Sem foto</small>
+        <ng-container *ngIf="photoPreviewUrl; else noPhoto">
+          <img
+            [src]="photoPreviewUrl"
+            alt="Foto do usuário"
+            (error)="onImgError()"
+          />
+        </ng-container>
+
+        <ng-template #noPhoto>
+          <div class="profile-photo-placeholder" aria-label="Sem foto">
+            <span class="profile-photo-icon">👤</span>
+          </div>
+        </ng-template>
+
+        <small class="hint" *ngIf="!photoPreviewUrl">Sem foto</small>
       </div>
     </div>
   </p-dialog>

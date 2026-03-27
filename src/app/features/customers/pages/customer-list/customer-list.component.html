@@ -80,6 +80,7 @@
                   pTooltip="Editar cliente"
                   tooltipPosition="top"
                   [routerLink]="['/customers/', customer.id, 'edit']"
+                  *ngIf="hasAuthority('CUSTOMER_WRITE')"
                 ></a>
 
                 <button
@@ -89,6 +90,7 @@
                   pTooltip="Excluir cliente"
                   tooltipPosition="top"
                   (click)="delete(customer)"
+                  *ngIf="hasAuthority('CUSTOMER_DELETE')"
                 ></button>
               </div>
             </td>

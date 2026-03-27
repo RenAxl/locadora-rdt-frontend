@@ -87,7 +87,7 @@
               routerLink="/customers"
               routerLinkActive="active"
               class="d-flex align-items-center nav-link px-4"
-              *ngIf="hasAuthority('ROLE_READ')"
+              *ngIf="hasAuthority('CUSTOMER_READ')"
             >
               <i class="fa-solid fa-id-card me-2"></i>
               <span>Clientes</span>
@@ -181,12 +181,12 @@
               <span>Perfis</span>
             </a>
           </li>
-                    <li>
+          <li>
             <a
               routerLink="/customers"
               routerLinkActive="active"
               class="d-flex align-items-center nav-link px-4"
-              *ngIf="hasAuthority('ROLE_READ')"
+              *ngIf="hasAuthority('CUSTOMER_READ')"
             >
               <i class="fa-solid fa-id-card me-2"></i>
               <span>Clientes</span>

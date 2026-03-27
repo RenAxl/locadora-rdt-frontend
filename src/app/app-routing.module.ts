@@ -92,6 +92,15 @@ const routes: Routes = [
     children: [
       {
         path: 'customers',
+        canActivate: [AuthGuard],
+        data: {
+          authorities: [
+            'CUSTOMER_READ',
+            'CUSTOMER_WRITE',
+            'CUSTOMER_DELETE',
+            'CUSTOMER_STATUS_CHANGE',
+          ],
+        },
         loadChildren: () =>
           import('./features/customers/customers.module').then((m) => m.CustomersModule),
       },

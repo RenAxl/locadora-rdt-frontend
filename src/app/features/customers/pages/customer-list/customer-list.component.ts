@@ -11,6 +11,7 @@ import { ErrorHandlerService } from 'src/app/core/error/services/error-handler.s
 import { Table } from 'primeng/table';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { catchError, EMPTY } from 'rxjs';
+import { AuthService } from 'src/app/core/auth/services/auth.service';
 
 @Component({
   selector: 'app-customer-list',
@@ -35,6 +36,7 @@ export class CustomerListComponent implements OnInit {
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private sanitizer: DomSanitizer,
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {}
@@ -100,5 +102,8 @@ export class CustomerListComponent implements OnInit {
         });
     });
   }
-  
+
+  hasAuthority(role: string) {
+    return this.authService.hasAuthority(role);
+  }
 }

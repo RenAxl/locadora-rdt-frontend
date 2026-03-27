@@ -7,7 +7,6 @@ import {
   LazyLoadEvent,
   MessageService,
 } from 'primeng/api';
-import { ErrorHandlerService } from 'src/app/core/error/services/error-handler.service';
 import { Table } from 'primeng/table';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { catchError, EMPTY } from 'rxjs';
@@ -30,6 +29,10 @@ export class CustomerListComponent implements OnInit {
   @ViewChild('customerTable') grid!: Table;
 
   photoMap: { [key: number]: SafeUrl } = {};
+
+  selectedCustomers: Customer[] = [];
+
+  selectedCustomerIds: number[] = [];
 
   constructor(
     private customerService: CustomerService,
@@ -100,6 +103,49 @@ export class CustomerListComponent implements OnInit {
           this.photoMap[customer.id!] =
             this.sanitizer.bypassSecurityTrustUrl(objectUrl);
         });
+    });
+  }
+
+  onRowSelect(event: any): void {
+    const id = event?.data?.id;
+    if (id == null) return;
+
+    if (!this.selectedCustomerIds.includes(id)) {
+      this.selectedCustomerIds.push(id);
+    }
+
+    console.log('IDs selecionados:', this.selectedCustomerIds);
+  }
+
+  onRowUnselect(event: any): void {
+    const id = event?.data?.id;
+    if (id == null) return;
+
+    this.selectedCustomerIds = this.selectedCustomerIds.filter((x) => x !== id);
+
+    console.log('IDs selecionados:', this.selectedCustomerIds);
+  }
+
+  deleteSelectedCustomers(): void {
+    if (!this.selectedCustomerIds || this.selectedCustomerIds.length === 0) return;
+
+    const ids = [...this.selectedCustomerIds];
+
+    this.confirmationService.confirm({
+      message: `Tem certeza que deseja excluir ${ids.length} usuário(s)?`,
+      accept: () => {
+        this.customerService.deleteAll(ids).subscribe(() => {
+          this.selectedCustomerIds = [];
+          this.selectedCustomers = [];
+
+          this.grid.reset();
+
+          this.messageService.add({
+            severity: 'success',
+            detail: 'Usuários excluídos com sucesso!',
+          });
+        });
+      },
     });
   }
 

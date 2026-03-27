@@ -1,10 +1,21 @@
 <div class="customer-filter-container">
   <div class="customer-actions-group">
     <a routerLink="/customers/create" class="action-link">
-      <button class="btn btn-primary text-white btn-crud-action">
+      <button
+        class="btn btn-primary text-white btn-crud-action"
+        *ngIf="hasAuthority('CUSTOMER_WRITE')"
+      >
         NOVO CLIENTE
       </button>
     </a>
+    <button
+      *ngIf="selectedCustomerIds.length > 0"
+      class="btn btn-danger text-white btn-crud-action"
+      type="button"
+      (click)="deleteSelectedCustomers()"
+    >
+      EXCLUIR CLIENTES
+    </button>
   </div>
 
   <app-name-filter
@@ -19,6 +30,8 @@
       <p-table
         [value]="customers"
         dataKey="id"
+        (onRowSelect)="onRowSelect($event)"
+        (onRowUnselect)="onRowUnselect($event)"
         [responsive]="true"
         [paginator]="true"
         [rows]="pagination.linesPerPage"
@@ -29,6 +42,7 @@
       >
         <ng-template pTemplate="header">
           <tr>
+            <th></th>
             <th>Nome</th>
             <th>E-mail</th>
             <th>Telefone</th>
@@ -39,6 +53,9 @@
 
         <ng-template pTemplate="body" let-customer>
           <tr>
+            <td>
+              <p-tableCheckbox [value]="customer"></p-tableCheckbox>
+            </td>
             <td class="columns">
               <span class="p-column-title">Nome:</span>
               {{ customer.name }}

@@ -35,6 +35,8 @@ export const API = {
   CUSTOMERS: {
     ROOT: `${BASE_URL}/customers`,
     BY_ID: (id: number | string) => `${BASE_URL}/customers/${id}`,
-    PHOTO: (id: number) => `${BASE_URL}/customers/${id}/photo`
+    PHOTO: (id: number) => `${BASE_URL}/customers/${id}/photo`,
+    DELETE_ALL: `${BASE_URL}/customers/all`,
   },
+  
 } as const;

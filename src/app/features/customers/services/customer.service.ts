@@ -54,4 +54,12 @@ export class CustomerService {
       responseType: 'blob',
     });
   }
+
+    deleteAll(ids: number[]): Observable<void> {
+    console.log(ids);
+    
+    return this.http.delete<void>(API.CUSTOMERS.DELETE_ALL, {
+      body: ids,
+    });
+  }
 }

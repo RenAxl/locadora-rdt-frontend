@@ -82,6 +82,17 @@
               <span>Perfis</span>
             </a>
           </li>
+          <li>
+            <a
+              routerLink="/customers"
+              routerLinkActive="active"
+              class="d-flex align-items-center nav-link px-4"
+              *ngIf="hasAuthority('ROLE_READ')"
+            >
+              <i class="fa-solid fa-id-card me-2"></i>
+              <span>Clientes</span>
+            </a>
+          </li>
         </ul>
       </li>
     </ul>
@@ -170,9 +181,19 @@
               <span>Perfis</span>
             </a>
           </li>
+                    <li>
+            <a
+              routerLink="/customers"
+              routerLinkActive="active"
+              class="d-flex align-items-center nav-link px-4"
+              *ngIf="hasAuthority('ROLE_READ')"
+            >
+              <i class="fa-solid fa-id-card me-2"></i>
+              <span>Clientes</span>
+            </a>
+          </li>
         </ul>
       </li>
     </ul>
   </nav>
 </aside>
-

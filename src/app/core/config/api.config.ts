@@ -31,4 +31,10 @@ export const API = {
     BY_ID: (id: number | string) => `${BASE_URL}/permissions/${id}`,
     GROUPS: `${BASE_URL}/permissions/groups`,
   },
+
+  CUSTOMERS: {
+    ROOT: `${BASE_URL}/customers`,
+    BY_ID: (id: number | string) => `${BASE_URL}/customers/${id}`,
+    PHOTO: (id: number) => `${BASE_URL}/customers/${id}/photo`
+  },
 } as const;

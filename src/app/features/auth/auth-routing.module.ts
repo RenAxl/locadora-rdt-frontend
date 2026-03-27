@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ActivateAccountComponent } from '../../features/auth/pages/activate-account/activate-account.component';
-import { LoginComponent } from '../../features/auth/pages/login/login.component';
+import { ActivateAccountComponent } from './pages/activate-account/activate-account.component';
+import { LoginComponent } from './pages/login/login.component';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 

@@ -86,6 +86,18 @@ const routes: Routes = [
     ],
   },
 
+   {
+    path: '',
+    component: MainComponent,
+    children: [
+      {
+        path: 'customers',
+        loadChildren: () =>
+          import('./features/customers/customers.module').then((m) => m.CustomersModule),
+      },
+    ],
+  },
+
   {
     path: 'not-authorized',
     component: NotAuthorizedComponent,

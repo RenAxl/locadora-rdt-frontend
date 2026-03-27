@@ -1,0 +1,100 @@
+<div class="customer-filter-container">
+  <div class="customer-actions-group">
+    <a routerLink="/customers/create" class="action-link">
+      <button class="btn btn-primary text-white btn-crud-action">
+        NOVO CLIENTE
+      </button>
+    </a>
+  </div>
+
+  <app-name-filter
+    text="Digite o nome do cliente"
+    (search)="searchCustomer($event)"
+  ></app-name-filter>
+</div>
+
+<div class="customer-card">
+  <div class="grid">
+    <div class="col-12">
+      <p-table
+        [value]="customers"
+        dataKey="id"
+        [responsive]="true"
+        [paginator]="true"
+        [rows]="pagination.linesPerPage"
+        [lazy]="true"
+        [totalRecords]="totalElements"
+        (onLazyLoad)="changePage($event)"
+        #customerTable
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>Telefone</th>
+            <th>Foto</th>
+            <th class="actions"></th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-customer>
+          <tr>
+            <td class="columns">
+              <span class="p-column-title">Nome:</span>
+              {{ customer.name }}
+            </td>
+
+            <td class="columns">
+              <span class="p-column-title">E-mail:</span>
+              {{ customer.email }}
+            </td>
+
+            <td class="columns">
+              <span class="p-column-title">Telefone:</span>
+              {{ customer.phone }}
+            </td>
+
+            <td class="columns col-photo">
+              <span class="p-column-title">Foto:</span>
+              <ng-container *ngIf="photoMap[customer.id!]; else noPhoto">
+                <img
+                  class="customer-photo"
+                  [src]="photoMap[customer.id!]"
+                  alt="Foto do cliente"
+                />
+              </ng-container>
+
+              <ng-template #noPhoto>
+                <div class="customer-photo-placeholder">
+                  <span class="customer-photo-icon">👤</span>
+                </div>
+              </ng-template>
+            </td>
+
+            <td class="col-actions">
+              <div class="actions-wrap">
+                <a
+                  pButton
+                  class="p-button-rounded p-button-text"
+                  icon="pi pi-pencil"
+                  pTooltip="Editar cliente"
+                  tooltipPosition="top"
+                  [routerLink]="['/customers/', customer.id, 'edit']"
+                ></a>
+
+                <button
+                  pButton
+                  class="p-button-rounded p-button-text p-button-danger"
+                  icon="pi pi-trash"
+                  pTooltip="Excluir cliente"
+                  tooltipPosition="top"
+                  (click)="delete(customer)"
+                ></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

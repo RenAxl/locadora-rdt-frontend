@@ -99,7 +99,7 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
   }
 
   private validatePasswordChangeOrToast(): boolean {
-    if (!this.wantsToChangePassword()) return true;
+    if (!this.wantsToChangePassword()) return true; // SE O USUÁRIO NÃO QUER TROCAR A SENHA RETORNA true.
 
     if (!this.password.currentPassword?.trim()) {
       this.messageService.add({
@@ -132,7 +132,7 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
   }
 
   saveProfile(): void {
-    if (!this.validatePasswordChangeOrToast()) return;
+    if (!this.validatePasswordChangeOrToast()) return; // Não pode haver inconsistências na troca de password.
 
     const sub = this.profileService.updateMe(this.profile).subscribe({
       next: () => {

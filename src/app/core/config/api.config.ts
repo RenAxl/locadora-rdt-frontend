@@ -37,6 +37,8 @@ export const API = {
     BY_ID: (id: number | string) => `${BASE_URL}/customers/${id}`,
     PHOTO: (id: number) => `${BASE_URL}/customers/${id}/photo`,
     DELETE_ALL: `${BASE_URL}/customers/all`,
+    CHANGE_ACTIVE: (id: number | string) => `${BASE_URL}/customers/${id}/active`,
+
   },
   
 } as const;

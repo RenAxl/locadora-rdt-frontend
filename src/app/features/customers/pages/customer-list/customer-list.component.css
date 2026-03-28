@@ -61,6 +61,23 @@
   align-items: center;
 }
 
+:host ::ng-deep .row-inactive td {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+:host ::ng-deep .row-inactive td:not(.col-actions) {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+:host ::ng-deep .row-inactive td:not(.col-actions) .p-column-title {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+:host ::ng-deep .row-inactive .user-photo {
+  filter: grayscale(100%);
+  opacity: 0.8;
+}
+
 
 @media (min-width: 768px) {
   .customer-filter-container {

@@ -127,12 +127,13 @@ export class CustomerListComponent implements OnInit {
   }
 
   deleteSelectedCustomers(): void {
-    if (!this.selectedCustomerIds || this.selectedCustomerIds.length === 0) return;
+    if (!this.selectedCustomerIds || this.selectedCustomerIds.length === 0)
+      return;
 
     const ids = [...this.selectedCustomerIds];
 
     this.confirmationService.confirm({
-      message: `Tem certeza que deseja excluir ${ids.length} usuário(s)?`,
+      message: `Tem certeza que deseja excluir ${ids.length} cliente(s)?`,
       accept: () => {
         this.customerService.deleteAll(ids).subscribe(() => {
           this.selectedCustomerIds = [];
@@ -142,8 +143,26 @@ export class CustomerListComponent implements OnInit {
 
           this.messageService.add({
             severity: 'success',
-            detail: 'Usuários excluídos com sucesso!',
+            detail: 'Clientes excluídos com sucesso!',
           });
+        });
+      },
+    });
+  }
+
+  changeActive(customer: Customer): void {
+    if (!customer?.id) return;
+    console.log(customer.id);
+
+    const newStatus = !customer.active;
+
+    this.customerService.changeActive(customer.id, newStatus).subscribe({
+      next: () => {
+        customer.active = newStatus;
+
+        this.messageService.add({
+          severity: 'success',
+          detail: `Cliente ${newStatus ? 'ativado' : 'desativado'} com sucesso!`,
         });
       },
     });

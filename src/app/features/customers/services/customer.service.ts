@@ -55,11 +55,16 @@ export class CustomerService {
     });
   }
 
-    deleteAll(ids: number[]): Observable<void> {
+  deleteAll(ids: number[]): Observable<void> {
     console.log(ids);
-    
+
     return this.http.delete<void>(API.CUSTOMERS.DELETE_ALL, {
       body: ids,
     });
+  }
+
+  changeActive(id: number, active: boolean): Observable<void> {
+    console.log(id, active);
+    return this.http.patch<void>(API.CUSTOMERS.CHANGE_ACTIVE(id), active);
   }
 }

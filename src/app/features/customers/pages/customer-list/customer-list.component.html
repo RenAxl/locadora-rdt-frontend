@@ -115,6 +115,16 @@
 
                 <button
                   pButton
+                  class="p-button-rounded p-button-text"
+                  icon="pi pi-eye"
+                  pTooltip="Detalhamento do Cliente"
+                  tooltipPosition="top"
+                  (click)="openDetails(customer)"
+                  *ngIf="hasAuthority('CUSTOMER_READ')"
+                ></button>
+
+                <button
+                  pButton
                   class="p-button-rounded p-button-text p-button-warning"
                   [icon]="customer.active ? 'pi pi-ban' : 'pi pi-check'"
                   pTooltip="Ativar / Desativar Cliente"
@@ -122,12 +132,19 @@
                   (click)="changeActive(customer)"
                   *ngIf="hasAuthority('CUSTOMER_STATUS_CHANGE')"
                 ></button>
-                
               </div>
             </td>
           </tr>
         </ng-template>
       </p-table>
+
+      <app-customer-details-modal
+        [visible]="detailsVisible"
+        (visibleChange)="detailsVisible = $event"
+        [title]="'Detalhamento do Cliente'"
+        [customer]="customerDetails"
+      ></app-customer-details-modal>
+
     </div>
   </div>
 </div>

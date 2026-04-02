@@ -6,6 +6,8 @@ export class Customer {
   phone?: string;
   address?: string;
   active?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
 
 
   constructor(init?: Partial<Customer>) {

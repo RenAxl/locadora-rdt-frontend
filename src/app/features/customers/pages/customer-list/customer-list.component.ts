@@ -34,6 +34,10 @@ export class CustomerListComponent implements OnInit {
 
   selectedCustomerIds: number[] = [];
 
+  detailsVisible = false;
+
+  customerDetails: Customer | null = null;
+
   constructor(
     private customerService: CustomerService,
     private messageService: MessageService,
@@ -164,6 +168,20 @@ export class CustomerListComponent implements OnInit {
           severity: 'success',
           detail: `Cliente ${newStatus ? 'ativado' : 'desativado'} com sucesso!`,
         });
+      },
+    });
+  }
+
+    openDetails(customer: Customer): void {
+    const id = customer?.id;
+    if (id == null) return;
+
+    this.detailsVisible = true;
+    this.customerDetails = null;
+
+    this.customerService.findById(id).subscribe({
+      next: (details: Customer) => {
+        this.customerDetails = details;
       },
     });
   }

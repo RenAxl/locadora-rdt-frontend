@@ -11,11 +11,12 @@ import { CustomersRoutingModule } from './customers-routing.module';
 import { CustomerListComponent } from './pages/customer-list/customer-list.component';
 import { CustomerFormComponent } from './pages/customer-form/customer-form.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { CustomerDetailsModalComponent } from './components/customer-details-modal/customer-details-modal.component';
 
 @NgModule({
   declarations: [
     CustomerListComponent, 
-    CustomerFormComponent
+    CustomerFormComponent, CustomerDetailsModalComponent
   ],
   imports: [
     CommonModule, 

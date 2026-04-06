@@ -170,7 +170,9 @@
   color: #111827;
   background: #fff;
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
   box-sizing: border-box;
 }
 
@@ -448,7 +450,35 @@
   scroll-padding-bottom: 2rem;
 }
 
+.file-preview {
+  min-height: 118px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  text-align: center;
+  padding: 1rem;
+}
 
+.preview-image {
+  max-width: 180px;
+  max-height: 120px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid #d7dfeb;
+}
+
+.preview-file-icon {
+  font-size: 2rem;
+  color: #64748b;
+}
+
+.preview-file-name {
+  font-size: 0.9rem;
+  color: #475569;
+  word-break: break-word;
+}
 
 @media (max-width: 768px) {
   :host ::ng-deep .customer-files-dialog .p-dialog {

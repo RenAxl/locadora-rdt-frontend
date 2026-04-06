@@ -12,11 +12,12 @@ import { CustomerListComponent } from './pages/customer-list/customer-list.compo
 import { CustomerFormComponent } from './pages/customer-form/customer-form.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CustomerDetailsModalComponent } from './components/customer-details-modal/customer-details-modal.component';
+import { CustomerFilesModalComponent } from './components/customer-files-modal/customer-files-modal.component';
 
 @NgModule({
   declarations: [
     CustomerListComponent, 
-    CustomerFormComponent, CustomerDetailsModalComponent
+    CustomerFormComponent, CustomerDetailsModalComponent, CustomerFilesModalComponent
   ],
   imports: [
     CommonModule, 

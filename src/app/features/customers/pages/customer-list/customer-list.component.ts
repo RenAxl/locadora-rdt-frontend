@@ -38,6 +38,11 @@ export class CustomerListComponent implements OnInit {
 
   customerDetails: Customer | null = null;
 
+  filesVisible: boolean = false;
+
+  selectedCustomerId?: number;
+  selectedCustomerName?: string;
+
   constructor(
     private customerService: CustomerService,
     private messageService: MessageService,
@@ -172,7 +177,7 @@ export class CustomerListComponent implements OnInit {
     });
   }
 
-    openDetails(customer: Customer): void {
+  openDetails(customer: Customer): void {
     const id = customer?.id;
     if (id == null) return;
 
@@ -184,6 +189,12 @@ export class CustomerListComponent implements OnInit {
         this.customerDetails = details;
       },
     });
+  }
+
+  openFilesModal(customer: Customer): void {
+    this.selectedCustomerId = customer.id;
+    this.selectedCustomerName = customer.name;
+    this.filesVisible = true;
   }
 
   hasAuthority(role: string) {

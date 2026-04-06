@@ -132,6 +132,16 @@
                   (click)="changeActive(customer)"
                   *ngIf="hasAuthority('CUSTOMER_STATUS_CHANGE')"
                 ></button>
+
+                <button
+                  pButton
+                  class="p-button-rounded p-button-text"
+                  icon="pi pi-folder-open"
+                  pTooltip="Arquivos do Cliente"
+                  tooltipPosition="top"
+                  (click)="openFilesModal(customer)"
+                  *ngIf="hasAuthority('CUSTOMER_READ')"
+                ></button>
               </div>
             </td>
           </tr>
@@ -145,6 +155,12 @@
         [customer]="customerDetails"
       ></app-customer-details-modal>
 
+      <app-customer-files-modal
+        [visible]="filesVisible"
+        (visibleChange)="filesVisible = $event"
+        [customerId]="selectedCustomerId"
+        [customerName]="selectedCustomerName"
+      ></app-customer-files-modal>
     </div>
   </div>
 </div>

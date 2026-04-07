@@ -10,6 +10,7 @@ import {
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { CustomerFileService } from '../../services/customer-file.service';
 import { CustomerFile } from '../../models/CustomerFile';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-customer-files-modal',
@@ -37,7 +38,8 @@ export class CustomerFilesModalComponent implements OnDestroy, OnChanges {
 
   constructor(
     private customerFileService: CustomerFileService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private confirmationService: ConfirmationService,
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -222,6 +224,23 @@ export class CustomerFilesModalComponent implements OnDestroy, OnChanges {
     this.files.forEach((file) => {
       file.previewUrl = undefined;
       file.previewError = false;
+    });
+  }
+
+   deleteFile(file: CustomerFile): void {
+    if (!this.customerId || !file.id) {
+      return;
+    }
+
+    this.confirmationService.confirm({
+      message: `Tem certeza que deseja excluir o arquivo "${file.name}"?`,
+      accept: () => {
+        this.customerFileService.delete(this.customerId!, file.id!).subscribe({
+          next: () => {
+            this.loadFiles();
+          },
+        });
+      },
     });
   }
 }

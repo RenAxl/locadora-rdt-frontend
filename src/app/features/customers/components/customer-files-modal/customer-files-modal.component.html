@@ -178,7 +178,6 @@
 
                     <div>
                       <strong>{{ file.name }}</strong>
-                      <small>ID: {{ file.id }}</small>
                     </div>
                   </div>
                 </td>
@@ -201,6 +200,7 @@
                       type="button"
                       class="icon-btn danger"
                       title="Excluir"
+                      (click)="deleteFile(file)"
                     >
                       <i class="pi pi-trash"></i>
                     </button>

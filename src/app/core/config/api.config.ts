@@ -46,6 +46,8 @@ export const API = {
 
       VIEW: (customerId: number | string, fileId: number | string) =>
         `${BASE_URL}/customers/${customerId}/files/${fileId}/view`,
+      BY_ID: (customerId: number, fileId: number) =>
+        `${BASE_URL}/customers/${customerId}/files/${fileId}`,
     },
   },
 } as const;

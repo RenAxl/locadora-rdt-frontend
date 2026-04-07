@@ -148,100 +148,45 @@
               </tr>
             </thead>
 
-            <tbody>
-              <tr>
+            <tbody *ngIf="files.length > 0; else emptyState">
+              <tr *ngFor="let file of files">
                 <td>
                   <div class="file-main-info">
-                    <div class="file-icon pdf">
-                      <i class="pi pi-file-pdf"></i>
-                    </div>
-
-                    <div>
-                      <strong>Contrato.pdf</strong>
-                      <small>ID: 15</small>
-                    </div>
-                  </div>
-                </td>
-
-                <td>application/pdf</td>
-                <td>1.2 MB</td>
-                <td>05/04/2026</td>
-                <td>
-                  <div class="table-actions">
-                    <button type="button" class="icon-btn" title="Visualizar">
-                      <i class="pi pi-external-link"></i>
-                    </button>
-
-                    <button type="button" class="icon-btn" title="Download">
-                      <i class="pi pi-download"></i>
-                    </button>
-
-                    <button
-                      type="button"
-                      class="icon-btn danger"
-                      title="Excluir"
+                    <ng-container
+                      *ngIf="
+                        isImageFile(file) &&
+                          file.previewUrl &&
+                          !file.previewError;
+                        else defaultFileIcon
+                      "
                     >
-                      <i class="pi pi-trash"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
+                      <div class="file-icon image-preview-box">
+                        <img
+                          [src]="file.previewUrl"
+                          [alt]="file.name"
+                          class="file-preview-thumb"
+                          (error)="onImageError(file)"
+                        />
+                      </div>
+                    </ng-container>
 
-              <tr>
-                <td>
-                  <div class="file-main-info">
-                    <div class="file-icon image">
-                      <i class="pi pi-image"></i>
-                    </div>
-
-                    <div>
-                      <strong>Documento RG Frente</strong>
-                      <small>ID: 16</small>
-                    </div>
-                  </div>
-                </td>
-
-                <td>image/png</td>
-                <td>420 KB</td>
-                <td>04/04/2026</td>
-                <td>
-                  <div class="table-actions">
-                    <button type="button" class="icon-btn" title="Visualizar">
-                      <i class="pi pi-external-link"></i>
-                    </button>
-
-                    <button type="button" class="icon-btn" title="Download">
-                      <i class="pi pi-download"></i>
-                    </button>
-
-                    <button
-                      type="button"
-                      class="icon-btn danger"
-                      title="Excluir"
-                    >
-                      <i class="pi pi-trash"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  <div class="file-main-info">
-                    <div class="file-icon default">
-                      <i class="pi pi-file"></i>
-                    </div>
+                    <ng-template #defaultFileIcon>
+                      <div class="file-icon" [ngClass]="getFileIconClass(file)">
+                        <i class="pi" [ngClass]="getFileIconPiClass(file)"></i>
+                      </div>
+                    </ng-template>
 
                     <div>
-                      <strong>Comprovante.pdf</strong>
-                      <small>ID: 17</small>
+                      <strong>{{ file.name }}</strong>
+                      <small>ID: {{ file.id }}</small>
                     </div>
                   </div>
                 </td>
 
-                <td>application/pdf</td>
-                <td>780 KB</td>
-                <td>03/04/2026</td>
+                <td>{{ file.contentType }}</td>
+                <td>{{ file.size }}</td>
+                <td>{{ file.createdAt | date: "dd/MM/yyyy" }}</td>
+
                 <td>
                   <div class="table-actions">
                     <button type="button" class="icon-btn" title="Visualizar">
@@ -263,6 +208,16 @@
                 </td>
               </tr>
             </tbody>
+
+            <ng-template #emptyState>
+              <tbody>
+                <tr>
+                  <td colspan="5" class="empty-table-message">
+                    Nenhum arquivo cadastrado para este cliente.
+                  </td>
+                </tr>
+              </tbody>
+            </ng-template>
           </table>
         </div>
       </div>

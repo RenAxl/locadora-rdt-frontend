@@ -480,6 +480,20 @@
   word-break: break-word;
 }
 
+.image-preview-box {
+  padding: 0;
+  overflow: hidden;
+  background: #f8fafc;
+}
+
+.file-preview-thumb {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  display: block;
+  border-radius: 10px;
+}
+
 @media (max-width: 768px) {
   :host ::ng-deep .customer-files-dialog .p-dialog {
     width: 98vw !important;

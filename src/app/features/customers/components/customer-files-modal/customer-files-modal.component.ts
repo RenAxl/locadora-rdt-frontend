@@ -1,15 +1,22 @@
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { CustomerFileService } from '../../services/customer-file.service';
 import { CustomerFile } from '../../models/CustomerFile';
 
-
 @Component({
   selector: 'app-customer-files-modal',
   templateUrl: './customer-files-modal.component.html',
-  styleUrls: ['./customer-files-modal.component.css']
+  styleUrls: ['./customer-files-modal.component.css'],
 })
-export class CustomerFilesModalComponent implements OnDestroy {
+export class CustomerFilesModalComponent implements OnDestroy, OnChanges {
   @Input() visible: boolean = false;
   @Output() visibleChange = new EventEmitter<boolean>();
 
@@ -22,12 +29,111 @@ export class CustomerFilesModalComponent implements OnDestroy {
   previewUrl: SafeUrl | null = null;
   isImagePreview: boolean = false;
 
+  files: CustomerFile[] = [];
+  loadingFiles: boolean = false;
+
   private objectUrl?: string;
+  private objectUrls: string[] = [];
 
   constructor(
     private customerFileService: CustomerFileService,
     private sanitizer: DomSanitizer
   ) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (
+      (changes['visible'] && this.visible) ||
+      (changes['customerId'] && this.customerId && this.visible)
+    ) {
+      this.loadFiles();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.clearPreview();
+    this.clearObjectUrls();
+  }
+
+  loadFiles(): void {
+    if (!this.customerId) {
+      return;
+    }
+
+    this.loadingFiles = true;
+    this.clearObjectUrls();
+
+    this.customerFileService.findAllByCustomer(this.customerId).subscribe({
+      next: (response) => {
+        this.files = response;
+        this.loadingFiles = false;
+        this.loadImagePreviews();
+      },
+      error: (error) => {
+        console.error('Erro ao carregar arquivos do cliente:', error);
+        this.loadingFiles = false;
+      },
+    });
+  }
+
+  private loadImagePreviews(): void {
+    if (!this.customerId) {
+      return;
+    }
+
+    this.files.forEach((file) => {
+      if (!file.id || !this.isImageFile(file)) {
+        return;
+      }
+
+      this.customerFileService.getViewBlob(this.customerId!, file.id!).subscribe({
+        next: (blob) => {
+          if (!blob || blob.size === 0) {
+            file.previewError = true;
+            return;
+          }
+
+          const objectUrl = URL.createObjectURL(blob);
+
+          file.previewUrl = this.sanitizer.bypassSecurityTrustUrl(objectUrl);
+          file.previewError = false;
+
+          this.objectUrls.push(objectUrl);
+        },
+        error: (error) => {
+          console.error(`Erro ao carregar preview do arquivo ${file.id}:`, error);
+          file.previewError = true;
+        },
+      });
+    });
+  }
+
+  onImageError(file: CustomerFile): void {
+    file.previewError = true;
+    file.previewUrl = undefined;
+  }
+
+  isImageFile(file: CustomerFile): boolean {
+    return (
+      (!!file.contentType && file.contentType.startsWith('image/')) ||
+      (!!file.fileName && /\.(jpg|jpeg|png|gif|webp)$/i.test(file.fileName))
+    );
+  }
+
+  getFileIconClass(file: CustomerFile): any {
+    return {
+      image: this.isImageFile(file),
+      pdf: file.contentType === 'application/pdf',
+      default: !this.isImageFile(file) && file.contentType !== 'application/pdf',
+    };
+  }
+
+  getFileIconPiClass(file: CustomerFile): any {
+    return {
+      'pi-image': this.isImageFile(file),
+      'pi-file-pdf': file.contentType === 'application/pdf',
+      'pi-file': !this.isImageFile(file) && file.contentType !== 'application/pdf',
+    };
+  }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -69,13 +175,13 @@ export class CustomerFilesModalComponent implements OnDestroy {
     this.customerFileService
       .upload(this.customerId, this.fileName.trim(), this.selectedFile)
       .subscribe({
-        next: (response: CustomerFile) => {
-          console.log('Arquivo enviado com sucesso:', response);
+        next: () => {
           this.clearForm();
+          this.loadFiles();
         },
         error: (error) => {
           console.error('Erro ao enviar arquivo:', error);
-        }
+        },
       });
   }
 
@@ -83,10 +189,6 @@ export class CustomerFilesModalComponent implements OnDestroy {
     this.fileName = '';
     this.selectedFile = null;
     this.selectedFileName = '';
-    this.clearPreview();
-  }
-
-  ngOnDestroy(): void {
     this.clearPreview();
   }
 
@@ -111,5 +213,15 @@ export class CustomerFilesModalComponent implements OnDestroy {
 
     this.previewUrl = null;
     this.isImagePreview = false;
+  }
+
+  private clearObjectUrls(): void {
+    this.objectUrls.forEach((url) => URL.revokeObjectURL(url));
+    this.objectUrls = [];
+
+    this.files.forEach((file) => {
+      file.previewUrl = undefined;
+      file.previewError = false;
+    });
   }
 }

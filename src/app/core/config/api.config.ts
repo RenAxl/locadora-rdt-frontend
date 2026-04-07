@@ -43,6 +43,9 @@ export const API = {
     FILES: {
       ROOT: (customerId: number | string) =>
         `${BASE_URL}/customers/${customerId}/files`,
+
+      VIEW: (customerId: number | string, fileId: number | string) =>
+        `${BASE_URL}/customers/${customerId}/files/${fileId}/view`,
     },
   },
 } as const;

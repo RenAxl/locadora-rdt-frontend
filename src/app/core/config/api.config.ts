@@ -48,6 +48,8 @@ export const API = {
         `${BASE_URL}/customers/${customerId}/files/${fileId}/view`,
       BY_ID: (customerId: number, fileId: number) =>
         `${BASE_URL}/customers/${customerId}/files/${fileId}`,
+      DOWNLOAD: (customerId: number, fileId: number) =>
+        `${BASE_URL}/customers/${customerId}/files/${fileId}/download`,
     },
   },
 } as const;

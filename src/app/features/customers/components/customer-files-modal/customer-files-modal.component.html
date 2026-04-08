@@ -188,11 +188,13 @@
 
                 <td>
                   <div class="table-actions">
-                    <button type="button" class="icon-btn" title="Visualizar">
-                      <i class="pi pi-external-link"></i>
-                    </button>
 
-                    <button type="button" class="icon-btn" title="Download">
+                    <button
+                      type="button"
+                      class="icon-btn"
+                      title="Download"
+                      (click)="downloadFile(file)"
+                    >
                       <i class="pi pi-download"></i>
                     </button>
 

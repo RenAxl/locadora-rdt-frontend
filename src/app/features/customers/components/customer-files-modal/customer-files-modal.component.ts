@@ -10,7 +10,7 @@ import {
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { CustomerFileService } from '../../services/customer-file.service';
 import { CustomerFile } from '../../models/CustomerFile';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-customer-files-modal',
@@ -40,6 +40,7 @@ export class CustomerFilesModalComponent implements OnDestroy, OnChanges {
     private customerFileService: CustomerFileService,
     private sanitizer: DomSanitizer,
     private confirmationService: ConfirmationService,
+    private messageService: MessageService
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -242,5 +243,61 @@ export class CustomerFilesModalComponent implements OnDestroy, OnChanges {
         });
       },
     });
+  }
+
+   downloadFile(file: CustomerFile): void {
+    if (!this.customerId || !file.id) {
+      return;
+    }
+
+    this.customerFileService.download(this.customerId, file.id).subscribe({
+      next: (response) => {
+        const blob = response.body;
+
+        if (!blob) {
+          this.messageService.add({
+            severity: 'warn',
+            detail: 'Arquivo não disponível para download.',
+          });
+          return;
+        }
+
+        const fileName = this.extractFileNameFromResponse(response, file);
+        const objectUrl = URL.createObjectURL(blob);
+
+        const anchor = document.createElement('a');
+        anchor.href = objectUrl;
+        anchor.download = fileName;
+        anchor.click();
+
+        URL.revokeObjectURL(objectUrl);
+
+        this.messageService.add({
+          severity: 'success',
+          detail: 'Download realizado com sucesso!',
+        });
+      },
+      error: (error) => {
+        console.error('Erro ao fazer download do arquivo:', error);
+        this.messageService.add({
+          severity: 'error',
+          detail: 'Erro ao fazer download do arquivo.',
+        });
+      },
+    });
+  }
+
+  private extractFileNameFromResponse(response: any, file: CustomerFile): string {
+    const contentDisposition = response.headers.get('content-disposition');
+
+    if (contentDisposition) {
+      const fileNameMatch = contentDisposition.match(/filename\*?=(?:UTF-8'')?["']?([^"';\n]+)["']?/i);
+
+      if (fileNameMatch?.[1]) {
+        return decodeURIComponent(fileNameMatch[1]);
+      }
+    }
+
+    return file.fileName || file.name || 'arquivo';
   }
 }

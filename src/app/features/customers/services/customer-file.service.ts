@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { CustomerFile } from '../models/CustomerFile';
 import { API } from 'src/app/core/config/api.config';
@@ -40,5 +40,12 @@ export class CustomerFileService {
     return this.http.delete<void>(
       API.CUSTOMERS.FILES.BY_ID(customerId, fileId),
     );
+  }
+
+  download(customerId: number, fileId: number): Observable<HttpResponse<Blob>> {
+    return this.http.get(API.CUSTOMERS.FILES.DOWNLOAD(customerId, fileId), {
+      observe: 'response',
+      responseType: 'blob',
+    });
   }
 }

@@ -321,17 +321,17 @@
 }
 
 .files-table-wrapper {
-  overflow-x: auto;
+  width: 100%;
   border: 1px solid #edf2f7;
   border-radius: 12px;
-  width: 100%;
   background: #fff;
+  overflow: hidden;
 }
 
 .files-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 760px;
+  table-layout: fixed;
 }
 
 .files-table thead th {
@@ -350,6 +350,7 @@
   font-size: 0.9rem;
   color: #334155;
   vertical-align: middle;
+  word-break: break-word;
 }
 
 .files-table tbody tr:last-child td {
@@ -360,32 +361,39 @@
   background: #fafcff;
 }
 
+.col-file {
+  width: 90px;
+}
+
 .col-actions {
-  width: 170px;
+  width: 110px;
 }
 
-.file-main-info {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
+.file-thumb-cell {
+  text-align: center;
 }
 
-.file-main-info strong {
+.file-name-cell {
+  min-width: 0;
+}
+
+.file-name-cell strong {
   display: block;
   color: #111827;
   font-size: 0.92rem;
+  word-break: break-word;
 }
 
-.file-main-info small {
-  color: #6b7280;
-  font-size: 0.78rem;
+.cell-value-text {
+  display: inline-block;
+  word-break: break-word;
 }
 
 .file-icon {
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   font-size: 1rem;
@@ -409,8 +417,10 @@
 
 .table-actions {
   display: flex;
-  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
   gap: 0.35rem;
+  flex-wrap: nowrap;
 }
 
 .icon-btn {
@@ -425,6 +435,7 @@
   justify-content: center;
   cursor: pointer;
   transition: 0.2s ease;
+  flex-shrink: 0;
 }
 
 .icon-btn:hover {
@@ -494,9 +505,130 @@
   border-radius: 10px;
 }
 
+.empty-table-message {
+  text-align: center;
+  color: #64748b;
+}
+
+@media (max-width: 992px) {
+  :host ::ng-deep .customer-files-dialog .p-dialog {
+    width: 96vw !important;
+    max-width: 96vw !important;
+  }
+
+  .modal-body {
+    padding: 1rem;
+  }
+
+  .card-section {
+    padding: 1rem;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .toolbar-actions {
+    width: 100%;
+  }
+
+  .toolbar-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .files-table-wrapper {
+    overflow: visible;
+    border: none;
+    background: transparent;
+  }
+
+  .files-table,
+  .files-table tbody,
+  .files-table tr,
+  .files-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .files-table thead {
+    display: none;
+  }
+
+  .files-table tbody tr {
+    background: #fff;
+    border: 1px solid #e7edf5;
+    border-radius: 14px;
+    margin-bottom: 1rem;
+    padding: 0.9rem 1rem;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+  }
+
+  .files-table tbody td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid #eef2f7;
+    text-align: left;
+  }
+
+  .files-table tbody td:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .files-table tbody td::before {
+    content: attr(data-label);
+    min-width: 82px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #64748b;
+    flex-shrink: 0;
+    padding-top: 0.15rem;
+  }
+
+  .file-thumb-cell {
+    justify-content: space-between;
+  }
+
+  .file-thumb-cell .file-icon {
+    margin-left: auto;
+  }
+
+  .file-name-cell {
+    flex: 1;
+    text-align: right;
+  }
+
+  .actions-cell {
+    align-items: center !important;
+  }
+
+  .table-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .col-file,
+  .col-actions {
+    width: 100%;
+  }
+
+  .empty-table-message {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 1rem 0;
+  }
+}
+
 @media (max-width: 768px) {
   :host ::ng-deep .customer-files-dialog .p-dialog {
     width: 98vw !important;
+    max-width: 98vw !important;
     margin: 0 !important;
   }
 
@@ -524,12 +656,40 @@
     align-items: flex-start;
   }
 
-  .toolbar {
+  .section-actions {
     flex-direction: column;
-    align-items: stretch;
   }
 
-  .files-table {
-    min-width: 640px;
+  .section-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .files-table tbody tr {
+    padding: 0.85rem;
+  }
+
+  .files-table tbody td {
+    gap: 0.85rem;
+    padding: 0.65rem 0;
+  }
+
+  .files-table tbody td::before {
+    min-width: 74px;
+    font-size: 0.78rem;
+  }
+
+  .file-name-cell strong,
+  .cell-value-text {
+    text-align: right;
+  }
+
+  .table-actions {
+    gap: 0.5rem;
+  }
+
+  .icon-btn {
+    width: 38px;
+    height: 38px;
   }
 }

@@ -118,31 +118,13 @@
           </div>
         </div>
 
-        <div class="toolbar">
-          <div class="toolbar-search">
-            <i class="pi pi-search"></i>
-            <input
-              type="text"
-              class="search-input"
-              placeholder="Pesquisar pelo nome do arquivo"
-            />
-          </div>
-
-          <div class="toolbar-actions">
-            <button type="button" class="btn btn-light">
-              <i class="pi pi-refresh"></i>
-              Atualizar
-            </button>
-          </div>
-        </div>
-
         <div class="files-table-wrapper">
           <table class="files-table">
             <thead>
               <tr>
-                <th>Arquivo</th>
+                <th class="col-file">Arquivo</th>
+                <th>Nome</th>
                 <th>Tipo</th>
-                <th>Tamanho</th>
                 <th>Data</th>
                 <th class="col-actions">Ações</th>
               </tr>
@@ -150,45 +132,50 @@
 
             <tbody *ngIf="files.length > 0; else emptyState">
               <tr *ngFor="let file of files">
-                <td>
-                  <div class="file-main-info">
-                    <ng-container
-                      *ngIf="
-                        isImageFile(file) &&
-                          file.previewUrl &&
-                          !file.previewError;
-                        else defaultFileIcon
-                      "
-                    >
-                      <div class="file-icon image-preview-box">
-                        <img
-                          [src]="file.previewUrl"
-                          [alt]="file.name"
-                          class="file-preview-thumb"
-                          (error)="onImageError(file)"
-                        />
-                      </div>
-                    </ng-container>
-
-                    <ng-template #defaultFileIcon>
-                      <div class="file-icon" [ngClass]="getFileIconClass(file)">
-                        <i class="pi" [ngClass]="getFileIconPiClass(file)"></i>
-                      </div>
-                    </ng-template>
-
-                    <div>
-                      <strong>{{ file.name }}</strong>
+                <td data-label="Arquivo" class="file-thumb-cell">
+                  <ng-container
+                    *ngIf="
+                      isImageFile(file) &&
+                      file.previewUrl &&
+                      !file.previewError;
+                      else defaultFileIcon
+                    "
+                  >
+                    <div class="file-icon image-preview-box">
+                      <img
+                        [src]="file.previewUrl"
+                        [alt]="file.name"
+                        class="file-preview-thumb"
+                        (error)="onImageError(file)"
+                      />
                     </div>
+                  </ng-container>
+
+                  <ng-template #defaultFileIcon>
+                    <div class="file-icon" [ngClass]="getFileIconClass(file)">
+                      <i class="pi" [ngClass]="getFileIconPiClass(file)"></i>
+                    </div>
+                  </ng-template>
+                </td>
+
+                <td data-label="Nome">
+                  <div class="file-name-cell">
+                    <strong>{{ file.name }}</strong>
                   </div>
                 </td>
 
-                <td>{{ file.contentType }}</td>
-                <td>{{ file.size }}</td>
-                <td>{{ file.createdAt | date: "dd/MM/yyyy" }}</td>
+                <td data-label="Tipo">
+                  <span class="cell-value-text">{{ file.contentType }}</span>
+                </td>
 
-                <td>
+                <td data-label="Data">
+                  <span class="cell-value-text">
+                    {{ file.createdAt | date: "dd/MM/yyyy" }}
+                  </span>
+                </td>
+
+                <td data-label="Ações" class="actions-cell">
                   <div class="table-actions">
-
                     <button
                       type="button"
                       class="icon-btn"

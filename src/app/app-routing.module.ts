@@ -81,12 +81,14 @@ const routes: Routes = [
         path: 'profile',
         canActivate: [AuthGuard],
         loadChildren: () =>
-          import('./features/profile/profile.module').then((m) => m.ProfileModule),
+          import('./features/profile/profile.module').then(
+            (m) => m.ProfileModule,
+          ),
       },
     ],
   },
 
-   {
+  {
     path: '',
     component: MainComponent,
     children: [
@@ -102,7 +104,23 @@ const routes: Routes = [
           ],
         },
         loadChildren: () =>
-          import('./features/customers/customers.module').then((m) => m.CustomersModule),
+          import('./features/customers/customers.module').then(
+            (m) => m.CustomersModule,
+          ),
+      },
+    ],
+  },
+
+  {
+    path: '',
+    component: MainComponent,
+    children: [
+      {
+        path: 'employees',
+        loadChildren: () =>
+          import('./features/employees/employees.module').then(
+            (m) => m.EmployeesModule,
+          ),
       },
     ],
   },

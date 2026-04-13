@@ -52,4 +52,10 @@ export const API = {
         `${BASE_URL}/customers/${customerId}/files/${fileId}/download`,
     },
   },
+
+  POSITIONS: {
+    ROOT: `${BASE_URL}/positions`,
+    BY_ID: (id: number | string) => `${BASE_URL}/positions/${id}`,
+  },
+  
 } as const;

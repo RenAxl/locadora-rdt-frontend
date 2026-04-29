@@ -13,12 +13,14 @@ import { EmployeeFormComponent } from './pages/employee-form/employee-form.compo
 import { EmployeeDetailsModalComponent } from './components/employee-details-modal/employee-details-modal.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { EmployeeFilesModalComponent } from './components/employee-files-modal/employee-files-modal.component';
 
 @NgModule({
   declarations: [
     EmployeeListComponent,
     EmployeeFormComponent,
-    EmployeeDetailsModalComponent
+    EmployeeDetailsModalComponent,
+    EmployeeFilesModalComponent
   ],
   imports: [
     CommonModule,

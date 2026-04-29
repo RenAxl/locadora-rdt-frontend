@@ -69,5 +69,17 @@ export const API = {
       ROOT: `${BASE_URL}/departments`,
       BY_ID: (id: number | string) => `${BASE_URL}/departments/${id}`,
     },
+
+    FILES: {
+      ROOT: (employeeId: number | string) =>
+        `${BASE_URL}/employees/${employeeId}/files`,
+
+      VIEW: (employeeId: number | string, fileId: number | string) =>
+        `${BASE_URL}/employees/${employeeId}/files/${fileId}/view`,
+      BY_ID: (employeeId: number, fileId: number) =>
+        `${BASE_URL}/employees/${employeeId}/files/${fileId}`,
+      DOWNLOAD: (employeeId: number, fileId: number) =>
+        `${BASE_URL}/customers/${employeeId}/files/${fileId}/download`,
+    },
   },
 } as const;

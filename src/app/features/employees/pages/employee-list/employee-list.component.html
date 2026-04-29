@@ -122,6 +122,16 @@
                   tooltipPosition="top"
                   (click)="changeActive(employee)"
                 ></button>
+
+                <button
+                  pButton
+                  class="p-button-rounded p-button-text"
+                  icon="pi pi-folder-open"
+                  pTooltip="Arquivos do Funcionário"
+                  tooltipPosition="top"
+                  (click)="openFilesModal(employee)"
+                ></button>
+
               </div>
             </td>
           </tr>
@@ -134,7 +144,13 @@
         [title]="'Detalhamento do Funcionário'"
         [employee]="employeeDetails"
       ></app-employee-details-modal>
-      
+
+      <app-employee-files-modal
+        [visible]="filesVisible"
+        (visibleChange)="filesVisible = $event"
+        [employeeId]="selectedEmployeeId"
+        [employeeName]="selectedEmployeeName"
+      ></app-employee-files-modal>
     </div>
   </div>
 </div>

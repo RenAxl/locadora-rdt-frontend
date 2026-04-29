@@ -1,1 +1,18 @@
-/* You can add global styles to this file, and also import other style files */
+
+/*o CSS dentro do employee-form.component.css pode não alcançar 
+corretamente o HTML interno gerado pelo PrimeNG. No styles.css global, 
+ele alcança.*/
+p-inputnumber.salary-input-host {
+  display: block !important;
+  width: 100% !important;
+}
+
+p-inputnumber.salary-input-host .p-inputnumber {
+  width: 100% !important;
+}
+
+p-inputnumber.salary-input-host .p-inputtext {
+  width: 100% !important;
+  height: 46px !important;
+  border-radius: 10px !important;
+}

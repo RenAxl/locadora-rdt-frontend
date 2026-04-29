@@ -5,17 +5,20 @@ import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
-import { SharedModule } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 
 import { EmployeesRoutingModule } from './employees-routing.module';
 import { EmployeeListComponent } from './pages/employee-list/employee-list.component';
 import { EmployeeFormComponent } from './pages/employee-form/employee-form.component';
+import { EmployeeDetailsModalComponent } from './components/employee-details-modal/employee-details-modal.component';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @NgModule({
   declarations: [
     EmployeeListComponent,
     EmployeeFormComponent,
+    EmployeeDetailsModalComponent
   ],
   imports: [
     CommonModule,
@@ -26,6 +29,7 @@ import { EmployeeFormComponent } from './pages/employee-form/employee-form.compo
     TooltipModule,
     SharedModule,
     DialogModule,
+    InputNumberModule,
 
     EmployeesRoutingModule,
   ],

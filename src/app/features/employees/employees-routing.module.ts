@@ -5,27 +5,31 @@ import { EmployeeFormComponent } from './pages/employee-form/employee-form.compo
 
 const routes: Routes = [
   {
-  path: '',
-  component: EmployeeListComponent,
-},
-{
-  path: 'create',
-  component: EmployeeFormComponent,
-},
-{
-  path: ':employeeId/edit',
-  component: EmployeeFormComponent,
-},
-{
-  path: 'positions',
-  loadChildren: () =>
-    import('./positions/positions.module')
-      .then(m => m.PositionsModule),
-}
+    path: '',
+    component: EmployeeListComponent,
+  },
+  {
+    path: 'create',
+    component: EmployeeFormComponent,
+  },
+  {
+    path: ':employeeId/edit',
+    component: EmployeeFormComponent,
+  },
+  {
+    path: 'positions',
+    loadChildren: () =>
+      import('./positions/positions.module').then((m) => m.PositionsModule),
+  },
+  {
+    path: 'departments',
+    loadChildren: () =>
+      import('./departments/departments.module').then((m) => m.DepartmentsModule),
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class EmployeesRoutingModule { }
+export class EmployeesRoutingModule {}

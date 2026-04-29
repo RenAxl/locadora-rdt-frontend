@@ -8,6 +8,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { NameFilterComponent } from './components/name-filter/name-filter.component';
 import { MessageComponent } from './components/message/message.component';
+import { NgxMaskModule } from 'ngx-mask';
+
 
 
 @NgModule({
@@ -15,12 +17,13 @@ import { MessageComponent } from './components/message/message.component';
     SidebarComponent,
     NavbarComponent,
     NameFilterComponent,
-    MessageComponent
+    MessageComponent,
   ],
   imports: [
     CommonModule,
     OverlayPanelModule,
     FormsModule,
+    NgxMaskModule.forRoot(),
     
     RouterModule
   ],
@@ -29,6 +32,7 @@ import { MessageComponent } from './components/message/message.component';
     NavbarComponent, 
     NameFilterComponent,
     MessageComponent,
+    NgxMaskModule,
   ],
 })
 export class SharedModule { }

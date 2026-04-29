@@ -16,11 +16,13 @@ import { CustomerFilesModalComponent } from './components/customer-files-modal/c
 
 @NgModule({
   declarations: [
-    CustomerListComponent, 
-    CustomerFormComponent, CustomerDetailsModalComponent, CustomerFilesModalComponent
+    CustomerListComponent,
+    CustomerFormComponent,
+    CustomerDetailsModalComponent,
+    CustomerFilesModalComponent,
   ],
   imports: [
-    CommonModule, 
+    CommonModule,
     FormsModule,
     TableModule,
     ButtonModule,
@@ -28,7 +30,7 @@ import { CustomerFilesModalComponent } from './components/customer-files-modal/c
     SharedModule,
     DialogModule,
 
-    CustomersRoutingModule
+    CustomersRoutingModule,
   ],
 })
 export class CustomersModule {}

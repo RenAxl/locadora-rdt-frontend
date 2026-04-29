@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
@@ -9,6 +9,11 @@ import { TableModule } from 'primeng/table';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
 import { ShellModule } from './shell/shell.module';
+
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
+
+registerLocaleData(localePt);
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,7 +28,9 @@ import { ShellModule } from './shell/shell.module';
 
     AppRoutingModule,
   ],
-  providers: [],
+  providers: [
+     { provide: LOCALE_ID, useValue: 'pt-BR' }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

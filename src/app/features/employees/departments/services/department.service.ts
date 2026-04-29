@@ -3,12 +3,12 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API } from 'src/app/core/config/api.config';
 import { Pagination } from 'src/app/core/models/Pagination';
-import { Position } from '../models/Position';
+import { Department } from '../models/Department';
 
 @Injectable({
   providedIn: 'root',
 })
-export class PositionService {
+export class DepartmentService {
   constructor(private http: HttpClient) {}
 
   list(pagination: Pagination, filterName: string): Observable<any> {
@@ -19,26 +19,26 @@ export class PositionService {
       .set('direction', String(pagination.direction))
       .set('orderBy', String(pagination.orderBy));
 
-    return this.http.get<any>(API.EMPLOYEES.POSITIONS.ROOT, { params });
+    return this.http.get<any>(API.EMPLOYEES.DEPARTMENTS.ROOT, { params });
   }
 
-  insert(position: Position): Observable<any> {
-    return this.http.post<any>(API.EMPLOYEES.POSITIONS.ROOT, position);
+  insert(department: Department): Observable<any> {
+    return this.http.post<any>(API.EMPLOYEES.DEPARTMENTS.ROOT, department);
   }
 
   findById(id: number | string): Observable<any> {
-    return this.http.get<any>(API.EMPLOYEES.POSITIONS.BY_ID(id));
+    return this.http.get<any>(API.EMPLOYEES.DEPARTMENTS.BY_ID(id));
   }
 
-  update(position: Position): Observable<any> {
-    if (!position.id) {
+  update(department: Department): Observable<any> {
+    if (!department.id) {
       throw new Error('ID do usuário obrigatório para atualização.');
     }
 
-    return this.http.put<Position>(API.EMPLOYEES.POSITIONS.BY_ID(position.id), position);
+    return this.http.put<Department>(API.EMPLOYEES.DEPARTMENTS.BY_ID(department.id), department);
   }
 
   delete(id: number): Observable<any> {
-    return this.http.delete<any>(API.EMPLOYEES.POSITIONS.BY_ID(id));
+    return this.http.delete<any>(API.EMPLOYEES.DEPARTMENTS.BY_ID(id));
   }
 }

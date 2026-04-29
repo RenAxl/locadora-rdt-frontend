@@ -53,9 +53,21 @@ export const API = {
     },
   },
 
-  POSITIONS: {
-    ROOT: `${BASE_URL}/positions`,
-    BY_ID: (id: number | string) => `${BASE_URL}/positions/${id}`,
+  EMPLOYEES: {
+    ROOT: `${BASE_URL}/employees`,
+    BY_ID: (id: number | string) => `${BASE_URL}/employees/${id}`,
+    PHOTO: (id: number) => `${BASE_URL}/employees/${id}/photo`,
+    DELETE_ALL: `${BASE_URL}/employees/all`,
+    CHANGE_ACTIVE: (id: number | string) =>
+      `${BASE_URL}/employees/${id}/active`,
+    POSITIONS: {
+      ROOT: `${BASE_URL}/positions`,
+      BY_ID: (id: number | string) => `${BASE_URL}/positions/${id}`,
+    },
+
+    DEPARTMENTS: {
+      ROOT: `${BASE_URL}/departments`,
+      BY_ID: (id: number | string) => `${BASE_URL}/departments/${id}`,
+    },
   },
-  
 } as const;

@@ -1,7 +1,26 @@
-.employee-card {
+p-tableCheckbox {
+  display: flex;
+  justify-content: center;
+}
+
+th:first-child,
+td:first-child {
+  text-align: center;
+  width: 48px;
+}
+
+.department-card {
   padding: 20px;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (min-width: 1400px) {
+  .role-card {
+    max-width: 1300px;
+  }
 }
 
 .btn-crud-action {
@@ -14,7 +33,7 @@
   margin-bottom: 20px;
 }
 
-.employee-actions-group {
+.department-actions-group {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -27,27 +46,30 @@
   text-decoration: none;
 }
 
-.employee-photo {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  object-fit: cover;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-}
-
 :host ::ng-deep .p-datatable thead th {
   background: #2f3a45;
   color: #ffffff;
   font-weight: 600;
 }
 
+th:nth-child(1),
+td:nth-child(1) {
+  width: auto;
+}
 
-.col-photo {
+th:nth-child(2),
+td:nth-child(2) {
+  width: 180px;
   text-align: center;
 }
 
+th:nth-child(3),
+td:nth-child(3) {
+  width: 140px;
+}
+
 .actions {
-  width: 120px;
+  width: 140px;
 }
 
 .col-actions {
@@ -61,33 +83,21 @@
   align-items: center;
 }
 
-:host ::ng-deep .row-inactive td {
-  background: rgba(0, 0, 0, 0.04);
-}
 
-:host ::ng-deep .row-inactive td:not(.col-actions) {
-  color: rgba(0, 0, 0, 0.55);
+:host ::ng-deep .p-datatable {
+  border-radius: 10px;
+  overflow: hidden;
 }
-
-:host ::ng-deep .row-inactive td:not(.col-actions) .p-column-title {
-  color: rgba(0, 0, 0, 0.55);
-}
-
-:host ::ng-deep .row-inactive .user-photo {
-  filter: grayscale(100%);
-  opacity: 0.8;
-}
-
 
 @media (min-width: 768px) {
-  .employee-filter-container {
+  .department-filter-container {
     display: flex;
     margin-bottom: 20px;
     gap: 16px;
     align-items: flex-start;
   }
 
-  .employee-actions-group {
+  .department-actions-group {
     flex-direction: row;
     width: auto;
     gap: 12px;
@@ -111,7 +121,7 @@
     margin-bottom: 0;
   }
 
-  .employee-actions-group {
+  .department-actions-group {
     flex-direction: row;
     gap: 10px;
     margin-bottom: 20px;

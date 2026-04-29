@@ -1,1 +1,140 @@
-<p>employee-list works!</p>
+<div class="employee-filter-container">
+  <div class="employee-actions-group">
+    <a routerLink="/employees/create" class="action-link">
+      <button class="btn btn-primary text-white btn-crud-action">
+        NOVO FUNCIONÁRIO
+      </button>
+    </a>
+    <button
+      *ngIf="selectedEmployeeIds.length > 0"
+      class="btn btn-danger text-white btn-crud-action"
+      type="button"
+      (click)="deleteSelectedEmployees()"
+    >
+      EXCLUIR FUNCIONÁRIOS
+    </button>
+  </div>
+
+  <app-name-filter
+    text="Digite o nome do funcionário"
+    (search)="searchEmployee($event)"
+  ></app-name-filter>
+</div>
+
+<div class="employee-card">
+  <div class="grid">
+    <div class="col-12">
+      <p-table
+        [value]="employees"
+        dataKey="id"
+        (onRowSelect)="onRowSelect($event)"
+        (onRowUnselect)="onRowUnselect($event)"
+        [responsive]="true"
+        [paginator]="true"
+        [rows]="pagination.linesPerPage"
+        [lazy]="true"
+        [totalRecords]="totalElements"
+        (onLazyLoad)="changePage($event)"
+        #employeeTable
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th></th>
+            <th>Nome</th>
+            <th>Matrícula</th>
+            <th>E-mail</th>
+            <th>Foto</th>
+            <th class="actions"></th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-employee>
+          <tr [ngClass]="{ 'row-inactive': employee?.active === false }">
+            <td>
+              <p-tableCheckbox [value]="employee"></p-tableCheckbox>
+            </td>
+            <td class="columns">
+              <span class="p-column-title">Nome:</span>
+              {{ employee.name }}
+            </td>
+
+            <td class="columns">
+              <span class="p-column-title">Matrícula:</span>
+              {{ employee.employeeCode }}
+            </td>
+
+            <td class="columns">
+              <span class="p-column-title">E-mail:</span>
+              {{ employee.email }}
+            </td>
+
+            <td class="columns col-photo">
+              <span class="p-column-title">Foto:</span>
+              <ng-container *ngIf="photoMap[employee.id!]; else noPhoto">
+                <img
+                  class="employee-photo"
+                  [src]="photoMap[employee.id!]"
+                  alt="Foto do cliente"
+                />
+              </ng-container>
+
+              <ng-template #noPhoto>
+                <div class="employee-photo-placeholder">
+                  <span class="employee-photo-icon">👤</span>
+                </div>
+              </ng-template>
+            </td>
+
+            <td class="col-actions">
+              <div class="actions-wrap">
+                <a
+                  pButton
+                  class="p-button-rounded p-button-text"
+                  icon="pi pi-pencil"
+                  pTooltip="Atualizar funcionário"
+                  tooltipPosition="top"
+                  [routerLink]="['/employees/', employee.id, 'edit']"
+                ></a>
+
+                <button
+                  pButton
+                  class="p-button-rounded p-button-text p-button-danger"
+                  icon="pi pi-trash"
+                  pTooltip="Excluir funcionário"
+                  tooltipPosition="top"
+                  (click)="delete(employee)"
+                ></button>
+
+                <button
+                  pButton
+                  class="p-button-rounded p-button-text"
+                  icon="pi pi-eye"
+                  pTooltip="Detalhamento do Funcionário"
+                  tooltipPosition="top"
+                  (click)="openDetails(employee)"
+                ></button>
+
+                <button
+                  pButton
+                  class="p-button-rounded p-button-text p-button-warning"
+                  [icon]="employee.active ? 'pi pi-ban' : 'pi pi-check'"
+                  pTooltip="Ativar / Desativar Funcionário"
+                  tooltipPosition="top"
+                  (click)="changeActive(employee)"
+                ></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <app-employee-details-modal
+        [visible]="detailsVisible"
+        (visibleChange)="detailsVisible = $event"
+        [title]="'Detalhamento do Funcionário'"
+        [employee]="employeeDetails"
+      ></app-employee-details-modal>
+      
+    </div>
+  </div>
+</div>

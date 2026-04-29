@@ -1,0 +1,144 @@
+<div *ngIf="!employee; else detailsTpl" class="loading"></div>
+
+<ng-template #detailsTpl>
+  <p-dialog
+    [(visible)]="visible"
+    [modal]="true"
+    [closable]="false"
+    [draggable]="false"
+    [resizable]="false"
+    [dismissableMask]="true"
+    [style]="{ width: '520px' }"
+    styleClass="like-dialog"
+    (onHide)="close()"
+  >
+    <ng-template pTemplate="header">
+      <div class="dlg-header">
+        <h4 class="dlg-title">{{ title }}</h4>
+
+        <button
+          type="button"
+          class="close-btn"
+          aria-label="Fechar"
+          (click)="close()"
+        >
+          &times;
+        </button>
+      </div>
+    </ng-template>
+
+    <div class="dlg-grid">
+      <div class="item span-2">
+        <span class="label">Nome</span>
+        <span class="value">{{ employee?.name || "-" }}</span>
+      </div>
+
+      <div class="item">
+        <span class="label">Matrícula</span>
+        <span class="value">{{ employee?.employeeCode || "-" }}</span>
+      </div>
+
+      <div class="item">
+        <span class="label">Telefone</span>
+        <span class="value">{{ employee?.phone || "-" }}</span>
+      </div>
+
+      <div class="item span-2">
+        <span class="label">Email</span>
+        <span class="value">{{ employee?.email || "-" }}</span>
+      </div>
+
+      <div class="item span-2">
+        <span class="label">Endereço</span>
+        <span class="value">{{ employee?.address || "-" }}</span>
+      </div>
+
+      <div class="item">
+        <span class="label">Salário</span>
+        <span class="value">{{
+          employee?.salary != null
+            ? (employee?.salary | currency: "BRL":"symbol":"1.2-2":"pt-BR")
+            : "-"
+        }}</span>
+      </div>
+
+      <div class="item">
+        <span class="label">Tipo de contratação</span>
+        <span class="value">{{ employee?.employmentType || "-" }}</span>
+      </div>
+
+      <div class="item">
+        <span class="label">Data de admissão</span>
+        <span class="value">{{
+          employee?.hireDate ? (employee?.hireDate | date: "dd/MM/yyyy") : "-"
+        }}</span>
+      </div>
+
+      <div class="item">
+        <span class="label">Data de desligamento</span>
+        <span class="value">{{
+          employee?.terminationDate
+            ? (employee?.terminationDate | date: "dd/MM/yyyy")
+            : "-"
+        }}</span>
+      </div>
+
+      <div class="item">
+        <span class="label">Cargo</span>
+        <span class="value">{{ employee?.position?.name|| "-" }}</span>
+      </div>
+
+      <div class="item">
+        <span class="label">Setor</span>
+        <span class="value">{{ employee?.department?.name || "-" }}</span>
+      </div>
+
+      <div class="item">
+        <span class="label">Ativo</span>
+        <span class="value">{{ getActiveLabel(employee?.active) }}</span>
+      </div>
+
+      <div class="item">
+        <span class="label">Data cadastro</span>
+        <span class="value">{{
+          employee?.createdAt ? (employee?.createdAt | date: "dd/MM/yyyy") : "-"
+        }}</span>
+      </div>
+
+      <div class="item">
+        <span class="label">Data atualização</span>
+        <span class="value">{{
+          employee?.updatedAt ? (employee?.updatedAt | date: "dd/MM/yyyy") : "-"
+        }}</span>
+      </div>
+
+      <div class="item">
+        <span class="label">Criado por</span>
+        <span class="value">{{ employee?.createdBy ?? "-" }}</span>
+      </div>
+
+      <div class="item">
+        <span class="label">Atualizado por</span>
+        <span class="value">{{ employee?.updatedBy ?? "-" }}</span>
+      </div>
+
+      <div class="photo span-2">
+        <ng-container *ngIf="photoPreviewUrl; else noPhoto">
+          <img
+            [src]="photoPreviewUrl"
+            alt="Foto do funcionário"
+            (error)="onImgError()"
+          />
+        </ng-container>
+
+        <ng-template #noPhoto>
+          <div class="profile-photo-placeholder" aria-label="Sem foto">
+            <span class="profile-photo-icon">👤</span>
+          </div>
+        </ng-template>
+
+        <small class="hint" *ngIf="!photoPreviewUrl">Sem foto</small>
+      </div>
+    </div>
+  </p-dialog>
+</ng-template>

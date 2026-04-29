@@ -6,6 +6,8 @@ import {
   OnDestroy,
   Output,
   SimpleChanges,
+  ElementRef,
+  ViewChild,
 } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { CustomerFileService } from '../../services/customer-file.service';
@@ -24,6 +26,8 @@ export class CustomerFilesModalComponent implements OnDestroy, OnChanges {
   @Input() customerId?: number;
   @Input() customerName?: string;
 
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+
   fileName: string = '';
   selectedFile: File | null = null;
   selectedFileName: string = '';
@@ -40,10 +44,14 @@ export class CustomerFilesModalComponent implements OnDestroy, OnChanges {
     private customerFileService: CustomerFileService,
     private sanitizer: DomSanitizer,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes['customerId'] && !changes['customerId'].firstChange) {
+      this.resetState();
+    }
+
     if (
       (changes['visible'] && this.visible) ||
       (changes['customerId'] && this.customerId && this.visible)
@@ -57,6 +65,28 @@ export class CustomerFilesModalComponent implements OnDestroy, OnChanges {
     this.clearObjectUrls();
   }
 
+  onDialogVisibilityChange(visible: boolean): void {
+    this.visible = visible;
+    this.visibleChange.emit(visible);
+
+    if (!visible) {
+      this.resetState();
+    }
+  }
+
+  private resetState(): void {
+    this.fileName = '';
+    this.selectedFile = null;
+    this.selectedFileName = '';
+    this.files = [];
+
+    this.clearPreview();
+    this.clearObjectUrls();
+
+    if (this.fileInput) {
+      this.fileInput.nativeElement.value = '';
+    }
+  }
   loadFiles(): void {
     if (!this.customerId) {
       return;
@@ -88,25 +118,30 @@ export class CustomerFilesModalComponent implements OnDestroy, OnChanges {
         return;
       }
 
-      this.customerFileService.getViewBlob(this.customerId!, file.id!).subscribe({
-        next: (blob) => {
-          if (!blob || blob.size === 0) {
+      this.customerFileService
+        .getViewBlob(this.customerId!, file.id!)
+        .subscribe({
+          next: (blob) => {
+            if (!blob || blob.size === 0) {
+              file.previewError = true;
+              return;
+            }
+
+            const objectUrl = URL.createObjectURL(blob);
+
+            file.previewUrl = this.sanitizer.bypassSecurityTrustUrl(objectUrl);
+            file.previewError = false;
+
+            this.objectUrls.push(objectUrl);
+          },
+          error: (error) => {
+            console.error(
+              `Erro ao carregar preview do arquivo ${file.id}:`,
+              error,
+            );
             file.previewError = true;
-            return;
-          }
-
-          const objectUrl = URL.createObjectURL(blob);
-
-          file.previewUrl = this.sanitizer.bypassSecurityTrustUrl(objectUrl);
-          file.previewError = false;
-
-          this.objectUrls.push(objectUrl);
-        },
-        error: (error) => {
-          console.error(`Erro ao carregar preview do arquivo ${file.id}:`, error);
-          file.previewError = true;
-        },
-      });
+          },
+        });
     });
   }
 
@@ -126,7 +161,8 @@ export class CustomerFilesModalComponent implements OnDestroy, OnChanges {
     return {
       image: this.isImageFile(file),
       pdf: file.contentType === 'application/pdf',
-      default: !this.isImageFile(file) && file.contentType !== 'application/pdf',
+      default:
+        !this.isImageFile(file) && file.contentType !== 'application/pdf',
     };
   }
 
@@ -134,7 +170,8 @@ export class CustomerFilesModalComponent implements OnDestroy, OnChanges {
     return {
       'pi-image': this.isImageFile(file),
       'pi-file-pdf': file.contentType === 'application/pdf',
-      'pi-file': !this.isImageFile(file) && file.contentType !== 'application/pdf',
+      'pi-file':
+        !this.isImageFile(file) && file.contentType !== 'application/pdf',
     };
   }
 
@@ -193,6 +230,10 @@ export class CustomerFilesModalComponent implements OnDestroy, OnChanges {
     this.selectedFile = null;
     this.selectedFileName = '';
     this.clearPreview();
+
+    if (this.fileInput) {
+      this.fileInput.nativeElement.value = '';
+    }
   }
 
   private createPreview(file: File): void {
@@ -228,7 +269,7 @@ export class CustomerFilesModalComponent implements OnDestroy, OnChanges {
     });
   }
 
-   deleteFile(file: CustomerFile): void {
+  deleteFile(file: CustomerFile): void {
     if (!this.customerId || !file.id) {
       return;
     }
@@ -245,7 +286,7 @@ export class CustomerFilesModalComponent implements OnDestroy, OnChanges {
     });
   }
 
-   downloadFile(file: CustomerFile): void {
+  downloadFile(file: CustomerFile): void {
     if (!this.customerId || !file.id) {
       return;
     }
@@ -287,11 +328,16 @@ export class CustomerFilesModalComponent implements OnDestroy, OnChanges {
     });
   }
 
-  private extractFileNameFromResponse(response: any, file: CustomerFile): string {
+  private extractFileNameFromResponse(
+    response: any,
+    file: CustomerFile,
+  ): string {
     const contentDisposition = response.headers.get('content-disposition');
 
     if (contentDisposition) {
-      const fileNameMatch = contentDisposition.match(/filename\*?=(?:UTF-8'')?["']?([^"';\n]+)["']?/i);
+      const fileNameMatch = contentDisposition.match(
+        /filename\*?=(?:UTF-8'')?["']?([^"';\n]+)["']?/i,
+      );
 
       if (fileNameMatch?.[1]) {
         return decodeURIComponent(fileNameMatch[1]);

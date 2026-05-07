@@ -3,25 +3,27 @@ import { Position } from '../positions/models/Position';
 
 export class Employee {
   id?: number;
-  name!: string;
-  employeeCode!: string;
-  email?: string;
-  phone?: string;
-  address?: string;
-  salary?: number;
+  name: string = '';
+  employeeCode: string = '';
+  email?: string | null;
+  phone?: string | null;
+  address?: string | null;
+  salary?: number | null;
   hireDate?: Date;
   terminationDate?: Date;
   employmentType?: string;
   active?: boolean;
+
   photo?: any;
   photoContentType?: string;
+
   createdAt?: Date;
   updatedAt?: Date;
-  createdBy?: number;
-  updatedBy?: number;
+  createdBy?: string | null;
+  updatedBy?: string | null;
 
-  position?: Position;
-  department?: Department;
+  position?: Position | null;
+  department?: Department | null;
 
   constructor(init?: Partial<Employee>) {
     Object.assign(this, init);

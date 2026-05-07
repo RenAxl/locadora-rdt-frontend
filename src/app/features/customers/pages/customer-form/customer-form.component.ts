@@ -6,6 +6,7 @@ import { Customer } from '../../models/Customer';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { CustomerMapper } from '../../mapper/customer.mapper';
 
 @Component({
   selector: 'app-customer-form',
@@ -37,7 +38,7 @@ export class CustomerFormComponent implements OnInit, OnDestroy {
     if (id != null) {
       const sub = this.customerService.findById(id).subscribe({
         next: (data) => {
-          this.customer = data;
+          this.customer = CustomerMapper.fromDetailsDTO(data);
           this.loadCustomerPhoto(Number(id));
         },
         error: (err) => {
@@ -59,6 +60,11 @@ export class CustomerFormComponent implements OnInit, OnDestroy {
   }
 
   save(form: NgForm) {
+    if (form.invalid) {
+      form.control.markAllAsTouched();
+      return;
+    }
+
     if (this.customer.id != null && this.customer.id.toString().trim() !== '') {
       this.update();
     } else {
@@ -67,7 +73,9 @@ export class CustomerFormComponent implements OnInit, OnDestroy {
   }
 
   insert(): void {
-    const sub = this.customerService.insert(this.customer).subscribe({
+    const dto = CustomerMapper.toInsertDTO(this.customer);
+
+    const sub = this.customerService.insert(dto).subscribe({
       next: (createdCustomer) => {
         if (this.selectedPhoto) {
           const subPhoto = this.customerService
@@ -112,7 +120,13 @@ export class CustomerFormComponent implements OnInit, OnDestroy {
   }
 
   update(): void {
-    const sub = this.customerService.update(this.customer).subscribe({
+    if (!this.customer.id) {
+      return;
+    }
+
+    const dto = CustomerMapper.toUpdateDTO(this.customer);
+
+    const sub = this.customerService.update(dto).subscribe({
       next: () => {
         if (this.selectedPhoto) {
           const subPhoto = this.customerService

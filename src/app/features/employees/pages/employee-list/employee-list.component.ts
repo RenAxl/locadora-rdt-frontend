@@ -11,6 +11,7 @@ import { Table } from 'primeng/table';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { catchError, EMPTY } from 'rxjs';
 import { AuthService } from 'src/app/core/auth/services/auth.service';
+import { EmployeeMapper } from '../../mapper/employee.mapper';
 
 @Component({
   selector: 'app-employee-list',
@@ -59,28 +60,32 @@ export class EmployeeListComponent implements OnInit {
     this.employeeService
       .list(this.pagination, this.filterName)
       .subscribe((data) => {
-        this.employees = data.content;
+        this.employees = data.content.map(EmployeeMapper.fromDTO);
         this.totalElements = data.totalElements;
 
         this.loadPhotos();
       });
   }
 
-  changePage(event: LazyLoadEvent) {
-    const page = event!.first! / event!.rows!;
+  changePage(event: LazyLoadEvent): void {
+    const page = event.first! / event.rows!;
     this.list(page);
   }
 
-  searchEmployee(name: string) {
+  searchEmployee(name: string): void {
     this.filterName = name;
     this.list();
   }
 
-  delete(employee: any) {
+  delete(employee: Employee): void {
+    if (!employee.id) {
+      return;
+    }
+
     this.confirmationService.confirm({
       message: 'Tem certeza que deseja excluir?',
       accept: () => {
-        this.employeeService.delete(employee.id).subscribe(() => {
+        this.employeeService.delete(employee.id!).subscribe(() => {
           this.grid.reset();
           this.messageService.add({
             severity: 'success',
@@ -95,7 +100,9 @@ export class EmployeeListComponent implements OnInit {
     this.photoMap = {};
 
     this.employees.forEach((employee) => {
-      if (!employee?.id) return;
+      if (!employee.id) {
+        return;
+      }
 
       this.employeeService
         .getEmployeePhoto(employee.id)
@@ -105,7 +112,9 @@ export class EmployeeListComponent implements OnInit {
           }),
         )
         .subscribe((blob: Blob) => {
-          if (!blob || blob.size === 0) return;
+          if (!blob || blob.size === 0) {
+            return;
+          }
 
           const objectUrl = URL.createObjectURL(blob);
           this.photoMap[employee.id!] =
@@ -116,32 +125,35 @@ export class EmployeeListComponent implements OnInit {
 
   onRowSelect(event: any): void {
     const id = event?.data?.id;
-    if (id == null) return;
+
+    if (id == null) {
+      return;
+    }
 
     if (!this.selectedEmployeeIds.includes(id)) {
       this.selectedEmployeeIds.push(id);
     }
-
-    console.log('IDs selecionados:', this.selectedEmployeeIds);
   }
 
   onRowUnselect(event: any): void {
     const id = event?.data?.id;
-    if (id == null) return;
+
+    if (id == null) {
+      return;
+    }
 
     this.selectedEmployeeIds = this.selectedEmployeeIds.filter((x) => x !== id);
-
-    console.log('IDs selecionados:', this.selectedEmployeeIds);
   }
 
   deleteSelectedEmployees(): void {
-    if (!this.selectedEmployeeIds || this.selectedEmployeeIds.length === 0)
+    if (!this.selectedEmployeeIds || this.selectedEmployeeIds.length === 0) {
       return;
+    }
 
     const ids = [...this.selectedEmployeeIds];
 
     this.confirmationService.confirm({
-      message: `Tem certeza que deseja excluir ${ids.length} funcionarios(s)?`,
+      message: `Tem certeza que deseja excluir ${ids.length} funcionário(s)?`,
       accept: () => {
         this.employeeService.deleteAll(ids).subscribe(() => {
           this.selectedEmployeeIds = [];
@@ -159,8 +171,9 @@ export class EmployeeListComponent implements OnInit {
   }
 
   changeActive(employee: Employee): void {
-    if (!employee?.id) return;
-    console.log(employee.id);
+    if (!employee.id) {
+      return;
+    }
 
     const newStatus = !employee.active;
 
@@ -170,22 +183,25 @@ export class EmployeeListComponent implements OnInit {
 
         this.messageService.add({
           severity: 'success',
-          detail: `Funcionário ${newStatus ? 'ativado' : 'desativado'} com sucesso!`,
+          detail: `Funcionário ${
+            newStatus ? 'ativado' : 'desativado'
+          } com sucesso!`,
         });
       },
     });
   }
 
   openDetails(employee: Employee): void {
-    const id = employee?.id;
-    if (id == null) return;
+    const id = employee.id;
 
+    if (id == null) return;
+    
     this.detailsVisible = true;
     this.employeeDetails = null;
 
     this.employeeService.findById(id).subscribe({
-      next: (details: Employee) => {
-        this.employeeDetails = details;
+      next: (details) => {
+        this.employeeDetails = EmployeeMapper.fromDetailsDTO(details);
       },
     });
   }
@@ -196,7 +212,7 @@ export class EmployeeListComponent implements OnInit {
     this.filesVisible = true;
   }
 
-  hasAuthority(role: string) {
+  hasAuthority(role: string): boolean {
     return this.authService.hasAuthority(role);
   }
 }

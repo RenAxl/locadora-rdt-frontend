@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
 import { Department } from '../../models/Department';
 import { DepartmentService } from '../../services/department.service';
-import { MessageService } from 'primeng/api';
-import { ActivatedRoute, Router } from '@angular/router';
+import { DepartmentMapper } from '../../mapper/department.mapper';
 import { NgForm } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-department-form',
@@ -14,7 +16,7 @@ export class DepartmentFormComponent implements OnInit {
   department: Department = new Department();
 
   constructor(
-    private departmentService: DepartmentService,
+    private service: DepartmentService,
     private messageService: MessageService,
     private router: Router,
     private route: ActivatedRoute,
@@ -23,46 +25,53 @@ export class DepartmentFormComponent implements OnInit {
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('departmentId');
 
-    if (id != null) {
-      const sub = this.departmentService.findById(id).subscribe({
-        next: (data) => {
-          this.department = data;
-        },
+    if (id) {
+      this.service.findById(id).subscribe((data) => {
+        this.department = DepartmentMapper.fromDetailsDTO(data);
       });
     }
   }
 
-  save(form: NgForm) {
-    if (this.department.id != null && this.department.id.toString().trim() !== '') {
+  save(form: NgForm): void {
+    if (form.invalid) {
+      form.control.markAllAsTouched();
+      return;
+    }
+
+    if (this.department.id) {
       this.update();
     } else {
       this.insert();
     }
   }
 
-insert() {
-    this.departmentService.insert(this.department).subscribe({
+  insert(): void {
+    const dto = DepartmentMapper.toInsertDTO(this.department);
+
+    this.service.insert(dto).subscribe({
       next: () => {
-        this.router.navigate(['/employees/departments/']);
+        this.router.navigate(['/employees/departments']);
         this.messageService.add({
           severity: 'success',
-          detail:
-            'Cargo cadastrado com sucesso!. Para ativar a conta acesse o E-mail cadastrado',
+          detail: 'Setor cadastrado com sucesso!',
         });
       },
     });
   }
 
-  update() {
-    this.departmentService.update(this.department).subscribe({
+  update(): void {
+    if (!this.department.id) return;
+
+    const dto = DepartmentMapper.toUpdateDTO(this.department);
+
+    this.service.update(this.department.id, dto).subscribe({
       next: () => {
-        this.router.navigate(['/employees/departments/']);
+        this.router.navigate(['/employees/departments']);
         this.messageService.add({
           severity: 'success',
-          detail: 'Cargo atualizado com sucesso!',
+          detail: 'Setor atualizado com sucesso!',
         });
       },
     });
   }
-
 }

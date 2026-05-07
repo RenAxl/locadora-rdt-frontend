@@ -32,6 +32,14 @@
   font-weight: bold;
 }
 
+.form-label-custom {
+  display: inline-block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #233247;
+}
+
 .select-wrapper {
   position: relative;
 }
@@ -61,11 +69,8 @@
   align-items: center;
 }
 
-
 @media (min-width: 992px) {
   .user-form-buttons {
     justify-content: flex-end;
   }
 }
-
-

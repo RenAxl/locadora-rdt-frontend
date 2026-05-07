@@ -38,6 +38,14 @@
   position: relative;
 }
 
+.form-label-custom {
+  display: inline-block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #233247;
+}
+
 .select-arrow {
   appearance: none;
   -webkit-appearance: none;

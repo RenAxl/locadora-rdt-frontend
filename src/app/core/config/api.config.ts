@@ -73,13 +73,12 @@ export const API = {
     FILES: {
       ROOT: (employeeId: number | string) =>
         `${BASE_URL}/employees/${employeeId}/files`,
-
       VIEW: (employeeId: number | string, fileId: number | string) =>
         `${BASE_URL}/employees/${employeeId}/files/${fileId}/view`,
       BY_ID: (employeeId: number, fileId: number) =>
         `${BASE_URL}/employees/${employeeId}/files/${fileId}`,
       DOWNLOAD: (employeeId: number, fileId: number) =>
-        `${BASE_URL}/customers/${employeeId}/files/${fileId}/download`,
+        `${BASE_URL}/employees/${employeeId}/files/${fileId}/download`,
     },
   },
 } as const;

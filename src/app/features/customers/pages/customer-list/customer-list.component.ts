@@ -11,6 +11,7 @@ import { Table } from 'primeng/table';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { catchError, EMPTY } from 'rxjs';
 import { AuthService } from 'src/app/core/auth/services/auth.service';
+import { CustomerMapper } from '../../mapper/customer.mapper';
 
 @Component({
   selector: 'app-customer-list',
@@ -59,7 +60,7 @@ export class CustomerListComponent implements OnInit {
     this.customerService
       .list(this.pagination, this.filterName)
       .subscribe((data) => {
-        this.customers = data.content;
+        this.customers = data.content.map(CustomerMapper.fromDTO);
         this.totalElements = data.totalElements;
 
         this.loadPhotos();
@@ -76,11 +77,15 @@ export class CustomerListComponent implements OnInit {
     this.list();
   }
 
-  delete(customer: any) {
+  delete(customer: Customer) {
+    if (!customer.id) {
+      return;
+    }
+
     this.confirmationService.confirm({
       message: 'Tem certeza que deseja excluir?',
       accept: () => {
-        this.customerService.delete(customer.id).subscribe(() => {
+        this.customerService.delete(customer.id!).subscribe(() => {
           this.grid.reset();
           this.messageService.add({
             severity: 'success',
@@ -179,6 +184,7 @@ export class CustomerListComponent implements OnInit {
 
   openDetails(customer: Customer): void {
     const id = customer?.id;
+    
     if (id == null) return;
 
     this.detailsVisible = true;

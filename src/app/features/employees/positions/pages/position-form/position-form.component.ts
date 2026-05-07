@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
 import { Position } from '../../models/Position';
 import { PositionService } from '../../services/position.service';
-import { MessageService } from 'primeng/api';
-import { ActivatedRoute, Router } from '@angular/router';
+import { PositionMapper } from '../../mapper/position.mapper';
 import { NgForm } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-position-form',
@@ -14,7 +16,7 @@ export class PositionFormComponent implements OnInit {
   position: Position = new Position();
 
   constructor(
-    private positionService: PositionService,
+    private service: PositionService,
     private messageService: MessageService,
     private router: Router,
     private route: ActivatedRoute,
@@ -23,40 +25,48 @@ export class PositionFormComponent implements OnInit {
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('positionId');
 
-    if (id != null) {
-      const sub = this.positionService.findById(id).subscribe({
-        next: (data) => {
-          this.position = data;
-        },
+    if (id) {
+      this.service.findById(id).subscribe((data) => {
+        this.position = PositionMapper.fromDetailsDTO(data);
       });
     }
   }
 
-  save(form: NgForm) {
-    if (this.position.id != null && this.position.id.toString().trim() !== '') {
+  save(form: NgForm): void {
+    if (form.invalid) {
+      form.control.markAllAsTouched();
+      return;
+    }
+
+    if (this.position.id) {
       this.update();
     } else {
       this.insert();
     }
   }
 
-insert() {
-    this.positionService.insert(this.position).subscribe({
+  insert(): void {
+    const dto = PositionMapper.toInsertDTO(this.position);
+
+    this.service.insert(dto).subscribe({
       next: () => {
-        this.router.navigate(['/employees/positions/']);
+        this.router.navigate(['/employees/positions']);
         this.messageService.add({
           severity: 'success',
-          detail:
-            'Cargo cadastrado com sucesso!. Para ativar a conta acesse o E-mail cadastrado',
+          detail: 'Cargo cadastrado com sucesso!',
         });
       },
     });
   }
 
-  update() {
-    this.positionService.update(this.position).subscribe({
+  update(): void {
+    if (!this.position.id) return;
+
+    const dto = PositionMapper.toUpdateDTO(this.position);
+
+    this.service.update(this.position.id, dto).subscribe({
       next: () => {
-        this.router.navigate(['/employees/positions/']);
+        this.router.navigate(['/employees/positions']);
         this.messageService.add({
           severity: 'success',
           detail: 'Cargo atualizado com sucesso!',
@@ -64,5 +74,4 @@ insert() {
       },
     });
   }
-
 }

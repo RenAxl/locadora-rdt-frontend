@@ -2,10 +2,10 @@ export class Department {
   id?: number;
   name!: string;
   description?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+ createdAt?: Date;
+  updatedAt?: Date | null;
   createdBy?: string;
-  updatedBy?: string;
+  updatedBy?: string | null;
 
   constructor(init?: Partial<Department>) {
     Object.assign(this, init);

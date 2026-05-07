@@ -10,8 +10,9 @@ import { PositionService } from '../../positions/services/position.service';
 import { DepartmentService } from '../../departments/services/department.service';
 import { Position } from '../../positions/models/Position';
 import { Department } from '../../departments/models/Department';
-import { EmployeeInsertDTO } from '../../dtos/EmployeeInsertDTO';
-import { EmployeeUpdateDTO } from '../../dtos/EmployeeUpdateDTO';
+import { EmployeeMapper } from '../../mapper/employee.mapper';
+import { PositionMapper } from '../../positions/mapper/position.mapper';
+import { DepartmentMapper } from '../../departments/mapper/department.mapper';
 
 @Component({
   selector: 'app-employee-form',
@@ -52,11 +53,7 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
     if (id != null) {
       const sub = this.employeeService.findById(id).subscribe({
         next: (data) => {
-          this.employee = new Employee(data);
-
-          this.employee.position = data?.position ?? undefined;
-          this.employee.department = data?.department ?? undefined;
-
+          this.employee = EmployeeMapper.fromDetailsDTO(data);
           this.loadEmployeePhoto(Number(id));
         },
         error: (err) => {
@@ -112,9 +109,9 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
   }
 
   insert(): void {
-    const employeeInsertDTO = EmployeeInsertDTO.fromEmployee(this.employee);
+    const dto = EmployeeMapper.toInsertDTO(this.employee);
 
-    const sub = this.employeeService.insert(employeeInsertDTO).subscribe({
+    const sub = this.employeeService.insert(dto).subscribe({
       next: (createdEmployee) => {
         if (!this.selectedPhoto) {
           this.finishSuccess('Funcionário cadastrado com sucesso!');
@@ -122,7 +119,7 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
         }
 
         const subPhoto = this.employeeService
-          .updatePhoto(createdEmployee.id!, this.selectedPhoto)
+          .updatePhoto(createdEmployee.id, this.selectedPhoto)
           .subscribe({
             next: () => {
               this.finishSuccess('Funcionário cadastrado com sucesso!');
@@ -155,9 +152,13 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
   }
 
   update(): void {
-    const employeeUpdateDTO = EmployeeUpdateDTO.fromEmployee(this.employee);
+    if (!this.employee.id) {
+      return;
+    }
 
-    const sub = this.employeeService.update(employeeUpdateDTO).subscribe({
+    const dto = EmployeeMapper.toUpdateDTO(this.employee);
+
+    const sub = this.employeeService.update(dto).subscribe({
       next: () => {
         if (!this.selectedPhoto) {
           this.finishSuccess('Funcionário atualizado com sucesso!');
@@ -224,7 +225,7 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
 
     const sub = this.positionService.list(pagination as any, '').subscribe({
       next: (response) => {
-        this.positions = response?.content ?? response ?? [];
+        this.positions = (response?.content ?? []).map(PositionMapper.fromDTO);
       },
       error: () => {
         this.positions = [];
@@ -249,7 +250,9 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
 
     const sub = this.departmentService.list(pagination as any, '').subscribe({
       next: (response) => {
-        this.departments = response?.content ?? response ?? [];
+        this.departments = (response?.content ?? []).map(
+          DepartmentMapper.fromDTO,
+        );
       },
       error: () => {
         this.departments = [];
@@ -274,7 +277,9 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
   private loadEmployeePhoto(employeeId: number): void {
     const sub = this.employeeService.getEmployeePhoto(employeeId).subscribe({
       next: (blob) => {
-        if (!blob || blob.size === 0) return;
+        if (!blob || blob.size === 0) {
+          return;
+        }
 
         this.cleanupObjectUrl();
         this.objectUrl = URL.createObjectURL(blob);
@@ -308,5 +313,4 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
   compareById(item1: any, item2: any): boolean {
     return item1 && item2 ? item1.id === item2.id : item1 === item2;
   }
-  
 }

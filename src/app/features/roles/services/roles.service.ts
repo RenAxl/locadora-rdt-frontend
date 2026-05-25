@@ -4,9 +4,9 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { Pagination } from 'src/app/core/models/Pagination';
-import { Role } from 'src/app/core/models/Role';
 import { RolePermissionsUpdateDTO } from 'src/app/features/roles/models/RolePermissionsUpdateDTO';
 import { API } from 'src/app/core/config/api.config';
+import { Role } from '../models/Role';
 
 @Injectable({
   providedIn: 'root',

@@ -14,10 +14,10 @@ export const API = {
     BY_ID: (id: number | string) => `${BASE_URL}/users/${id}`,
     DELETE_ALL: `${BASE_URL}/users/all`,
     CHANGE_ACTIVE: (id: number | string) => `${BASE_URL}/users/${id}/active`,
-    ACTIVATE: `${BASE_URL}/users/activate`,
+    ACTIVATE: `${BASE_URL}/auth/activate`,
     PHOTO: (id: number) => `${BASE_URL}/users/${id}/photo`,
-    FORGOT_PASSWORD: `${BASE_URL}/users/forgot-password`,
-    RESET_PASSWORD: `${BASE_URL}/users/reset-password`,
+    FORGOT_PASSWORD: `${BASE_URL}/auth/forgot-password`,
+    RESET_PASSWORD: `${BASE_URL}/auth/reset-password`,
   },
 
   ROLES: {

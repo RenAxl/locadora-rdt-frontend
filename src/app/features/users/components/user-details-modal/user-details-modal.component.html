@@ -51,8 +51,25 @@
       <div class="item">
         <span class="label">Data cadastro</span>
         <span class="value">{{
-          user?.date ? (user?.date | date: "dd/MM/yyyy") : "-"
+          user?.createdAt ? (user?.createdAt | date: "dd/MM/yyyy") : "-"
         }}</span>
+      </div>
+
+      <div class="item">
+        <span class="label">Data atualização</span>
+        <span class="value">{{
+          user?.updatedAt ? (user?.updatedAt | date: "dd/MM/yyyy") : "-"
+        }}</span>
+      </div>
+
+      <div class="item">
+        <span class="label">Criado por</span>
+        <span class="value">{{ user?.createdBy ?? "-" }}</span>
+      </div>
+
+      <div class="item">
+        <span class="label">Atualizado por</span>
+        <span class="value">{{ user?.updatedBy ?? "-" }}</span>
       </div>
 
       <div class="item span-2">

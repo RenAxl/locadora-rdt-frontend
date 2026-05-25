@@ -53,3 +53,4 @@ export class PositionService {
     return this.http.delete<void>(API.EMPLOYEES.POSITIONS.BY_ID(id));
   }
 }
+

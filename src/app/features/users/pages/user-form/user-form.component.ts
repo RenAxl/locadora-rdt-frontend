@@ -5,10 +5,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Pagination } from 'src/app/core/models/Pagination';
 import { UsersService } from '../../services/users.service';
-import { User } from '../../../../core/models/User';
-import { Role } from 'src/app/core/models/Role';
+import { User } from '../../models/user';
 import { RolesService } from 'src/app/features/roles/services/roles.service';
-
+import { Role } from 'src/app/features/roles/models/Role';
+import { UserMapper } from '../../mapper/user.mapper';
 
 @Component({
   selector: 'app-user-form',
@@ -16,7 +16,7 @@ import { RolesService } from 'src/app/features/roles/services/roles.service';
   styleUrls: ['./user-form.component.css'],
 })
 export class UserFormComponent implements OnInit {
-  user: User = {};
+  user: User = new User();
 
   roles: Role[] = [];
 
@@ -37,7 +37,7 @@ export class UserFormComponent implements OnInit {
     if (id != null) {
       this.userService.findById(id).subscribe({
         next: (data) => {
-          this.user = data;
+          this.user = UserMapper.toDetailsModel(data);
           this.roleSelectedIds = (this.user.roles || [])
             .map((r: any) => r?.id)
             .filter((id: any) => typeof id === 'number');
@@ -87,9 +87,9 @@ export class UserFormComponent implements OnInit {
   }
 
   insert() {
-    console.log('Insert payload:', JSON.parse(JSON.stringify(this.user)));
+    const dto = UserMapper.toInsertDTO(this.user);
 
-    this.userService.insert(this.user).subscribe({
+    this.userService.insert(dto).subscribe({
       next: () => {
         this.router.navigate(['/users/']);
         this.messageService.add({
@@ -102,9 +102,9 @@ export class UserFormComponent implements OnInit {
   }
 
   update() {
-    console.log('Update payload:', JSON.parse(JSON.stringify(this.user)));
+    const dto = UserMapper.toUpdateDTO(this.user);
 
-    this.userService.update(this.user).subscribe({
+    this.userService.update(dto).subscribe({
       next: () => {
         this.router.navigate(['/users/']);
         this.messageService.add({
@@ -115,4 +115,3 @@ export class UserFormComponent implements OnInit {
     });
   }
 }
-

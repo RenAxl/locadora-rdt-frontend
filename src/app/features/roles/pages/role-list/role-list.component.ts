@@ -3,10 +3,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Table } from 'primeng/table';
 import { LazyLoadEvent } from 'primeng/api';
 
-import { RoleList } from 'src/app/features/roles/models/RoleList';
 import { Pagination } from 'src/app/core/models/Pagination';
 import { RolesService } from '../../services/roles.service';
 import { AuthService } from 'src/app/core/auth/services/auth.service';
+import { Role } from '../../models/Role';
 
 @Component({
   selector: 'app-role-list',
@@ -14,8 +14,8 @@ import { AuthService } from 'src/app/core/auth/services/auth.service';
   styleUrls: ['./role-list.component.css'],
 })
 export class RoleListComponent implements OnInit {
-  roles: RoleList[] = [];
-  selectedRoles: RoleList[] = [];
+  roles: Role[] = [];
+  selectedRoles: Role[] = [];
   pagination: Pagination = new Pagination(0, 4, 'ASC', 'authority');
   totalElements: number = 0;
   filterName: string = '';

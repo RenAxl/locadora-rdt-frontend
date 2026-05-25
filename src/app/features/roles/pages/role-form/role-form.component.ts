@@ -3,8 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { MessageService } from 'primeng/api';
 import { ErrorHandlerService } from 'src/app/core/error/services/error-handler.service';
-import { Role } from 'src/app/core/models/Role';
 import { RolesService } from '../../services/roles.service';
+import { Role } from '../../models/Role';
 
 
 @Component({

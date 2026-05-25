@@ -10,9 +10,12 @@ import {
 } from 'primeng/api';
 import { ErrorHandlerService } from 'src/app/core/error/services/error-handler.service';
 import { UsersService } from '../../services/users.service';
-import { User } from '../../../../core/models/User';
+import { User } from '../../models/user';
 import { AuthService } from 'src/app/core/auth/services/auth.service';
 import { catchError, EMPTY } from 'rxjs';
+import { UserDTO } from '../../dtos/user.dto';
+import { UserMapper } from '../../mapper/user.mapper';
+import { UserDetailsDTO } from '../../dtos/user-details.dto';
 
 @Component({
   selector: 'app-user-list',
@@ -57,7 +60,8 @@ export class UserListComponent implements OnInit {
     this.userService
       .list(this.pagination, this.filterName)
       .subscribe((data) => {
-        this.users = data.content;
+        this.users = data.content.map((dto: UserDTO) =>
+        UserMapper.toModel(dto));
         this.totalElements = data.totalElements;
 
         this.selectedUsers = this.users.filter(
@@ -144,8 +148,8 @@ export class UserListComponent implements OnInit {
     this.userDetails = null;
 
     this.userService.findById(id).subscribe({
-      next: (details: User) => {
-        this.userDetails = details;
+      next: (details: UserDetailsDTO) => {
+        this.userDetails = UserMapper.toDetailsModel(details);
       },
     });
   }

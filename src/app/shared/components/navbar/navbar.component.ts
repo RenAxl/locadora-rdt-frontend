@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
-import { AuthService } from 'src/app/core/auth/services/auth.service';
-import { UserSessionService } from '../../services/user-session.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { catchError, EMPTY, Subscription } from 'rxjs';
+import { MessageService } from 'primeng/api';
+import { Subscription } from 'rxjs';
+
+import { AuthService } from 'src/app/core/auth/services/auth.service';
 import { Profile } from 'src/app/core/models/Profile';
+import { UserSessionService } from '../../services/user-session.service';
 
 @Component({
   selector: 'app-navbar',
@@ -14,10 +15,9 @@ import { Profile } from 'src/app/core/models/Profile';
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   photoPreviewUrl?: SafeUrl;
-  private objectUrl?: string;
-
   profile: Profile = new Profile();
 
+  private objectUrl?: string;
   private subs: Subscription[] = [];
 
   constructor(
@@ -29,65 +29,62 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.loadMyPhoto();
-    this.loadProfile();
+    this.userSessionService.loadSession();
+
+    this.subscribeToProfile();
+    this.subscribeToPhoto();
   }
 
   ngOnDestroy(): void {
     this.cleanupObjectUrl();
-    this.subs.forEach((s) => s.unsubscribe());
+    this.subs.forEach((sub) => sub.unsubscribe());
   }
 
   logout(): void {
+    this.userSessionService.clear();
     this.authService.logout();
+
     this.messageService.add({
       severity: 'success',
       detail: 'Usuário deslogado com sucesso.',
     });
+
     this.router.navigate(['/auth/login']);
   }
 
-private loadMyPhoto(): void {
-  const sub = this.userSessionService
-    .getMyPhoto()
-    .pipe(
-      catchError(() => {
-        this.photoPreviewUrl = undefined;
-        return EMPTY;
-      })
-    )
-    .subscribe((blob) => {
-      if (!blob || blob.size === 0) return;
+  private subscribeToProfile(): void {
+    const sub = this.userSessionService.profile$.subscribe((profile) => {
+      if (!profile) {
+        this.profile = new Profile();
+        return;
+      }
 
-      this.cleanupObjectUrl();
-      this.objectUrl = URL.createObjectURL(blob);
-      this.photoPreviewUrl =
-        this.sanitizer.bypassSecurityTrustUrl(this.objectUrl);
+      const firstName = profile.name ? profile.name.trim().split(' ')[0] : '';
+
+      this.profile = {
+        ...profile,
+        name: firstName,
+      };
     });
 
-  this.subs.push(sub);
-}
+    this.subs.push(sub);
+  }
 
-  private loadProfile(): void {
-    const sub = this.userSessionService.getMe().subscribe({
-      next: (data) => {
-        console.log(data);
+  private subscribeToPhoto(): void {
+    const sub = this.userSessionService.photo$.subscribe((blob) => {
+      if (!blob || blob.size === 0) {
+        this.cleanupObjectUrl();
+        this.photoPreviewUrl = undefined;
+        return;
+      }
 
-        const firstName = data.name ? data.name.trim().split(' ')[0] : '';
+      this.cleanupObjectUrl();
 
-        this.profile = {
-          ...this.profile,
-          ...data,
-          name: firstName,
-        };
-      },
-      error: () => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Erro',
-          detail: 'Erro ao carregar perfil.',
-        });
-      },
+      this.objectUrl = URL.createObjectURL(blob);
+
+      this.photoPreviewUrl = this.sanitizer.bypassSecurityTrustUrl(
+        this.objectUrl,
+      );
     });
 
     this.subs.push(sub);

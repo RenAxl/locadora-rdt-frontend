@@ -10,7 +10,7 @@ import {
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { catchError, EMPTY, Subscription } from 'rxjs';
 
-import { User } from 'src/app/core/models/User';
+import { User } from 'src/app/features/users/models/user';
 import { UsersService } from 'src/app/features/users/services/users.service';
 
 @Component({

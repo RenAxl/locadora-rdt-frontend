@@ -3,8 +3,13 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { Pagination } from 'src/app/core/models/Pagination';
-import { User } from '../../../core/models/User';
+import { User } from '../models/user';
 import { API } from 'src/app/core/config/api.config';
+import { UserDTO } from '../dtos/user.dto';
+import { PageResponse } from 'src/app/core/models/page-response';
+import { UserInsertDTO } from '../dtos/user-insert.dto';
+import { UserDetailsDTO } from '../dtos/user-details.dto';
+import { UserUpdateDTO } from '../dtos/user-update.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +17,10 @@ import { API } from 'src/app/core/config/api.config';
 export class UsersService {
   constructor(private http: HttpClient) {}
 
-  list(pagination: Pagination, filterName: string): Observable<any> {
+  list(
+    pagination: Pagination,
+    filterName: string,
+  ): Observable<PageResponse<UserDTO>> {
     let params = new HttpParams()
       .set('name', filterName)
       .set('page', pagination.page)
@@ -20,27 +28,26 @@ export class UsersService {
       .set('direction', String(pagination.direction))
       .set('orderBy', String(pagination.orderBy));
 
-    return this.http.get<any>(API.USERS.ROOT, { params });
+    return this.http.get<PageResponse<UserDTO>>(API.USERS.ROOT, { params });
   }
 
-  insert(user: User): Observable<any> {
-    return this.http.post<any>(API.USERS.ROOT, user);
+  insert(user: UserInsertDTO): Observable<UserDTO> {
+    return this.http.post<UserDTO>(API.USERS.ROOT, user);
   }
 
-  findById(id: any): Observable<any> {
-    return this.http.get<any>(API.USERS.BY_ID(id));
+  findById(id: any): Observable<UserDetailsDTO> {
+    return this.http.get<UserDetailsDTO>(API.USERS.BY_ID(id));
   }
 
-  update(user: User): Observable<any> {
-    if (!user.id) {
-      throw new Error('ID do usuário obrigatório para atualização.');
+  update(dto: UserUpdateDTO): Observable<UserDTO> {
+    if (!dto.id) {
+      throw new Error('User ID is required for update');
     }
-
-    return this.http.put<User>(API.USERS.BY_ID(user.id), user);
+    return this.http.put<UserDTO>(API.USERS.BY_ID(dto.id), dto);
   }
 
-  delete(id: number): Observable<any> {
-    return this.http.delete<any>(API.USERS.BY_ID(id));
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(API.USERS.BY_ID(id));
   }
 
   deleteAll(ids: number[]): Observable<void> {
@@ -66,5 +73,4 @@ export class UsersService {
       responseType: 'blob',
     });
   }
-  
 }

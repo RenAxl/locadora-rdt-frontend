@@ -9,10 +9,12 @@ import {
 import { MessageService } from 'primeng/api';
 
 import { ErrorHandlerService } from 'src/app/core/error/services/error-handler.service';
-import { PermissionsService } from '../../services/permissions.service';
-import { Permission } from 'src/app/features/roles/models/Permission';
+import { PermissionsService } from '../../permissions/services/permissions.service';
+import { Permission } from 'src/app/features/roles/permissions/models/permission';
 import { RolePermissionsUpdateDTO } from 'src/app/features/roles/models/RolePermissionsUpdateDTO';
 import { RolesService } from '../../services/roles.service';
+import { PermissionMapper } from '../../permissions/mapper/permission.mapper';
+import { RoleMapper } from '../../mapper/role.mapper';
 
 @Component({
   selector: 'app-role-permissions-modal',
@@ -74,7 +76,9 @@ export class PermissionComponent implements OnChanges {
 
     this.rolesService.findById(roleId).subscribe({
       next: (role) => {
-        const currentPermissions: Permission[] = role?.permissions || [];
+        const currentPermissions: Permission[] = PermissionMapper.toModelList(
+          role?.permissions || [],
+        );
         currentPermissions.forEach((p) => {
           if (p?.id != null) this.selectedIds.add(Number(p.id));
         });
@@ -115,7 +119,7 @@ export class PermissionComponent implements OnChanges {
 
     this.permissionsService.listByGroup(groupName).subscribe({
       next: (list) => {
-        this.permissions = list || [];
+        this.permissions = PermissionMapper.toModelList(list || []);
         this.loading = false;
         this.recalcCounters();
       },
@@ -186,8 +190,7 @@ export class PermissionComponent implements OnChanges {
   save(): void {
     if (!this.roleId) return;
 
-    const dto = new RolePermissionsUpdateDTO();
-    dto.permissionIds = Array.from(this.selectedIds.values());
+    const dto = RoleMapper.toPermissionsUpdateDTO(this.selectedIds);
 
     this.saving = true;
 

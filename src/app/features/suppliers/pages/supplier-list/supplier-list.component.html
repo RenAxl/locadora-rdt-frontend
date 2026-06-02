@@ -1,0 +1,38 @@
+<div class="supplier-filter-container">
+  <div class="supplier-actions-group">
+    <a routerLink="/suppliers/create" class="action-link">
+      <button class="btn btn-primary text-white btn-crud-action">NOVO FORNECEDOR</button>
+    </a>
+  </div>
+  <app-name-filter text="Digite o nome do fornecedor" (search)="searchSupplier($event)"></app-name-filter>
+</div>
+
+<div class="supplier-card">
+  <p-table [value]="suppliers" [responsive]="true" [paginator]="true" [rows]="pagination.linesPerPage"
+    [lazy]="true" [totalRecords]="totalElements" (onLazyLoad)="changePage($event)" #supplierTable>
+    <ng-template pTemplate="header">
+      <tr><th>Nome</th><th>Nome fantasia</th><th>CNPJ</th><th>Telefone</th><th>Imagem</th><th class="actions"></th></tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-supplier>
+      <tr>
+        <td><span class="p-column-title">Nome:</span>{{ supplier.name }}</td>
+        <td><span class="p-column-title">Nome fantasia:</span>{{ supplier.tradeName }}</td>
+        <td><span class="p-column-title">CNPJ:</span>{{ supplier.cnpj }}</td>
+        <td><span class="p-column-title">Telefone:</span>{{ supplier.phoneNumber }}</td>
+        <td class="col-photo">
+          <span class="p-column-title">Imagem:</span>
+          <img *ngIf="imageMap[supplier.id!]; else noImage" class="supplier-photo" [src]="imageMap[supplier.id!]" alt="Imagem do fornecedor" />
+          <ng-template #noImage>-</ng-template>
+        </td>
+        <td class="col-actions"><div class="actions-wrap">
+          <a pButton class="p-button-rounded p-button-text" icon="pi pi-pencil" pTooltip="Editar fornecedor" [routerLink]="['/suppliers', supplier.id, 'edit']"></a>
+          <button pButton class="p-button-rounded p-button-text p-button-danger" icon="pi pi-trash" pTooltip="Excluir fornecedor" (click)="delete(supplier)"></button>
+          <button pButton class="p-button-rounded p-button-text" icon="pi pi-eye" pTooltip="Detalhamento do fornecedor" (click)="openDetails(supplier)"></button>
+          <button pButton class="p-button-rounded p-button-text" icon="pi pi-folder-open" pTooltip="Arquivos do fornecedor" (click)="openFilesModal(supplier)"></button>
+        </div></td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <app-supplier-details-modal [visible]="detailsVisible" (visibleChange)="detailsVisible = $event" [supplier]="supplierDetails"></app-supplier-details-modal>
+  <app-supplier-files-modal [visible]="filesVisible" (visibleChange)="filesVisible = $event" [supplierId]="selectedSupplierId" [supplierName]="selectedSupplierName"></app-supplier-files-modal>
+</div>

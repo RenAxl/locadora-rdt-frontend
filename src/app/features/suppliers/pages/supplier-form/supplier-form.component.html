@@ -1,0 +1,16 @@
+<div class="supplier-form-container"><div class="supplier-card">
+  <form #supplierForm="ngForm" (ngSubmit)="save(supplierForm)">
+    <div class="col-12 mb-3"><h1>Dados do Fornecedor</h1></div>
+    <div class="row g-3 supplier-form-inputs">
+      <div class="col-12 col-lg-6"><label class="form-label-custom">Nome</label><input pInputText name="name" [(ngModel)]="supplier.name" #name="ngModel" required minlength="3" class="form-control" /><app-message [control]="name" error="required" text="Informe o nome do fornecedor"></app-message></div>
+      <div class="col-12 col-lg-6"><label class="form-label-custom">Nome fantasia</label><input pInputText name="tradeName" [(ngModel)]="supplier.tradeName" #tradeName="ngModel" required class="form-control" /><app-message [control]="tradeName" error="required" text="Informe o nome fantasia"></app-message></div>
+      <div class="col-12 col-lg-6"><label class="form-label-custom">Razão social</label><input pInputText name="companyName" [(ngModel)]="supplier.companyName" #companyName="ngModel" required class="form-control" /><app-message [control]="companyName" error="required" text="Informe a razão social"></app-message></div>
+      <div class="col-12 col-lg-6"><label class="form-label-custom">CNPJ</label><input pInputText name="cnpj" [(ngModel)]="supplier.cnpj" #cnpj="ngModel" required mask="00.000.000/0000-00" class="form-control" /><app-message [control]="cnpj" error="required" text="Informe o CNPJ"></app-message></div>
+      <div class="col-12 col-lg-6"><label class="form-label-custom">E-mail</label><input pInputText type="email" name="email" [(ngModel)]="supplier.email" class="form-control" /></div>
+      <div class="col-12 col-lg-6"><label class="form-label-custom">Telefone</label><input pInputText name="phoneNumber" [(ngModel)]="supplier.phoneNumber" mask="(00) 0000-0000||(00) 00000-0000" class="form-control" /></div>
+      <div class="col-12"><label class="form-label-custom">Endereço</label><input pInputText name="address" [(ngModel)]="supplier.address" #address="ngModel" required class="form-control" /><app-message [control]="address" error="required" text="Informe o endereço"></app-message></div>
+      <div class="col-12"><div class="supplier-photo-section"><div class="supplier-photo-area"><div class="supplier-photo-frame"><img *ngIf="imagePreviewUrl; else noImage" class="supplier-photo" [src]="imagePreviewUrl" alt="Imagem do fornecedor" /><ng-template #noImage><div class="supplier-photo-placeholder"><i class="pi pi-image supplier-photo-icon"></i></div></ng-template></div><div class="supplier-photo-meta"><div class="supplier-photo-title">Imagem do fornecedor</div><div class="supplier-photo-actions"><label class="upload-btn"><i class="pi pi-upload"></i>Selecionar imagem<input class="upload-input" type="file" accept="image/*" (change)="onImageSelected($event)" /></label><span class="file-chip" *ngIf="selectedImageName">{{ selectedImageName }}</span></div></div></div></div></div>
+    </div>
+    <div class="supplier-form-buttons mt-4"><button [disabled]="supplierForm.invalid" class="btn btn-primary supplier-form-button">SALVAR</button><a routerLink="/suppliers"><button type="button" class="btn btn-outline-danger supplier-form-button">CANCELAR</button></a></div>
+  </form>
+</div></div>

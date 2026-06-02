@@ -1,0 +1,15 @@
+<p-dialog header="Detalhamento do Fornecedor" styleClass="like-dialog" [visible]="visible" (visibleChange)="$event ? null : close()" [modal]="true" [style]="{ width: '92vw', maxWidth: '760px' }">
+  <div *ngIf="supplier; else loading">
+    <div class="photo" *ngIf="imagePreviewUrl"><img [src]="imagePreviewUrl" alt="Imagem do fornecedor" /></div>
+    <div class="dlg-grid">
+      <div class="item"><span class="label">Nome</span><span class="value">{{ supplier.name || '-' }}</span></div>
+      <div class="item"><span class="label">Nome fantasia</span><span class="value">{{ supplier.tradeName || '-' }}</span></div>
+      <div class="item"><span class="label">Razão social</span><span class="value">{{ supplier.companyName || '-' }}</span></div>
+      <div class="item"><span class="label">CNPJ</span><span class="value">{{ supplier.cnpj || '-' }}</span></div>
+      <div class="item"><span class="label">E-mail</span><span class="value">{{ supplier.email || '-' }}</span></div>
+      <div class="item"><span class="label">Telefone</span><span class="value">{{ supplier.phoneNumber || '-' }}</span></div>
+      <div class="item span-2"><span class="label">Endereço</span><span class="value">{{ supplier.address || '-' }}</span></div>
+    </div>
+  </div>
+  <ng-template #loading><div class="loading">Carregando...</div></ng-template>
+</p-dialog>

@@ -126,6 +126,21 @@ const routes: Routes = [
   },
 
   {
+    path: '',
+    component: MainComponent,
+    children: [
+      {
+        path: 'suppliers',
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+          import('./features/suppliers/suppliers.module').then(
+            (m) => m.SuppliersModule,
+          ),
+      },
+    ],
+  },
+
+  {
     path: 'not-authorized',
     component: NotAuthorizedComponent,
   },

@@ -53,6 +53,22 @@ export const API = {
     },
   },
 
+  SUPPLIERS: {
+    ROOT: `${BASE_URL}/suppliers`,
+    BY_ID: (id: number | string) => `${BASE_URL}/suppliers/${id}`,
+    IMAGE: (id: number | string) => `${BASE_URL}/suppliers/${id}/image`,
+    FILES: {
+      ROOT: (supplierId: number | string) =>
+        `${BASE_URL}/suppliers/${supplierId}/files`,
+      VIEW: (supplierId: number | string, fileId: number | string) =>
+        `${BASE_URL}/suppliers/${supplierId}/files/${fileId}/view`,
+      BY_ID: (supplierId: number, fileId: number) =>
+        `${BASE_URL}/suppliers/${supplierId}/files/${fileId}`,
+      DOWNLOAD: (supplierId: number, fileId: number) =>
+        `${BASE_URL}/suppliers/${supplierId}/files/${fileId}/download`,
+    },
+  },
+
   EMPLOYEES: {
     ROOT: `${BASE_URL}/employees`,
     BY_ID: (id: number | string) => `${BASE_URL}/employees/${id}`,

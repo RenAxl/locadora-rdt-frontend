@@ -3,6 +3,7 @@ import { Permission } from '../permissions/models/permission';
 export class Role {
   id?: number;
   authority: string = '';
+  label?: string;
   permissionsCount?: number;
 
   permissions: Permission[] = [];

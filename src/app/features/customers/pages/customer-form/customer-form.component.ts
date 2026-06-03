@@ -7,6 +7,7 @@ import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { CustomerMapper } from '../../mapper/customer.mapper';
+import { PhotoPreview } from 'src/app/core/utils/photo-preview.util';
 
 @Component({
   selector: 'app-customer-form',
@@ -20,9 +21,8 @@ export class CustomerFormComponent implements OnInit, OnDestroy {
   selectedPhotoName?: string;
   photoPreviewUrl: SafeUrl | null = null;
 
-  private objectUrl?: string;
-
   private subs: Subscription[] = [];
+  private photoPreview: PhotoPreview;
 
   constructor(
     private customerService: CustomerService,
@@ -30,7 +30,9 @@ export class CustomerFormComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
-  ) {}
+  ) {
+    this.photoPreview = new PhotoPreview(sanitizer);
+  }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('customerId');
@@ -55,17 +57,17 @@ export class CustomerFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.cleanupObjectUrl();
+    this.photoPreview.clear();
     this.subs.forEach((s) => s.unsubscribe());
   }
 
-  save(form: NgForm) {
+  save(form: NgForm): void {
     if (form.invalid) {
       form.control.markAllAsTouched();
       return;
     }
 
-    if (this.customer.id != null && this.customer.id.toString().trim() !== '') {
+    if (this.customer.id != null) {
       this.update();
     } else {
       this.insert();
@@ -77,34 +79,10 @@ export class CustomerFormComponent implements OnInit, OnDestroy {
 
     const sub = this.customerService.insert(dto).subscribe({
       next: (createdCustomer) => {
-        if (this.selectedPhoto) {
-          const subPhoto = this.customerService
-            .updatePhoto(createdCustomer.id!, this.selectedPhoto)
-            .subscribe({
-              next: () => {
-                this.finishCustomerSuccessAndRedirect(
-                  'Cliente cadastrado com sucesso!',
-                );
-              },
-              error: (err) => {
-                this.messageService.add({
-                  severity: 'warn',
-                  summary: 'Atenção',
-                  detail:
-                    err?.error?.message ||
-                    'Cliente cadastrado, mas falhou ao enviar a foto.',
-                });
-
-                this.router.navigate(['/customers']);
-              },
-            });
-
-          this.subs.push(subPhoto);
-          return;
-        }
-
-        this.finishCustomerSuccessAndRedirect(
+        this.uploadPhotoOrFinish(
+          createdCustomer.id,
           'Cliente cadastrado com sucesso!',
+          'Cliente cadastrado, mas falhou ao enviar a foto.',
         );
       },
       error: (err) => {
@@ -128,34 +106,10 @@ export class CustomerFormComponent implements OnInit, OnDestroy {
 
     const sub = this.customerService.update(dto).subscribe({
       next: () => {
-        if (this.selectedPhoto) {
-          const subPhoto = this.customerService
-            .updatePhoto(this.customer.id!, this.selectedPhoto)
-            .subscribe({
-              next: () => {
-                this.finishCustomerSuccessAndRedirect(
-                  'Cliente atualizado com sucesso!',
-                );
-              },
-              error: (err) => {
-                this.messageService.add({
-                  severity: 'warn',
-                  summary: 'Atenção',
-                  detail:
-                    err?.error?.message ||
-                    'Cliente atualizado, mas falhou ao enviar a foto.',
-                });
-
-                this.router.navigate(['/customers/']);
-              },
-            });
-
-          this.subs.push(subPhoto);
-          return;
-        }
-
-        this.finishCustomerSuccessAndRedirect(
+        this.uploadPhotoOrFinish(
+          this.customer.id,
           'Cliente atualizado com sucesso!',
+          'Cliente atualizado, mas falhou ao enviar a foto.',
         );
       },
       error: (err) => {
@@ -179,28 +133,16 @@ export class CustomerFormComponent implements OnInit, OnDestroy {
 
     this.customer = new Customer();
     this.selectedPhoto = null;
+    this.selectedPhotoName = undefined;
     this.photoPreviewUrl = null;
 
     this.router.navigate(['/customers']);
   }
 
-  private cleanupObjectUrl(): void {
-    if (this.objectUrl) {
-      URL.revokeObjectURL(this.objectUrl);
-      this.objectUrl = undefined;
-    }
-  }
-
   private loadCustomerPhoto(customerId: number): void {
     const sub = this.customerService.getCustomerPhoto(customerId).subscribe({
       next: (blob) => {
-        if (!blob || blob.size === 0) return;
-
-        this.cleanupObjectUrl();
-        this.objectUrl = URL.createObjectURL(blob);
-        this.photoPreviewUrl = this.sanitizer.bypassSecurityTrustUrl(
-          this.objectUrl,
-        );
+        this.photoPreviewUrl = this.photoPreview.create(blob);
       },
       error: () => {
         this.photoPreviewUrl = null;
@@ -214,14 +156,36 @@ export class CustomerFormComponent implements OnInit, OnDestroy {
     const file = event?.target?.files?.[0] ?? null;
 
     this.selectedPhoto = file;
-    this.selectedPhotoName = file?.name ?? null;
+    this.selectedPhotoName = file?.name ?? undefined;
 
-    if (file) {
-      this.cleanupObjectUrl();
-      this.objectUrl = URL.createObjectURL(file);
-      this.photoPreviewUrl = this.sanitizer.bypassSecurityTrustUrl(
-        this.objectUrl,
-      );
+    this.photoPreviewUrl = file ? this.photoPreview.create(file) : null;
+  }
+
+  private uploadPhotoOrFinish(
+    customerId: number | undefined,
+    successMessage: string,
+    uploadErrorMessage: string,
+  ): void {
+    if (!customerId || !this.selectedPhoto) {
+      this.finishCustomerSuccessAndRedirect(successMessage);
+      return;
     }
+
+    const sub = this.customerService
+      .updatePhoto(customerId, this.selectedPhoto)
+      .subscribe({
+        next: () => this.finishCustomerSuccessAndRedirect(successMessage),
+        error: (err) => {
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Atenção',
+            detail: err?.error?.message || uploadErrorMessage,
+          });
+
+          this.router.navigate(['/customers']);
+        },
+      });
+
+    this.subs.push(sub);
   }
 }

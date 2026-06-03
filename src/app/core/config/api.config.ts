@@ -76,16 +76,6 @@ export const API = {
     DELETE_ALL: `${BASE_URL}/employees/all`,
     CHANGE_ACTIVE: (id: number | string) =>
       `${BASE_URL}/employees/${id}/active`,
-    POSITIONS: {
-      ROOT: `${BASE_URL}/positions`,
-      BY_ID: (id: number | string) => `${BASE_URL}/positions/${id}`,
-    },
-
-    DEPARTMENTS: {
-      ROOT: `${BASE_URL}/departments`,
-      BY_ID: (id: number | string) => `${BASE_URL}/departments/${id}`,
-    },
-
     FILES: {
       ROOT: (employeeId: number | string) =>
         `${BASE_URL}/employees/${employeeId}/files`,
@@ -96,5 +86,15 @@ export const API = {
       DOWNLOAD: (employeeId: number, fileId: number) =>
         `${BASE_URL}/employees/${employeeId}/files/${fileId}/download`,
     },
+  },
+
+  POSITIONS: {
+    ROOT: `${BASE_URL}/positions`,
+    BY_ID: (id: number | string) => `${BASE_URL}/positions/${id}`,
+  },
+
+  DEPARTMENTS: {
+    ROOT: `${BASE_URL}/departments`,
+    BY_ID: (id: number | string) => `${BASE_URL}/departments/${id}`,
   },
 } as const;

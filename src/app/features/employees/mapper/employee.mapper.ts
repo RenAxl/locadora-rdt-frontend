@@ -3,8 +3,8 @@ import { EmployeeDTO } from '../dtos/employee.dto';
 import { EmployeeDetailsDTO } from '../dtos/employee-details.dto';
 import { EmployeeInsertDTO } from '../dtos/employee-insert.dto';
 import { EmployeeUpdateDTO } from '../dtos/employee-update.dto';
-import { Position } from '../positions/models/Position';
-import { Department } from '../departments/models/Department';
+import { Position } from '../../positions/models/Position';
+import { Department } from '../../departments/models/Department';
 
 export class EmployeeMapper {
   static fromDTO(dto: EmployeeDTO): Employee {

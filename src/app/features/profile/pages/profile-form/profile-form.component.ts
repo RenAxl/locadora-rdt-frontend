@@ -6,6 +6,7 @@ import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
+import { PhotoPreview } from 'src/app/core/utils/photo-preview.util';
 
 @Component({
   selector: 'app-profile-form',
@@ -13,7 +14,6 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./profile-form.component.css'],
 })
 export class ProfileFormComponent implements OnInit, OnDestroy {
-
   profile: Profile = new Profile();
   password: ChangePassword = new ChangePassword();
 
@@ -21,16 +21,18 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
   selectedPhotoName?: string;
 
   photoPreviewUrl?: SafeUrl;
-  private objectUrl?: string;
 
   private subs: Subscription[] = [];
+  private photoPreview: PhotoPreview;
 
   constructor(
     private profileService: ProfileService,
     private messageService: MessageService,
     private router: Router,
-    private sanitizer: DomSanitizer
-  ) {}
+    private sanitizer: DomSanitizer,
+  ) {
+    this.photoPreview = new PhotoPreview(sanitizer);
+  }
 
   ngOnInit(): void {
     this.loadProfile();
@@ -38,8 +40,8 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.cleanupObjectUrl();
-    this.subs.forEach(s => s.unsubscribe());
+    this.photoPreview.clear();
+    this.subs.forEach((s) => s.unsubscribe());
   }
 
   private loadProfile(): void {
@@ -64,22 +66,12 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
       next: (blob) => {
         if (!blob || blob.size === 0) return;
 
-        this.cleanupObjectUrl();
-        this.objectUrl = URL.createObjectURL(blob);
-        this.photoPreviewUrl = this.sanitizer.bypassSecurityTrustUrl(this.objectUrl);
+        this.photoPreviewUrl = this.photoPreview.create(blob) ?? undefined;
       },
-      error: () => {
-      },
+      error: () => {},
     });
 
     this.subs.push(sub);
-  }
-
-  private cleanupObjectUrl(): void {
-    if (this.objectUrl) {
-      URL.revokeObjectURL(this.objectUrl);
-      this.objectUrl = undefined;
-    }
   }
 
   onPhotoSelected(event: any): void {
@@ -87,11 +79,7 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
     this.selectedPhoto = file;
     this.selectedPhotoName = file?.name;
 
-    if (file) {
-      this.cleanupObjectUrl();
-      this.objectUrl = URL.createObjectURL(file);
-      this.photoPreviewUrl = this.sanitizer.bypassSecurityTrustUrl(this.objectUrl);
-    }
+    this.photoPreviewUrl = file ? this.photoPreview.create(file) ?? undefined : undefined;
   }
 
   private wantsToChangePassword(): boolean {
@@ -99,7 +87,9 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
   }
 
   private validatePasswordChangeOrToast(): boolean {
-    if (!this.wantsToChangePassword()) return true; // SE O USUÁRIO NÃO QUER TROCAR A SENHA RETORNA true.
+    if (!this.wantsToChangePassword()) {
+      return true;
+    }
 
     if (!this.password.currentPassword?.trim()) {
       this.messageService.add({
@@ -132,28 +122,18 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
   }
 
   saveProfile(): void {
-    if (!this.validatePasswordChangeOrToast()) return; // Não pode haver inconsistências na troca de password.
+    if (!this.validatePasswordChangeOrToast()) {
+      return;
+    }
 
     const sub = this.profileService.updateMe(this.profile).subscribe({
       next: () => {
         if (this.wantsToChangePassword()) {
-          const subPass = this.profileService.changePassword(this.password).subscribe({
-            next: () => {
-              this.afterProfileAndPasswordSuccess();
-            },
-            error: (err) => {
-              this.messageService.add({
-                severity: 'error',
-                summary: 'Erro',
-                detail: err?.error?.message || 'Erro ao alterar a senha.',
-              });
-            },
-          });
-          this.subs.push(subPass);
+          this.changePassword();
           return;
         }
 
-        this.afterProfileAndPasswordSuccess();
+        this.uploadPhotoOrFinish();
       },
       error: (err) => {
         this.messageService.add({
@@ -167,26 +147,42 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
     this.subs.push(sub);
   }
 
-  private afterProfileAndPasswordSuccess(): void {
-    if (this.selectedPhoto) {
-      const subPhoto = this.profileService.updateMyPhoto(this.selectedPhoto).subscribe({
-        next: () => {
-          this.finishSuccessAndRedirect('Perfil atualizado com sucesso!');
-        },
-        error: (err) => {
-          this.messageService.add({
-            severity: 'warn',
-            summary: 'Atenção',
-            detail: err?.error?.message || 'Perfil atualizado, mas falhou ao enviar a foto.',
-          });
-          this.router.navigate(['/home']);
-        },
-      });
-      this.subs.push(subPhoto);
+  private changePassword(): void {
+    const sub = this.profileService.changePassword(this.password).subscribe({
+      next: () => this.uploadPhotoOrFinish(),
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: err?.error?.message || 'Erro ao alterar a senha.',
+        });
+      },
+    });
+
+    this.subs.push(sub);
+  }
+
+  private uploadPhotoOrFinish(): void {
+    if (!this.selectedPhoto) {
+      this.finishSuccessAndRedirect('Perfil atualizado com sucesso!');
       return;
     }
 
-    this.finishSuccessAndRedirect('Perfil atualizado com sucesso!');
+    const sub = this.profileService.updateMyPhoto(this.selectedPhoto).subscribe({
+      next: () => this.finishSuccessAndRedirect('Perfil atualizado com sucesso!'),
+      error: (err) => {
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Atenção',
+          detail:
+            err?.error?.message ||
+            'Perfil atualizado, mas falhou ao enviar a foto.',
+        });
+        this.router.navigate(['/home']);
+      },
+    });
+
+    this.subs.push(sub);
   }
 
   private finishSuccessAndRedirect(detail: string): void {

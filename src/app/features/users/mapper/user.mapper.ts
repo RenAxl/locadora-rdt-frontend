@@ -61,12 +61,16 @@ export class UserMapper {
       updatedBy: dto.updatedBy,
 
       roles:
-        dto.roles?.map(
-          (roleName: string) =>
-            new Role({
-              authority: roleName,
-            })
-        ) || [],
+        dto.roles?.map((role) => {
+          if (typeof role === 'string') {
+            return new Role({ authority: role });
+          }
+
+          return new Role({
+            id: role.id,
+            authority: role.authority,
+          });
+        }) || [],
     });
   }
 

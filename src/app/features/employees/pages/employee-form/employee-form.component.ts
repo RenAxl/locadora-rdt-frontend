@@ -6,13 +6,15 @@ import { Employee } from '../../models/Employee';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { PositionService } from '../../positions/services/position.service';
-import { DepartmentService } from '../../departments/services/department.service';
-import { Position } from '../../positions/models/Position';
-import { Department } from '../../departments/models/Department';
+import { PositionService } from '../../../positions/services/position.service';
+import { DepartmentService } from '../../../departments/services/department.service';
+import { Position } from '../../../positions/models/Position';
+import { Department } from '../../../departments/models/Department';
 import { EmployeeMapper } from '../../mapper/employee.mapper';
-import { PositionMapper } from '../../positions/mapper/position.mapper';
-import { DepartmentMapper } from '../../departments/mapper/department.mapper';
+import { PositionMapper } from '../../../positions/mapper/position.mapper';
+import { DepartmentMapper } from '../../../departments/mapper/department.mapper';
+import { PhotoPreview } from 'src/app/core/utils/photo-preview.util';
+import { Pagination } from 'src/app/core/models/Pagination';
 
 @Component({
   selector: 'app-employee-form',
@@ -31,8 +33,8 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
   selectedPhotoName?: string;
   photoPreviewUrl: SafeUrl | null = null;
 
-  private objectUrl?: string;
   private subs: Subscription[] = [];
+  private photoPreview: PhotoPreview;
 
   constructor(
     private employeeService: EmployeeService,
@@ -42,7 +44,9 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
-  ) {}
+  ) {
+    this.photoPreview = new PhotoPreview(sanitizer);
+  }
 
   ngOnInit(): void {
     this.loadPositions();
@@ -70,7 +74,7 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.cleanupObjectUrl();
+    this.photoPreview.clear();
     this.subs.forEach((s) => s.unsubscribe());
   }
 
@@ -113,31 +117,11 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
 
     const sub = this.employeeService.insert(dto).subscribe({
       next: (createdEmployee) => {
-        if (!this.selectedPhoto) {
-          this.finishSuccess('Funcionário cadastrado com sucesso!');
-          return;
-        }
-
-        const subPhoto = this.employeeService
-          .updatePhoto(createdEmployee.id, this.selectedPhoto)
-          .subscribe({
-            next: () => {
-              this.finishSuccess('Funcionário cadastrado com sucesso!');
-            },
-            error: (err) => {
-              this.messageService.add({
-                severity: 'warn',
-                summary: 'Atenção',
-                detail:
-                  err?.error?.message ||
-                  'Funcionário cadastrado, mas falhou ao enviar a foto.',
-              });
-
-              this.router.navigate(['/employees']);
-            },
-          });
-
-        this.subs.push(subPhoto);
+        this.uploadPhotoOrFinish(
+          createdEmployee.id,
+          'Funcionário cadastrado com sucesso!',
+          'Funcionário cadastrado, mas falhou ao enviar a foto.',
+        );
       },
       error: (err) => {
         this.messageService.add({
@@ -160,31 +144,11 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
 
     const sub = this.employeeService.update(dto).subscribe({
       next: () => {
-        if (!this.selectedPhoto) {
-          this.finishSuccess('Funcionário atualizado com sucesso!');
-          return;
-        }
-
-        const subPhoto = this.employeeService
-          .updatePhoto(this.employee.id!, this.selectedPhoto)
-          .subscribe({
-            next: () => {
-              this.finishSuccess('Funcionário atualizado com sucesso!');
-            },
-            error: (err) => {
-              this.messageService.add({
-                severity: 'warn',
-                summary: 'Atenção',
-                detail:
-                  err?.error?.message ||
-                  'Funcionário atualizado, mas falhou ao enviar a foto.',
-              });
-
-              this.router.navigate(['/employees']);
-            },
-          });
-
-        this.subs.push(subPhoto);
+        this.uploadPhotoOrFinish(
+          this.employee.id,
+          'Funcionário atualizado com sucesso!',
+          'Funcionário atualizado, mas falhou ao enviar a foto.',
+        );
       },
       error: (err) => {
         this.messageService.add({
@@ -216,14 +180,9 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
   }
 
   private loadPositions(): void {
-    const pagination = {
-      page: 0,
-      linesPerPage: 1000,
-      direction: 'ASC',
-      orderBy: 'name',
-    };
+    const pagination = new Pagination(0, 1000, 'ASC', 'name');
 
-    const sub = this.positionService.list(pagination as any, '').subscribe({
+    const sub = this.positionService.list(pagination, '').subscribe({
       next: (response) => {
         this.positions = (response?.content ?? []).map(PositionMapper.fromDTO);
       },
@@ -241,14 +200,9 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
   }
 
   private loadDepartments(): void {
-    const pagination = {
-      page: 0,
-      linesPerPage: 1000,
-      direction: 'ASC',
-      orderBy: 'name',
-    };
+    const pagination = new Pagination(0, 1000, 'ASC', 'name');
 
-    const sub = this.departmentService.list(pagination as any, '').subscribe({
+    const sub = this.departmentService.list(pagination, '').subscribe({
       next: (response) => {
         this.departments = (response?.content ?? []).map(
           DepartmentMapper.fromDTO,
@@ -267,25 +221,10 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
     this.subs.push(sub);
   }
 
-  private cleanupObjectUrl(): void {
-    if (this.objectUrl) {
-      URL.revokeObjectURL(this.objectUrl);
-      this.objectUrl = undefined;
-    }
-  }
-
   private loadEmployeePhoto(employeeId: number): void {
     const sub = this.employeeService.getEmployeePhoto(employeeId).subscribe({
       next: (blob) => {
-        if (!blob || blob.size === 0) {
-          return;
-        }
-
-        this.cleanupObjectUrl();
-        this.objectUrl = URL.createObjectURL(blob);
-        this.photoPreviewUrl = this.sanitizer.bypassSecurityTrustUrl(
-          this.objectUrl,
-        );
+        this.photoPreviewUrl = this.photoPreview.create(blob);
       },
       error: () => {
         this.photoPreviewUrl = null;
@@ -301,16 +240,38 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
     this.selectedPhoto = file;
     this.selectedPhotoName = file?.name ?? undefined;
 
-    if (file) {
-      this.cleanupObjectUrl();
-      this.objectUrl = URL.createObjectURL(file);
-      this.photoPreviewUrl = this.sanitizer.bypassSecurityTrustUrl(
-        this.objectUrl,
-      );
-    }
+    this.photoPreviewUrl = file ? this.photoPreview.create(file) : null;
   }
 
   compareById(item1: any, item2: any): boolean {
     return item1 && item2 ? item1.id === item2.id : item1 === item2;
+  }
+
+  private uploadPhotoOrFinish(
+    employeeId: number | undefined,
+    successMessage: string,
+    uploadErrorMessage: string,
+  ): void {
+    if (!employeeId || !this.selectedPhoto) {
+      this.finishSuccess(successMessage);
+      return;
+    }
+
+    const sub = this.employeeService
+      .updatePhoto(employeeId, this.selectedPhoto)
+      .subscribe({
+        next: () => this.finishSuccess(successMessage),
+        error: (err) => {
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Atenção',
+            detail: err?.error?.message || uploadErrorMessage,
+          });
+
+          this.router.navigate(['/employees']);
+        },
+      });
+
+    this.subs.push(sub);
   }
 }

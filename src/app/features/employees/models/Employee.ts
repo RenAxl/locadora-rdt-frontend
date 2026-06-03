@@ -1,5 +1,5 @@
-import { Department } from '../departments/models/Department';
-import { Position } from '../positions/models/Position';
+import { Department } from '../../departments/models/Department';
+import { Position } from '../../positions/models/Position';
 
 export class Employee {
   id?: number;

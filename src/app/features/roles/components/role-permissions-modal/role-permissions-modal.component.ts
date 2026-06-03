@@ -8,13 +8,11 @@ import {
 } from '@angular/core';
 import { MessageService } from 'primeng/api';
 
-import { ErrorHandlerService } from 'src/app/core/error/services/error-handler.service';
 import { PermissionsService } from '../../permissions/services/permissions.service';
 import { Permission } from 'src/app/features/roles/permissions/models/permission';
-import { RolePermissionsUpdateDTO } from 'src/app/features/roles/models/RolePermissionsUpdateDTO';
 import { RolesService } from '../../services/roles.service';
-import { PermissionMapper } from '../../permissions/mapper/permission.mapper';
 import { RoleMapper } from '../../mapper/role.mapper';
+import { PermissionMapper } from '../../permissions/mapper/permission.mapper';
 
 @Component({
   selector: 'app-role-permissions-modal',
@@ -47,7 +45,6 @@ export class PermissionComponent implements OnChanges {
     private rolesService: RolesService,
     private permissionsService: PermissionsService,
     private messageService: MessageService,
-    private errorHandler: ErrorHandlerService,
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -76,9 +73,7 @@ export class PermissionComponent implements OnChanges {
 
     this.rolesService.findById(roleId).subscribe({
       next: (role) => {
-        const currentPermissions: Permission[] = PermissionMapper.toModelList(
-          role?.permissions || [],
-        );
+        const currentPermissions = RoleMapper.fromDetailsDTO(role).permissions;
         currentPermissions.forEach((p) => {
           if (p?.id != null) this.selectedIds.add(Number(p.id));
         });

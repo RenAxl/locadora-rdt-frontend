@@ -4,8 +4,7 @@ export class Profile {
   telephone: string = '';
   address: string = '';
 
-   constructor(init?: Partial<Profile>) {
+  constructor(init?: Partial<Profile>) {
     Object.assign(this, init);
   }
-
 }

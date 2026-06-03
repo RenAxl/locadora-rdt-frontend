@@ -1,0 +1,70 @@
+<div class="department-filter-container">
+  <div class="department-actions-group">
+    <a routerLink="/departments/create" class="action-link">
+      <button class="btn btn-primary text-white btn-crud-action" type="button">
+        NOVO SETOR
+      </button>
+    </a>
+  </div>
+
+  <app-name-filter
+    text="Digite o nome do setor"
+    (search)="searchDepartment($event)"
+  ></app-name-filter>
+</div>
+
+<div class="department-card">
+  <div class="grid">
+    <div class="col-12">
+      <p-table
+        [value]="departments"
+        [responsive]="true"
+        [paginator]="true"
+        [rows]="pagination.linesPerPage"
+        [lazy]="true"
+        [totalRecords]="totalElements"
+        (onLazyLoad)="changePage($event)"
+        #departmentTable
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Nome</th>
+            <th class="actions"></th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-department>
+          <tr>
+            <td class="columns">
+              <span class="p-column-title">Nome:</span>
+              {{ department.name }}
+            </td>
+
+            <td class="col-actions">
+              <div class="actions-wrap">
+                <a
+                  pButton
+                  class="p-button-rounded p-button-text"
+                  icon="pi pi-pencil"
+                  pTooltip="Atualizar setor"
+                  tooltipDepartment="top"
+                  [routerLink]="['/departments/', department.id, 'edit']"
+                ></a>
+
+                <button
+                  pButton
+                  class="p-button-rounded p-button-text p-button-danger"
+                  icon="pi pi-trash"
+                  pTooltip="Excluir setor"
+                  tooltipDepartment="top"
+                  (click)="delete(department)"
+                ></button>
+
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { MessageService } from 'primeng/api';
-import { ErrorHandlerService } from 'src/app/core/error/services/error-handler.service';
 import { RolesService } from '../../services/roles.service';
 import { Role } from '../../models/Role';
-
+import { RoleMapper } from '../../mapper/role.mapper';
+import { normalizeRoleAuthority } from '../../utils/role-authority.util';
 
 @Component({
   selector: 'app-role-form',
@@ -20,7 +20,6 @@ export class RoleFormComponent implements OnInit {
     private messageService: MessageService,
     private router: Router,
     private route: ActivatedRoute,
-    private errorHandler: ErrorHandlerService,
   ) {}
 
   ngOnInit(): void {
@@ -28,15 +27,13 @@ export class RoleFormComponent implements OnInit {
 
     if (id != null) {
       this.roleService.findById(id).subscribe((data) => {
-        this.role = data;
+        this.role = RoleMapper.fromDetailsDTO(data);
       });
     }
   }
 
-  save() {
-    if (this.role.authority) {
-      this.role.authority = this.formatRole(this.role.authority);
-    }
+  save(): void {
+    this.role.authority = normalizeRoleAuthority(this.role.authority);
 
     this.roleService.insert(this.role).subscribe({
       next: () => {
@@ -47,19 +44,5 @@ export class RoleFormComponent implements OnInit {
         });
       },
     });
-  }
-
-  formatRole(value: string): string {
-    let role = value
-      .trim()
-      .toUpperCase()
-      .replace(/\s+/g, '_')
-      .replace(/[^A-Z0-9_]/g, '');
-
-    if (!role.startsWith('ROLE_')) {
-      role = 'ROLE_' + role;
-    }
-
-    return role;
   }
 }

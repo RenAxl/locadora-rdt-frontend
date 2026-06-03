@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 import { Table } from 'primeng/table';
@@ -8,7 +8,6 @@ import {
   LazyLoadEvent,
   MessageService,
 } from 'primeng/api';
-import { ErrorHandlerService } from 'src/app/core/error/services/error-handler.service';
 import { UsersService } from '../../services/users.service';
 import { User } from '../../models/user';
 import { AuthService } from 'src/app/core/auth/services/auth.service';
@@ -16,13 +15,18 @@ import { catchError, EMPTY } from 'rxjs';
 import { UserDTO } from '../../dtos/user.dto';
 import { UserMapper } from '../../mapper/user.mapper';
 import { UserDetailsDTO } from '../../dtos/user-details.dto';
+import {
+  addSelectedId,
+  removeSelectedId,
+} from 'src/app/core/utils/selection.util';
+import { PhotoUrlRegistry } from 'src/app/core/utils/photo-preview.util';
 
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.css'],
 })
-export class UserListComponent implements OnInit {
+export class UserListComponent implements OnInit, OnDestroy {
   users: User[] = [];
 
   pagination: Pagination = new Pagination();
@@ -42,17 +46,23 @@ export class UserListComponent implements OnInit {
   userDetails: User | null = null;
 
   photoMap: { [key: number]: SafeUrl } = {};
+  private photoUrls: PhotoUrlRegistry;
 
   constructor(
     private userService: UsersService,
     private messageService: MessageService,
-    private errorHandler: ErrorHandlerService,
     private confirmationService: ConfirmationService,
     private authService: AuthService,
     private sanitizer: DomSanitizer,
-  ) {}
+  ) {
+    this.photoUrls = new PhotoUrlRegistry(sanitizer);
+  }
 
   ngOnInit(): void {}
+
+  ngOnDestroy(): void {
+    this.photoUrls.clear();
+  }
 
   list(page: number = 0): void {
     this.pagination.page = page;
@@ -61,7 +71,8 @@ export class UserListComponent implements OnInit {
       .list(this.pagination, this.filterName)
       .subscribe((data) => {
         this.users = data.content.map((dto: UserDTO) =>
-        UserMapper.toModel(dto));
+          UserMapper.toModel(dto),
+        );
         this.totalElements = data.totalElements;
 
         this.selectedUsers = this.users.filter(
@@ -72,21 +83,25 @@ export class UserListComponent implements OnInit {
       });
   }
 
-  changePage(event: LazyLoadEvent) {
+  changePage(event: LazyLoadEvent): void {
     const page = event!.first! / event!.rows!;
     this.list(page);
   }
 
-  searchUser(name: string) {
+  searchUser(name: string): void {
     this.filterName = name;
     this.list();
   }
 
-  delete(user: any) {
+  delete(user: User): void {
+    if (!user.id) {
+      return;
+    }
+
     this.confirmationService.confirm({
       message: 'Tem certeza que deseja excluir?',
       accept: () => {
-        this.userService.delete(user.id).subscribe(() => {
+        this.userService.delete(user.id!).subscribe(() => {
           this.grid.reset();
           this.messageService.add({
             severity: 'success',
@@ -98,23 +113,11 @@ export class UserListComponent implements OnInit {
   }
 
   onRowSelect(event: any): void {
-    const id = event?.data?.id;
-    if (id == null) return;
-
-    if (!this.selectedUserIds.includes(id)) {
-      this.selectedUserIds.push(id);
-    }
-
-    console.log('IDs selecionados:', this.selectedUserIds);
+    this.selectedUserIds = addSelectedId(this.selectedUserIds, event?.data);
   }
 
   onRowUnselect(event: any): void {
-    const id = event?.data?.id;
-    if (id == null) return;
-
-    this.selectedUserIds = this.selectedUserIds.filter((x) => x !== id);
-
-    console.log('IDs selecionados:', this.selectedUserIds);
+    this.selectedUserIds = removeSelectedId(this.selectedUserIds, event?.data);
   }
 
   deleteSelectedUsers(): void {
@@ -171,11 +174,12 @@ export class UserListComponent implements OnInit {
     });
   }
 
-  hasAuthority(role: string) {
+  hasAuthority(role: string): boolean {
     return this.authService.hasAuthority(role);
   }
 
   private loadPhotos(): void {
+    this.photoUrls.clear();
     this.photoMap = {};
 
     this.users.forEach((user) => {
@@ -190,13 +194,12 @@ export class UserListComponent implements OnInit {
           }),
         )
         .subscribe((blob: Blob) => {
-          if (!blob || blob.size === 0) return;
+          const photoUrl = this.photoUrls.create(blob);
 
-          const objectUrl = URL.createObjectURL(blob);
-          this.photoMap[user.id!] =
-            this.sanitizer.bypassSecurityTrustUrl(objectUrl);
+          if (photoUrl) {
+            this.photoMap[user.id!] = photoUrl;
+          }
         });
     });
   }
-  
 }

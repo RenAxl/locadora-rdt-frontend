@@ -1,3 +1,5 @@
+import { RoleDTO } from '../../roles/dtos/role.dto';
+
 export class UserDetailsDTO {
   id?: number;
 
@@ -11,7 +13,7 @@ export class UserDetailsDTO {
 
   photoContentType?: string;
 
-  roles: string[] = [];
+  roles: Array<string | RoleDTO> = [];
 
   createdAt?: Date;
   updatedAt?: Date;

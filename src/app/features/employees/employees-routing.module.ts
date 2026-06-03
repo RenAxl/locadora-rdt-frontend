@@ -16,16 +16,6 @@ const routes: Routes = [
     path: ':employeeId/edit',
     component: EmployeeFormComponent,
   },
-  {
-    path: 'positions',
-    loadChildren: () =>
-      import('./positions/positions.module').then((m) => m.PositionsModule),
-  },
-  {
-    path: 'departments',
-    loadChildren: () =>
-      import('./departments/departments.module').then((m) => m.DepartmentsModule),
-  },
 ];
 
 @NgModule({

@@ -93,6 +93,34 @@ const routes: Routes = [
     component: MainComponent,
     children: [
       {
+        path: 'positions',
+        loadChildren: () =>
+          import('./features/positions/positions.module').then(
+            (m) => m.PositionsModule,
+          ),
+      },
+    ],
+  },
+
+  {
+    path: '',
+    component: MainComponent,
+    children: [
+      {
+        path: 'departments',
+        loadChildren: () =>
+          import('./features/departments/departments.module').then(
+            (m) => m.DepartmentsModule,
+          ),
+      },
+    ],
+  },
+
+  {
+    path: '',
+    component: MainComponent,
+    children: [
+      {
         path: 'customers',
         canActivate: [AuthGuard],
         data: {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Customer } from '../../models/Customer';
 import { Pagination } from 'src/app/core/models/Pagination';
 import { CustomerService } from '../../services/customer.service';
@@ -12,13 +12,18 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { catchError, EMPTY } from 'rxjs';
 import { AuthService } from 'src/app/core/auth/services/auth.service';
 import { CustomerMapper } from '../../mapper/customer.mapper';
+import {
+  addSelectedId,
+  removeSelectedId,
+} from 'src/app/core/utils/selection.util';
+import { PhotoUrlRegistry } from 'src/app/core/utils/photo-preview.util';
 
 @Component({
   selector: 'app-customer-list',
   templateUrl: './customer-list.component.html',
   styleUrls: ['./customer-list.component.css'],
 })
-export class CustomerListComponent implements OnInit {
+export class CustomerListComponent implements OnInit, OnDestroy {
   customers: Customer[] = [];
 
   pagination: Pagination = new Pagination();
@@ -43,6 +48,7 @@ export class CustomerListComponent implements OnInit {
 
   selectedCustomerId?: number;
   selectedCustomerName?: string;
+  private photoUrls: PhotoUrlRegistry;
 
   constructor(
     private customerService: CustomerService,
@@ -50,9 +56,15 @@ export class CustomerListComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private sanitizer: DomSanitizer,
     private authService: AuthService,
-  ) {}
+  ) {
+    this.photoUrls = new PhotoUrlRegistry(sanitizer);
+  }
 
   ngOnInit(): void {}
+
+  ngOnDestroy(): void {
+    this.photoUrls.clear();
+  }
 
   list(page: number = 0): void {
     this.pagination.page = page;
@@ -67,17 +79,17 @@ export class CustomerListComponent implements OnInit {
       });
   }
 
-  changePage(event: LazyLoadEvent) {
+  changePage(event: LazyLoadEvent): void {
     const page = event!.first! / event!.rows!;
     this.list(page);
   }
 
-  searchCustomer(name: string) {
+  searchCustomer(name: string): void {
     this.filterName = name;
     this.list();
   }
 
-  delete(customer: Customer) {
+  delete(customer: Customer): void {
     if (!customer.id) {
       return;
     }
@@ -97,6 +109,7 @@ export class CustomerListComponent implements OnInit {
   }
 
   private loadPhotos(): void {
+    this.photoUrls.clear();
     this.photoMap = {};
 
     this.customers.forEach((customer) => {
@@ -111,33 +124,27 @@ export class CustomerListComponent implements OnInit {
           }),
         )
         .subscribe((blob: Blob) => {
-          if (!blob || blob.size === 0) return;
+          const photoUrl = this.photoUrls.create(blob);
 
-          const objectUrl = URL.createObjectURL(blob);
-          this.photoMap[customer.id!] =
-            this.sanitizer.bypassSecurityTrustUrl(objectUrl);
+          if (photoUrl) {
+            this.photoMap[customer.id!] = photoUrl;
+          }
         });
     });
   }
 
   onRowSelect(event: any): void {
-    const id = event?.data?.id;
-    if (id == null) return;
-
-    if (!this.selectedCustomerIds.includes(id)) {
-      this.selectedCustomerIds.push(id);
-    }
-
-    console.log('IDs selecionados:', this.selectedCustomerIds);
+    this.selectedCustomerIds = addSelectedId(
+      this.selectedCustomerIds,
+      event?.data,
+    );
   }
 
   onRowUnselect(event: any): void {
-    const id = event?.data?.id;
-    if (id == null) return;
-
-    this.selectedCustomerIds = this.selectedCustomerIds.filter((x) => x !== id);
-
-    console.log('IDs selecionados:', this.selectedCustomerIds);
+    this.selectedCustomerIds = removeSelectedId(
+      this.selectedCustomerIds,
+      event?.data,
+    );
   }
 
   deleteSelectedCustomers(): void {
@@ -166,7 +173,6 @@ export class CustomerListComponent implements OnInit {
 
   changeActive(customer: Customer): void {
     if (!customer?.id) return;
-    console.log(customer.id);
 
     const newStatus = !customer.active;
 
@@ -184,15 +190,15 @@ export class CustomerListComponent implements OnInit {
 
   openDetails(customer: Customer): void {
     const id = customer?.id;
-    
+
     if (id == null) return;
 
     this.detailsVisible = true;
     this.customerDetails = null;
 
     this.customerService.findById(id).subscribe({
-      next: (details: Customer) => {
-        this.customerDetails = details;
+      next: (details) => {
+        this.customerDetails = CustomerMapper.fromDetailsDTO(details);
       },
     });
   }
@@ -203,7 +209,7 @@ export class CustomerListComponent implements OnInit {
     this.filesVisible = true;
   }
 
-  hasAuthority(role: string) {
+  hasAuthority(role: string): boolean {
     return this.authService.hasAuthority(role);
   }
 }

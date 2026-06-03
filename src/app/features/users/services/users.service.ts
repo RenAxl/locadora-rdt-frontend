@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { Pagination } from 'src/app/core/models/Pagination';
@@ -10,6 +10,7 @@ import { PageResponse } from 'src/app/core/models/page-response';
 import { UserInsertDTO } from '../dtos/user-insert.dto';
 import { UserDetailsDTO } from '../dtos/user-details.dto';
 import { UserUpdateDTO } from '../dtos/user-update.dto';
+import { buildPaginationParams } from 'src/app/core/utils/pagination-params.util';
 
 @Injectable({
   providedIn: 'root',
@@ -21,12 +22,7 @@ export class UsersService {
     pagination: Pagination,
     filterName: string,
   ): Observable<PageResponse<UserDTO>> {
-    let params = new HttpParams()
-      .set('name', filterName)
-      .set('page', pagination.page)
-      .set('linesPerPage', pagination.linesPerPage)
-      .set('direction', String(pagination.direction))
-      .set('orderBy', String(pagination.orderBy));
+    const params = buildPaginationParams(pagination, 'name', filterName);
 
     return this.http.get<PageResponse<UserDTO>>(API.USERS.ROOT, { params });
   }
@@ -35,7 +31,7 @@ export class UsersService {
     return this.http.post<UserDTO>(API.USERS.ROOT, user);
   }
 
-  findById(id: any): Observable<UserDetailsDTO> {
+  findById(id: number | string): Observable<UserDetailsDTO> {
     return this.http.get<UserDetailsDTO>(API.USERS.BY_ID(id));
   }
 

@@ -9,6 +9,8 @@ import { User } from '../../models/user';
 import { RolesService } from 'src/app/features/roles/services/roles.service';
 import { Role } from 'src/app/features/roles/models/Role';
 import { UserMapper } from '../../mapper/user.mapper';
+import { RoleMapper } from 'src/app/features/roles/mapper/role.mapper';
+import { getUniqueNumericIds } from 'src/app/core/utils/selection.util';
 
 @Component({
   selector: 'app-user-form',
@@ -31,62 +33,65 @@ export class UserFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadRoles();
-
     const id = this.route.snapshot.paramMap.get('userId');
-    if (id != null) {
-      this.userService.findById(id).subscribe({
-        next: (data) => {
-          this.user = UserMapper.toDetailsModel(data);
-          this.roleSelectedIds = (this.user.roles || [])
-            .map((r: any) => r?.id)
-            .filter((id: any) => typeof id === 'number');
 
-          console.log(
-            'Usuário carregado:',
-            JSON.parse(JSON.stringify(this.user)),
-          );
-          console.log('Roles selecionadas (IDs):', this.roleSelectedIds);
-        },
-      });
-    }
+    this.loadRoles(() => {
+      if (id != null) {
+        this.loadUser(id);
+      }
+    });
   }
 
-  private loadRoles(): void {
+  private loadRoles(afterLoad?: () => void): void {
     const pagination = new Pagination(0, 1000, 'ASC', 'authority');
 
     this.rolesService.list(pagination, '').subscribe({
-      next: (page: any) => {
-        const rolesArray = Array.isArray(page?.content) ? page.content : [];
+      next: (page) => {
+        this.roles = page.content.map((role) => {
+          const model = RoleMapper.fromDTO(role);
 
-        this.roles = rolesArray.map((r: any) => ({
-          id: r.id,
-          authority: r.authority,
-          label: r.authority,
-        }));
+          return new Role({
+            ...model,
+            label: model.authority,
+          } as Partial<Role>);
+        });
+
+        afterLoad?.();
+      },
+    });
+  }
+
+  private loadUser(id: number | string): void {
+    this.userService.findById(id).subscribe({
+      next: (data) => {
+        this.user = UserMapper.toDetailsModel(data);
+        this.roleSelectedIds = this.getRoleIdsByAuthority(this.user.roles);
       },
     });
   }
 
   private applySelectedRolesToUser(): void {
-    const uniqueIds = Array.from(new Set(this.roleSelectedIds)).filter(
-      (id) => typeof id === 'number',
-    );
+    const uniqueIds = getUniqueNumericIds(this.roleSelectedIds);
 
-    this.user.roles = uniqueIds.map((id) => ({ id }) as any);
+    this.user.roles = uniqueIds.map((id) => new Role({ id }));
   }
 
-  save(form: NgForm) {
+  save(form: NgForm): void {
+    if (form.invalid) {
+      form.control.markAllAsTouched();
+      return;
+    }
+
     this.applySelectedRolesToUser();
 
-    if (this.user.id != null && this.user.id.toString().trim() !== '') {
+    if (this.user.id != null) {
       this.update();
     } else {
       this.insert();
     }
   }
 
-  insert() {
+  insert(): void {
     const dto = UserMapper.toInsertDTO(this.user);
 
     this.userService.insert(dto).subscribe({
@@ -101,7 +106,7 @@ export class UserFormComponent implements OnInit {
     });
   }
 
-  update() {
+  update(): void {
     const dto = UserMapper.toUpdateDTO(this.user);
 
     this.userService.update(dto).subscribe({
@@ -113,5 +118,25 @@ export class UserFormComponent implements OnInit {
         });
       },
     });
+  }
+
+  private getRoleIdsByAuthority(userRoles: Role[]): number[] {
+    const idsFromDetails = userRoles
+      .map((role) => role.id)
+      .filter((id): id is number => typeof id === 'number');
+
+    if (idsFromDetails.length > 0) {
+      return idsFromDetails;
+    }
+
+    const selectedAuthorities = new Set(
+      userRoles.map((role) => role.authority).filter(Boolean),
+    );
+
+    return this.roles
+      .filter(
+        (role) => role.id != null && selectedAuthorities.has(role.authority),
+      )
+      .map((role) => role.id!);
   }
 }

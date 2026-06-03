@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API } from 'src/app/core/config/api.config';
@@ -9,6 +9,7 @@ import { EmployeeDetailsDTO } from '../dtos/employee-details.dto';
 import { EmployeeInsertDTO } from '../dtos/employee-insert.dto';
 import { EmployeeUpdateDTO } from '../dtos/employee-update.dto';
 import { PageResponse } from 'src/app/core/models/page-response';
+import { buildPaginationParams } from 'src/app/core/utils/pagination-params.util';
 
 @Injectable({
   providedIn: 'root',
@@ -20,12 +21,7 @@ export class EmployeeService {
     pagination: Pagination,
     filterName: string,
   ): Observable<PageResponse<EmployeeDTO>> {
-    const params = new HttpParams()
-      .set('name', filterName || '')
-      .set('page', String(pagination.page))
-      .set('linesPerPage', String(pagination.linesPerPage))
-      .set('direction', String(pagination.direction))
-      .set('orderBy', String(pagination.orderBy));
+    const params = buildPaginationParams(pagination, 'name', filterName);
 
     return this.http.get<PageResponse<EmployeeDTO>>(API.EMPLOYEES.ROOT, {
       params,

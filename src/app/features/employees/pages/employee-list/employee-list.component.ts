@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Employee } from '../../models/Employee';
 import { Pagination } from 'src/app/core/models/Pagination';
 import { EmployeeService } from '../../services/employee.service';
@@ -12,13 +12,18 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { catchError, EMPTY } from 'rxjs';
 import { AuthService } from 'src/app/core/auth/services/auth.service';
 import { EmployeeMapper } from '../../mapper/employee.mapper';
+import {
+  addSelectedId,
+  removeSelectedId,
+} from 'src/app/core/utils/selection.util';
+import { PhotoUrlRegistry } from 'src/app/core/utils/photo-preview.util';
 
 @Component({
   selector: 'app-employee-list',
   templateUrl: './employee-list.component.html',
   styleUrls: ['./employee-list.component.css'],
 })
-export class EmployeeListComponent implements OnInit {
+export class EmployeeListComponent implements OnInit, OnDestroy {
   employees: Employee[] = [];
 
   pagination: Pagination = new Pagination();
@@ -43,6 +48,7 @@ export class EmployeeListComponent implements OnInit {
 
   selectedEmployeeId?: number;
   selectedEmployeeName?: string;
+  private photoUrls: PhotoUrlRegistry;
 
   constructor(
     private employeeService: EmployeeService,
@@ -50,9 +56,15 @@ export class EmployeeListComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private sanitizer: DomSanitizer,
     private authService: AuthService,
-  ) {}
+  ) {
+    this.photoUrls = new PhotoUrlRegistry(sanitizer);
+  }
 
   ngOnInit(): void {}
+
+  ngOnDestroy(): void {
+    this.photoUrls.clear();
+  }
 
   list(page: number = 0): void {
     this.pagination.page = page;
@@ -97,6 +109,7 @@ export class EmployeeListComponent implements OnInit {
   }
 
   private loadPhotos(): void {
+    this.photoUrls.clear();
     this.photoMap = {};
 
     this.employees.forEach((employee) => {
@@ -116,33 +129,27 @@ export class EmployeeListComponent implements OnInit {
             return;
           }
 
-          const objectUrl = URL.createObjectURL(blob);
-          this.photoMap[employee.id!] =
-            this.sanitizer.bypassSecurityTrustUrl(objectUrl);
+          const photoUrl = this.photoUrls.create(blob);
+
+          if (photoUrl) {
+            this.photoMap[employee.id!] = photoUrl;
+          }
         });
     });
   }
 
   onRowSelect(event: any): void {
-    const id = event?.data?.id;
-
-    if (id == null) {
-      return;
-    }
-
-    if (!this.selectedEmployeeIds.includes(id)) {
-      this.selectedEmployeeIds.push(id);
-    }
+    this.selectedEmployeeIds = addSelectedId(
+      this.selectedEmployeeIds,
+      event?.data,
+    );
   }
 
   onRowUnselect(event: any): void {
-    const id = event?.data?.id;
-
-    if (id == null) {
-      return;
-    }
-
-    this.selectedEmployeeIds = this.selectedEmployeeIds.filter((x) => x !== id);
+    this.selectedEmployeeIds = removeSelectedId(
+      this.selectedEmployeeIds,
+      event?.data,
+    );
   }
 
   deleteSelectedEmployees(): void {
@@ -195,7 +202,7 @@ export class EmployeeListComponent implements OnInit {
     const id = employee.id;
 
     if (id == null) return;
-    
+
     this.detailsVisible = true;
     this.employeeDetails = null;
 

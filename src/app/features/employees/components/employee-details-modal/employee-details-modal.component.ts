@@ -35,10 +35,6 @@ export class EmployeeDetailsModalComponent implements OnChanges, OnDestroy {
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('EMPLOYEE RECEBIDO:', this.employee);
-    console.log('SALARY:', this.employee?.salary);
-    console.log('TIPO DO SALARY:', typeof this.employee?.salary);
-    
     const employeeChanged = !!changes['employee'];
     const visibleChanged = !!changes['visible'];
 

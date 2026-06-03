@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API } from 'src/app/core/config/api.config';
@@ -7,6 +7,8 @@ import { CustomerDTO } from '../dtos/customer.dto';
 import { PageResponse } from 'src/app/core/models/page-response';
 import { CustomerInsertDTO } from '../dtos/customer-insert.dto';
 import { CustomerUpdateDTO } from '../dtos/customer-update.dto';
+import { CustomerDetailsDTO } from '../dtos/customer-details.dto';
+import { buildPaginationParams } from 'src/app/core/utils/pagination-params.util';
 
 @Injectable({
   providedIn: 'root',
@@ -18,12 +20,7 @@ export class CustomerService {
     pagination: Pagination,
     filterName: string,
   ): Observable<PageResponse<CustomerDTO>> {
-    let params = new HttpParams()
-      .set('name', filterName)
-      .set('page', pagination.page)
-      .set('linesPerPage', pagination.linesPerPage)
-      .set('direction', String(pagination.direction))
-      .set('orderBy', String(pagination.orderBy));
+    const params = buildPaginationParams(pagination, 'name', filterName);
 
     return this.http.get<PageResponse<CustomerDTO>>(API.CUSTOMERS.ROOT, {
       params,
@@ -34,8 +31,8 @@ export class CustomerService {
     return this.http.post<CustomerDTO>(API.CUSTOMERS.ROOT, customer);
   }
 
-  findById(id: any): Observable<any> {
-    return this.http.get<any>(API.CUSTOMERS.BY_ID(id));
+  findById(id: number | string): Observable<CustomerDetailsDTO> {
+    return this.http.get<CustomerDetailsDTO>(API.CUSTOMERS.BY_ID(id));
   }
 
   update(dto: CustomerUpdateDTO): Observable<CustomerDTO> {
@@ -43,19 +40,16 @@ export class CustomerService {
   }
 
   delete(id: number): Observable<void> {
-    return this.http.delete<any>(API.CUSTOMERS.BY_ID(id));
+    return this.http.delete<void>(API.CUSTOMERS.BY_ID(id));
   }
 
   deleteAll(ids: number[]): Observable<void> {
-    console.log(ids);
-
     return this.http.delete<void>(API.CUSTOMERS.DELETE_ALL, {
       body: ids,
     });
   }
 
   changeActive(id: number, active: boolean): Observable<void> {
-    console.log(id, active);
     return this.http.patch<void>(API.CUSTOMERS.CHANGE_ACTIVE(id), active);
   }
 

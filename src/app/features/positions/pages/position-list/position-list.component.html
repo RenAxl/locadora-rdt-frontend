@@ -1,0 +1,70 @@
+<div class="position-filter-container">
+  <div class="position-actions-group">
+    <a routerLink="/positions/create" class="action-link">
+      <button class="btn btn-primary text-white btn-crud-action" type="button">
+        NOVO CARGO
+      </button>
+    </a>
+  </div>
+
+  <app-name-filter
+    text="Digite o nome do cargo"
+    (search)="searchPosition($event)"
+  ></app-name-filter>
+</div>
+
+<div class="position-card">
+  <div class="grid">
+    <div class="col-12">
+      <p-table
+        [value]="positions"
+        [responsive]="true"
+        [paginator]="true"
+        [rows]="pagination.linesPerPage"
+        [lazy]="true"
+        [totalRecords]="totalElements"
+        (onLazyLoad)="changePage($event)"
+        #positionTable
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Nome</th>
+            <th class="actions"></th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-position>
+          <tr>
+            <td class="columns">
+              <span class="p-column-title">Nome:</span>
+              {{ position.name }}
+            </td>
+
+            <td class="col-actions">
+              <div class="actions-wrap">
+                <a
+                  pButton
+                  class="p-button-rounded p-button-text"
+                  icon="pi pi-pencil"
+                  pTooltip="Editar cargo"
+                  tooltipPosition="top"
+                  [routerLink]="['/positions/', position.id, 'edit']"
+                ></a>
+
+                <button
+                  pButton
+                  class="p-button-rounded p-button-text p-button-danger"
+                  icon="pi pi-trash"
+                  pTooltip="Excluir cargo"
+                  tooltipPosition="top"
+                  (click)="confirmDelete(position)"
+                ></button>
+
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

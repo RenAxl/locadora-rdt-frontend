@@ -1,13 +1,15 @@
-FROM node:16
+FROM node:16-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
+ENV NG_CLI_ANALYTICS=false
 
-RUN npm install
+COPY package.json package-lock.json ./
+
+RUN npm ci --no-audit --no-fund
 
 COPY . .
 
 EXPOSE 4200
 
-CMD ["npm", "start", "--", "--host", "0.0.0.0"]
+CMD ["npm", "start", "--", "--host", "0.0.0.0", "--poll", "2000"]

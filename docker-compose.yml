@@ -8,5 +8,14 @@ services:
       - .:/app
       - /app/node_modules
     environment:
-      - CHOKIDAR_USEPOLLING=true
-    command: npm start -- --host 0.0.0.0
+      CHOKIDAR_USEPOLLING: "true"
+      NG_CLI_ANALYTICS: "false"
+    command: npm start -- --host 0.0.0.0 --poll 2000
+    networks:
+      - default
+      - locadora_rdt_network
+
+networks:
+  locadora_rdt_network:
+    external: true
+    name: locadora-rdt-backend_locadora_rdt_network

@@ -158,6 +158,20 @@ const routes: Routes = [
     component: MainComponent,
     children: [
       {
+        path: 'payment-methods',
+        loadChildren: () =>
+          import('./features/payment-methods/payment-methods.module').then(
+            (m) => m.PaymentMethodsModule,
+          ),
+      },
+    ],
+  },
+
+  {
+    path: '',
+    component: MainComponent,
+    children: [
+      {
         path: 'suppliers',
         canActivate: [AuthGuard],
         loadChildren: () =>

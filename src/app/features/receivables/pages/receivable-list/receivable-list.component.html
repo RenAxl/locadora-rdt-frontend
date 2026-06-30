@@ -1,0 +1,118 @@
+<div class="receivable-filter-container">
+  <div class="receivable-title-group">
+    <h1>Contas a Receber</h1>
+  </div>
+
+  <app-name-filter
+    text="Digite a descrição do recebível"
+    (search)="searchReceivable($event)"
+  ></app-name-filter>
+</div>
+
+<div class="receivable-card">
+  <div *ngIf="loading" class="loading-state">Carregando recebíveis...</div>
+
+  <div *ngIf="!loading && receivables.length === 0" class="empty-state">
+    Nenhum recebível encontrado.
+  </div>
+
+  <div class="receivable-list" *ngIf="!loading && receivables.length > 0">
+    <article
+      class="receivable-item"
+      *ngFor="let receivable of receivables"
+      [ngClass]="{ paid: receivable.paid, open: !receivable.paid }"
+    >
+      <div class="receivable-main">
+        <div class="receivable-heading">
+          <div class="receivable-title-wrap">
+            <span class="receivable-id">#{{ receivable.id }}</span>
+            <h2>{{ receivable.description || "-" }}</h2>
+          </div>
+
+          <span class="status-chip" [ngClass]="getStatusClass(receivable)">
+            {{ getStatusLabel(receivable) }}
+          </span>
+        </div>
+
+        <div class="receivable-meta">
+          <span>
+            <i class="fa-solid fa-user"></i>
+            <strong>Cliente:</strong>
+            {{ receivable.customerName || "Não informado" }}
+          </span>
+
+          <span>
+            <i class="fa-solid fa-credit-card"></i>
+            {{ receivable.paymentMethodName || "Forma não informada" }}
+          </span>
+
+          <span>
+            <i class="fa-solid fa-calendar-days"></i>
+            {{ receivable.paymentFrequency || "Frequência não informada" }}
+          </span>
+        </div>
+      </div>
+
+      <div class="receivable-summary">
+        <div class="summary-block amount">
+          <span class="summary-label">Valor</span>
+          <strong>
+            {{
+              receivable.amount != null
+                ? (receivable.amount | currency: "BRL":"symbol":"1.2-2":"pt-BR")
+                : "-"
+            }}
+          </strong>
+        </div>
+
+        <div class="summary-block">
+          <span class="summary-label">Vencimento</span>
+          <strong>
+            {{
+              receivable.dueDate
+                ? (receivable.dueDate | date: "dd/MM/yyyy")
+                : "-"
+            }}
+          </strong>
+        </div>
+
+        <div class="summary-block">
+          <span class="summary-label">Pagamento</span>
+          <strong>
+            {{
+              receivable.paymentDate
+                ? (receivable.paymentDate | date: "dd/MM/yyyy")
+                : "-"
+            }}
+          </strong>
+        </div>
+
+        <div class="summary-block file-block">
+          <span class="summary-label">Arquivo</span>
+          <strong>{{ receivable.fileName || "-" }}</strong>
+        </div>
+
+        <div class="summary-block actions-block">
+          <span class="summary-label">Ações</span>
+          <div class="card-actions">
+            <button
+              pButton
+              type="button"
+              class="p-button-rounded p-button-text"
+              icon="pi pi-eye"
+              pTooltip="Visualizar recebível"
+              tooltipPosition="top"
+            ></button>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <p-paginator
+    [rows]="pagination.linesPerPage"
+    [totalRecords]="totalElements"
+    [rowsPerPageOptions]="[5, 10, 20]"
+    (onPageChange)="changePage($event)"
+  ></p-paginator>
+</div>

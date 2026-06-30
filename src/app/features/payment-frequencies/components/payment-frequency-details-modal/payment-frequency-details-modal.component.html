@@ -1,0 +1,72 @@
+<div *ngIf="!paymentFrequency; else detailsTpl" class="loading"></div>
+
+<ng-template #detailsTpl>
+  <p-dialog
+    [(visible)]="visible"
+    [modal]="true"
+    [closable]="false"
+    [draggable]="false"
+    [resizable]="false"
+    [dismissableMask]="true"
+    [style]="{ width: '520px' }"
+    styleClass="like-dialog"
+    (onHide)="close()"
+  >
+    <ng-template pTemplate="header">
+      <div class="dlg-header">
+        <h4 class="dlg-title">{{ title }}</h4>
+
+        <button
+          type="button"
+          class="close-btn"
+          aria-label="Fechar"
+          (click)="close()"
+        >
+          &times;
+        </button>
+      </div>
+    </ng-template>
+
+    <div class="dlg-grid">
+      <div class="item span-2">
+        <span class="label">Frequência</span>
+        <span class="value">{{ paymentFrequency?.frequency || "-" }}</span>
+      </div>
+
+      <div class="item">
+        <span class="label">Dias</span>
+        <span class="value">{{
+          paymentFrequency?.days != null ? paymentFrequency?.days : "-"
+        }}</span>
+      </div>
+
+      <div class="item">
+        <span class="label">Data cadastro</span>
+        <span class="value">{{
+          paymentFrequency?.createdAt
+            ? (paymentFrequency?.createdAt | date: "dd/MM/yyyy")
+            : "-"
+        }}</span>
+      </div>
+
+      <div class="item">
+        <span class="label">Data atualização</span>
+        <span class="value">{{
+          paymentFrequency?.updatedAt
+            ? (paymentFrequency?.updatedAt | date: "dd/MM/yyyy")
+            : "-"
+        }}</span>
+      </div>
+
+      <div class="item">
+        <span class="label">Criado por</span>
+        <span class="value">{{ paymentFrequency?.createdBy ?? "-" }}</span>
+      </div>
+
+      <div class="item">
+        <span class="label">Atualizado por</span>
+        <span class="value">{{ paymentFrequency?.updatedBy ?? "-" }}</span>
+      </div>
+    </div>
+  </p-dialog>
+</ng-template>

@@ -172,6 +172,34 @@ const routes: Routes = [
     component: MainComponent,
     children: [
       {
+        path: 'payment-frequencies',
+        loadChildren: () =>
+          import('./features/payment-frequencies/payment-frequencies.module').then(
+            (m) => m.PaymentFrequenciesModule,
+          ),
+      },
+    ],
+  },
+
+  {
+    path: '',
+    component: MainComponent,
+    children: [
+      {
+        path: 'receivables',
+        loadChildren: () =>
+          import('./features/receivables/receivables.module').then(
+            (m) => m.ReceivablesModule,
+          ),
+      },
+    ],
+  },
+
+  {
+    path: '',
+    component: MainComponent,
+    children: [
+      {
         path: 'suppliers',
         canActivate: [AuthGuard],
         loadChildren: () =>

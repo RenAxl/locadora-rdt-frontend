@@ -1,0 +1,76 @@
+.receivable-form-container {
+  width: 100%;
+}
+
+.receivable-card {
+  padding: 24px;
+  background: #fff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  border-radius: 14px;
+}
+
+.receivable-form-inputs .form-control {
+  min-height: 46px;
+  border-radius: 10px;
+}
+
+.receivable-amount-control,
+:host ::ng-deep .receivable-amount-control .p-inputnumber,
+:host ::ng-deep .receivable-amount-input,
+:host ::ng-deep .receivable-amount-input .p-inputnumber-input {
+  display: block;
+  width: 100%;
+}
+
+:host ::ng-deep .receivable-amount-input .p-inputnumber-input {
+  min-height: 46px;
+  border-radius: 10px;
+}
+
+.receivable-file-input {
+  padding: 0;
+  line-height: 44px;
+}
+
+.receivable-file-input::file-selector-button {
+  height: 46px;
+  margin: 0 12px 0 0;
+  padding: 0 14px;
+  border: 0;
+  border-right: 1px solid #ced4da;
+  border-radius: 10px 0 0 10px;
+}
+
+.form-label-custom {
+  display: inline-block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #233247;
+}
+
+.select-arrow {
+  appearance: none;
+  padding-right: 40px;
+}
+
+.receivable-form-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.receivable-form-button {
+  height: 50px;
+  min-width: 120px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+@media (max-width: 575.98px) {
+  .receivable-card {
+    padding: 16px;
+    border-radius: 12px;
+  }
+}

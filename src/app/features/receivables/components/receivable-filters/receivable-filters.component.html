@@ -1,0 +1,144 @@
+<form class="receivable-filters" [formGroup]="form" (ngSubmit)="applyFilters()">
+  <div class="receivable-filters-grid">
+    <div class="field field-search">
+      <label for="receivable-search">Busca</label>
+      <input
+        id="receivable-search"
+        type="text"
+        class="form-control"
+        formControlName="search"
+        placeholder="Pesquisar descrição, cliente, referência ou número da conta"
+      />
+    </div>
+
+    <div class="field field-quick-period">
+      <app-receivable-quick-period-filter
+        [startDate]="form.get('startDate')?.value"
+        [endDate]="form.get('endDate')?.value"
+        (periodChange)="onQuickPeriodChange($event)"
+      ></app-receivable-quick-period-filter>
+    </div>
+
+    <div class="field">
+      <label for="receivable-period-type">Tipo de Período</label>
+      <select id="receivable-period-type" class="form-control" formControlName="periodType">
+        <option value="DUE_DATE">Vencimento</option>
+        <option value="PAYMENT_DATE">Pagamento</option>
+        <option value="CREATED_DATE">Cadastro</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="receivable-start-date">Data Inicial</label>
+      <input id="receivable-start-date" type="date" class="form-control" formControlName="startDate" />
+    </div>
+
+    <div class="field">
+      <label for="receivable-end-date">Data Final</label>
+      <input id="receivable-end-date" type="date" class="form-control" formControlName="endDate" />
+    </div>
+
+    <div class="field">
+      <label for="receivable-status">Status</label>
+      <select id="receivable-status" class="form-control" formControlName="status">
+        <option value="ALL">Todos</option>
+        <option value="PENDING">Pendentes</option>
+        <option value="PAID">Pagas</option>
+        <option value="OVERDUE">Vencidas</option>
+        <option value="PARTIALLY_PAID">Pagamento Parcial</option>
+        <option value="CANCELED">Canceladas</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="receivable-customer">Cliente</label>
+      <input
+        id="receivable-customer"
+        type="text"
+        class="form-control"
+        list="receivable-customers"
+        formControlName="customerSearch"
+        (input)="onCustomerInput()"
+      />
+      <datalist id="receivable-customers">
+        <option *ngFor="let customer of customers" [value]="customer.name"></option>
+      </datalist>
+    </div>
+
+    <div class="field">
+      <label for="receivable-payment-method">Forma de Pagamento</label>
+      <select id="receivable-payment-method" class="form-control" formControlName="paymentMethodId">
+        <option [ngValue]="null">Todas</option>
+        <option *ngFor="let method of paymentMethods" [ngValue]="method.id">
+          {{ method.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="receivable-payment-frequency">Frequência</label>
+      <select id="receivable-payment-frequency" class="form-control" formControlName="paymentFrequencyId">
+        <option [ngValue]="null">Todas</option>
+        <option *ngFor="let frequency of paymentFrequencies" [ngValue]="frequency.id">
+          {{ frequency.frequency }}
+        </option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="receivable-minimum-amount">Valor Inicial</label>
+      <input
+        id="receivable-minimum-amount"
+        type="number"
+        min="0"
+        step="0.01"
+        class="form-control"
+        formControlName="minimumAmount"
+      />
+    </div>
+
+    <div class="field">
+      <label for="receivable-maximum-amount">Valor Final</label>
+      <input
+        id="receivable-maximum-amount"
+        type="number"
+        min="0"
+        step="0.01"
+        class="form-control"
+        formControlName="maximumAmount"
+      />
+    </div>
+
+    <div class="field">
+      <label for="receivable-reference">Origem</label>
+      <select id="receivable-reference" class="form-control" formControlName="reference">
+        <option [ngValue]="null">Todas</option>
+        <option value="RENTAL">Locação</option>
+        <option value="SALE">Venda</option>
+        <option value="SERVICE">Serviço</option>
+        <option value="OTHER">Outros</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="receivable-sort">Ordenação</label>
+      <select id="receivable-sort" class="form-control" formControlName="sort">
+        <option *ngFor="let option of sortOptions" [ngValue]="option">
+          {{ option.label }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div class="receivable-filter-actions">
+    <button pButton type="submit" icon="pi pi-search" label="Filtrar"></button>
+    <button
+      pButton
+      type="button"
+      class="p-button-outlined p-button-secondary"
+      icon="pi pi-filter-slash"
+      label="Limpar"
+      (click)="clearFilters()"
+    ></button>
+  </div>
+</form>

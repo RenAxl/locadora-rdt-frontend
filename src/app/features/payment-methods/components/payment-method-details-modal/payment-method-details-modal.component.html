@@ -1,74 +1,20 @@
-<div *ngIf="!paymentMethod; else detailsTpl" class="loading"></div>
+<p-dialog
+  [header]="title"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '720px', maxWidth: '95vw' }"
+  (onHide)="close()"
+>
+  <div class="details-grid" *ngIf="paymentMethod; else loading">
+    <div class="wide"><span>Nome</span><strong>{{ paymentMethod.name || "-" }}</strong></div>
+    <div><span>Taxa</span><strong>{{ paymentMethod.fee != null ? (paymentMethod.fee | number: "1.2-2") + "%" : "-" }}</strong></div>
+    <div><span>Data cadastro</span><strong>{{ paymentMethod.createdAt ? (paymentMethod.createdAt | date: "dd/MM/yyyy") : "-" }}</strong></div>
+    <div><span>Data atualização</span><strong>{{ paymentMethod.updatedAt ? (paymentMethod.updatedAt | date: "dd/MM/yyyy") : "-" }}</strong></div>
+    <div><span>Criado por</span><strong>{{ paymentMethod.createdBy ?? "-" }}</strong></div>
+    <div><span>Atualizado por</span><strong>{{ paymentMethod.updatedBy ?? "-" }}</strong></div>
+  </div>
 
-<ng-template #detailsTpl>
-  <p-dialog
-    [(visible)]="visible"
-    [modal]="true"
-    [closable]="false"
-    [draggable]="false"
-    [resizable]="false"
-    [dismissableMask]="true"
-    [style]="{ width: '520px' }"
-    styleClass="like-dialog"
-    (onHide)="close()"
-  >
-    <ng-template pTemplate="header">
-      <div class="dlg-header">
-        <h4 class="dlg-title">{{ title }}</h4>
-
-        <button
-          type="button"
-          class="close-btn"
-          aria-label="Fechar"
-          (click)="close()"
-        >
-          &times;
-        </button>
-      </div>
-    </ng-template>
-
-    <div class="dlg-grid">
-      <div class="item span-2">
-        <span class="label">Nome</span>
-        <span class="value">{{ paymentMethod?.name || "-" }}</span>
-      </div>
-
-      <div class="item">
-        <span class="label">Taxa</span>
-        <span class="value">{{
-          paymentMethod?.fee != null
-            ? (paymentMethod?.fee | number: "1.2-2") + "%"
-            : "-"
-        }}</span>
-      </div>
-
-      <div class="item">
-        <span class="label">Data cadastro</span>
-        <span class="value">{{
-          paymentMethod?.createdAt
-            ? (paymentMethod?.createdAt | date: "dd/MM/yyyy")
-            : "-"
-        }}</span>
-      </div>
-
-      <div class="item">
-        <span class="label">Data atualização</span>
-        <span class="value">{{
-          paymentMethod?.updatedAt
-            ? (paymentMethod?.updatedAt | date: "dd/MM/yyyy")
-            : "-"
-        }}</span>
-      </div>
-
-      <div class="item">
-        <span class="label">Criado por</span>
-        <span class="value">{{ paymentMethod?.createdBy ?? "-" }}</span>
-      </div>
-
-      <div class="item">
-        <span class="label">Atualizado por</span>
-        <span class="value">{{ paymentMethod?.updatedBy ?? "-" }}</span>
-      </div>
-    </div>
-  </p-dialog>
-</ng-template>
+  <ng-template #loading>
+    <div class="empty">Carregando...</div>
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,143 @@
+<div class="receivable-form-container">
+  <div class="receivable-card">
+    <form #receivableForm="ngForm" (ngSubmit)="save(receivableForm)">
+      <div class="col-12 mb-3">
+        <h1>Dados da Conta a Receber</h1>
+      </div>
+
+      <div class="row g-3 receivable-form-inputs">
+        <div class="col-12 col-lg-6">
+          <label class="form-label-custom">Descrição</label>
+          <input
+            pInputText
+            type="text"
+            name="description"
+            [(ngModel)]="receivable.description"
+            placeholder="Descrição"
+            class="form-control select-arrow"
+          />
+        </div>
+
+        <div class="col-12 col-lg-3">
+          <label class="form-label-custom">Valor</label>
+          <p-inputNumber
+            [(ngModel)]="receivable.amount"
+            name="amount"
+            mode="currency"
+            currency="BRL"
+            locale="pt-BR"
+            class="receivable-amount-control"
+            styleClass="receivable-amount-input"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="2"
+            [required]="true"
+          ></p-inputNumber>
+        </div>
+
+        <div class="col-12 col-lg-3">
+          <label class="form-label-custom">Cliente</label>
+          <select
+            name="customerId"
+            [(ngModel)]="receivable.customerId"
+            class="form-control select-arrow"
+          >
+            <option [ngValue]="null">Selecione um cliente</option>
+            <option *ngFor="let customer of customers" [ngValue]="customer.id">
+              {{ customer.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-12 col-lg-3">
+          <label class="form-label-custom">Vencimento</label>
+          <input
+            type="date"
+            name="dueDate"
+            [(ngModel)]="receivable.dueDate"
+            class="form-control"
+          />
+        </div>
+
+        <div class="col-12 col-lg-3">
+          <label class="form-label-custom">Pago Em</label>
+          <input
+            type="date"
+            name="paymentDate"
+            [(ngModel)]="receivable.paymentDate"
+            class="form-control"
+          />
+        </div>
+
+        <div class="col-12 col-lg-3">
+          <label class="form-label-custom">Forma Pgto</label>
+          <select
+            name="paymentMethodId"
+            [(ngModel)]="receivable.paymentMethodId"
+            class="form-control select-arrow"
+          >
+            <option [ngValue]="null">Selecione uma forma de pagamento</option>
+            <option *ngFor="let method of paymentMethods" [ngValue]="method.id">
+              {{ method.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-12 col-lg-3">
+          <label class="form-label-custom">Frequência</label>
+          <select
+            name="paymentFrequencyId"
+            [(ngModel)]="receivable.paymentFrequencyId"
+            class="form-control select-arrow"
+          >
+            <option [ngValue]="null">Selecione uma frequência</option>
+            <option
+              *ngFor="let frequency of paymentFrequencies"
+              [ngValue]="frequency.id"
+            >
+              {{ frequency.frequency }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <label class="form-label-custom">Observações</label>
+          <textarea
+            name="note"
+            [(ngModel)]="receivable.note"
+            placeholder="Observações"
+            class="form-control"
+            rows="1"
+          ></textarea>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <label class="form-label-custom">Arquivo</label>
+          <input
+            type="file"
+            name="file"
+            (change)="onFileSelected($event)"
+            class="form-control receivable-file-input"
+          />
+        </div>
+
+        <div class="col-12 receivable-form-buttons">
+          <button
+            pButton
+            type="submit"
+            icon="pi pi-save"
+            label="Salvar"
+            class="receivable-form-button"
+          ></button>
+          <a
+            pButton
+            type="button"
+            icon="pi pi-arrow-left"
+            label="Voltar"
+            class="p-button-secondary receivable-form-button"
+            routerLink="/receivables"
+          ></a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

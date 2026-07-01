@@ -1,0 +1,28 @@
+<p-dialog
+  header="Arquivos da Conta"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '760px', maxWidth: '95vw' }"
+  (visibleChange)="onDialogVisibilityChange($event)"
+>
+  <div class="upload-row">
+    <input pInputText type="text" placeholder="Nome do arquivo" [(ngModel)]="fileName" />
+    <input #fileInput type="file" (change)="onFileSelected($event)" />
+    <button pButton type="button" icon="pi pi-upload" label="Enviar" (click)="upload()"></button>
+  </div>
+
+  <div class="file-list" *ngIf="!loadingFiles; else loading">
+    <div class="file-item" *ngFor="let file of files">
+      <span>{{ file.fileName }}</span>
+      <div>
+        <button pButton type="button" class="p-button-text" icon="pi pi-download" (click)="download(file)"></button>
+        <button pButton type="button" class="p-button-text p-button-danger" icon="pi pi-trash" (click)="delete(file)"></button>
+      </div>
+    </div>
+    <div class="empty" *ngIf="files.length === 0">Nenhum arquivo anexado.</div>
+  </div>
+
+  <ng-template #loading>
+    <div class="empty">Carregando arquivos...</div>
+  </ng-template>
+</p-dialog>

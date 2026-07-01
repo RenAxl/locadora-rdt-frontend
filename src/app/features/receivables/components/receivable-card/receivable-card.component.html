@@ -1,0 +1,139 @@
+<article
+  class="receivable-item"
+  [ngClass]="{
+    paid: isReceivableSettled(),
+    partial: isPartiallyPaid(),
+    open: !isReceivableSettled() && !isPartiallyPaid()
+  }"
+>
+  <div class="receivable-main">
+    <div class="receivable-heading">
+      <div class="receivable-title-wrap">
+        <span class="receivable-id">#{{ receivable.id }}</span>
+        <h2>{{ receivable.description || receivable.customerName || "-" }}</h2>
+      </div>
+
+      <span class="status-chip" [ngClass]="getStatusClass()">
+        {{ getStatusLabel() }}
+      </span>
+    </div>
+
+    <div class="receivable-meta">
+      <span>
+        <i class="fa-solid fa-user"></i>
+        {{ receivable.customerName || "Sem cliente" }}
+      </span>
+      <span>
+        <i class="fa-solid fa-credit-card"></i>
+        {{ receivable.paymentMethodName || "Sem forma" }}
+      </span>
+      <span>
+        <i class="fa-solid fa-repeat"></i>
+        {{ receivable.paymentFrequency || "Sem frequência" }}
+      </span>
+      <span *ngIf="receivable.residual">
+        Resíduo de #{{ receivable.parentReceivableId }}
+      </span>
+    </div>
+  </div>
+
+  <div class="receivable-summary">
+    <div class="summary-block amount">
+      <span>Valor</span>
+      <strong>{{ receivable.amount | currency: "BRL" }}</strong>
+    </div>
+    <div class="summary-block paid-amount">
+      <span>Valor Pago</span>
+      <strong>{{ getPaidAmount() | currency: "BRL" }}</strong>
+    </div>
+    <div class="summary-block">
+      <span>Vencimento</span>
+      <strong>
+        {{
+          receivable.dueDate
+            ? (receivable.dueDate | date: "dd/MM/yyyy")
+            : "-"
+        }}
+      </strong>
+    </div>
+    <div class="summary-block">
+      <span>Pagamento</span>
+      <strong>
+        {{
+          receivable.paymentDate
+            ? (receivable.paymentDate | date: "dd/MM/yyyy")
+            : "-"
+        }}
+      </strong>
+    </div>
+    <div class="summary-block">
+      <span>Saldo</span>
+      <strong>{{ getReceivableOpenAmount() | currency: "BRL" }}</strong>
+    </div>
+  </div>
+
+  <div class="actions-wrap">
+    <a
+      pButton
+      class="p-button-rounded p-button-text"
+      icon="pi pi-pencil"
+      pTooltip="Atualizar conta"
+      tooltipPosition="top"
+      [routerLink]="['/receivables/', receivable.id, 'edit']"
+    ></a>
+    <button
+      pButton
+      class="p-button-rounded p-button-text p-button-success"
+      icon="pi pi-check-circle"
+      [pTooltip]="
+        isReceivableSettled()
+          ? 'Conta sem saldo para baixa'
+          : 'Baixar conta total ou parcial'
+      "
+      tooltipPosition="top"
+      [disabled]="isReceivableSettled()"
+      (click)="pay.emit(receivable)"
+    ></button>
+    <button
+      pButton
+      class="p-button-rounded p-button-text"
+      icon="pi pi-clone"
+      pTooltip="Parcelar conta"
+      tooltipPosition="top"
+      [disabled]="isReceivableSettled()"
+      (click)="installment.emit(receivable)"
+    ></button>
+    <button
+      pButton
+      class="p-button-rounded p-button-text"
+      icon="pi pi-eye"
+      pTooltip="Detalhamento da Conta"
+      tooltipPosition="top"
+      (click)="details.emit(receivable)"
+    ></button>
+    <button
+      pButton
+      class="p-button-rounded p-button-text"
+      icon="pi pi-folder-open"
+      pTooltip="Arquivos da Conta"
+      tooltipPosition="top"
+      (click)="files.emit(receivable)"
+    ></button>
+    <button
+      pButton
+      class="p-button-rounded p-button-text"
+      icon="pi pi-file"
+      pTooltip="Recibo"
+      tooltipPosition="top"
+      (click)="receipt.emit(receivable)"
+    ></button>
+    <button
+      pButton
+      class="p-button-rounded p-button-text p-button-danger"
+      icon="pi pi-trash"
+      pTooltip="Excluir conta"
+      tooltipPosition="top"
+      (click)="delete.emit(receivable)"
+    ></button>
+  </div>
+</article>

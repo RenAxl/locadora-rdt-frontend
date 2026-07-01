@@ -1,72 +1,20 @@
-<div *ngIf="!paymentFrequency; else detailsTpl" class="loading"></div>
+<p-dialog
+  [header]="title"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '720px', maxWidth: '95vw' }"
+  (onHide)="close()"
+>
+  <div class="details-grid" *ngIf="paymentFrequency; else loading">
+    <div class="wide"><span>Frequência</span><strong>{{ paymentFrequency.frequency || "-" }}</strong></div>
+    <div><span>Dias</span><strong>{{ paymentFrequency.days != null ? paymentFrequency.days : "-" }}</strong></div>
+    <div><span>Data cadastro</span><strong>{{ paymentFrequency.createdAt ? (paymentFrequency.createdAt | date: "dd/MM/yyyy") : "-" }}</strong></div>
+    <div><span>Data atualização</span><strong>{{ paymentFrequency.updatedAt ? (paymentFrequency.updatedAt | date: "dd/MM/yyyy") : "-" }}</strong></div>
+    <div><span>Criado por</span><strong>{{ paymentFrequency.createdBy ?? "-" }}</strong></div>
+    <div><span>Atualizado por</span><strong>{{ paymentFrequency.updatedBy ?? "-" }}</strong></div>
+  </div>
 
-<ng-template #detailsTpl>
-  <p-dialog
-    [(visible)]="visible"
-    [modal]="true"
-    [closable]="false"
-    [draggable]="false"
-    [resizable]="false"
-    [dismissableMask]="true"
-    [style]="{ width: '520px' }"
-    styleClass="like-dialog"
-    (onHide)="close()"
-  >
-    <ng-template pTemplate="header">
-      <div class="dlg-header">
-        <h4 class="dlg-title">{{ title }}</h4>
-
-        <button
-          type="button"
-          class="close-btn"
-          aria-label="Fechar"
-          (click)="close()"
-        >
-          &times;
-        </button>
-      </div>
-    </ng-template>
-
-    <div class="dlg-grid">
-      <div class="item span-2">
-        <span class="label">Frequência</span>
-        <span class="value">{{ paymentFrequency?.frequency || "-" }}</span>
-      </div>
-
-      <div class="item">
-        <span class="label">Dias</span>
-        <span class="value">{{
-          paymentFrequency?.days != null ? paymentFrequency?.days : "-"
-        }}</span>
-      </div>
-
-      <div class="item">
-        <span class="label">Data cadastro</span>
-        <span class="value">{{
-          paymentFrequency?.createdAt
-            ? (paymentFrequency?.createdAt | date: "dd/MM/yyyy")
-            : "-"
-        }}</span>
-      </div>
-
-      <div class="item">
-        <span class="label">Data atualização</span>
-        <span class="value">{{
-          paymentFrequency?.updatedAt
-            ? (paymentFrequency?.updatedAt | date: "dd/MM/yyyy")
-            : "-"
-        }}</span>
-      </div>
-
-      <div class="item">
-        <span class="label">Criado por</span>
-        <span class="value">{{ paymentFrequency?.createdBy ?? "-" }}</span>
-      </div>
-
-      <div class="item">
-        <span class="label">Atualizado por</span>
-        <span class="value">{{ paymentFrequency?.updatedBy ?? "-" }}</span>
-      </div>
-    </div>
-  </p-dialog>
-</ng-template>
+  <ng-template #loading>
+    <div class="empty">Carregando...</div>
+  </ng-template>
+</p-dialog>

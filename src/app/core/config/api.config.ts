@@ -102,6 +102,22 @@ export const API = {
 
   RECEIVABLES: {
     ROOT: `${BASE_URL}/receivables`,
+    BY_ID: (id: number | string) => `${BASE_URL}/receivables/${id}`,
+    PAY: (id: number | string) => `${BASE_URL}/receivables/${id}/payments`,
+    INSTALLMENTS: (id: number | string) =>
+      `${BASE_URL}/receivables/${id}/installments`,
+    REPORT: `${BASE_URL}/receivables/report`,
+    RECEIPT: (id: number | string) => `${BASE_URL}/receivables/${id}/receipt`,
+    FILES: {
+      ROOT: (receivableId: number | string) =>
+        `${BASE_URL}/receivables/${receivableId}/files`,
+      VIEW: (receivableId: number | string, fileId: number | string) =>
+        `${BASE_URL}/receivables/${receivableId}/files/${fileId}/view`,
+      BY_ID: (receivableId: number | string, fileId: number | string) =>
+        `${BASE_URL}/receivables/${receivableId}/files/${fileId}`,
+      DOWNLOAD: (receivableId: number | string, fileId: number | string) =>
+        `${BASE_URL}/receivables/${receivableId}/files/${fileId}/download`,
+    },
   },
 
   POSITIONS: {

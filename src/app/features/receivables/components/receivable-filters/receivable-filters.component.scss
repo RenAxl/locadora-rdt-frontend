@@ -1,0 +1,73 @@
+.receivable-filters {
+  padding: 16px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(35, 50, 71, 0.12);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.receivable-filters-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.field {
+  min-width: 0;
+}
+
+.field-search {
+  grid-column: 1 / -1;
+}
+
+.field-quick-period {
+  grid-column: 1 / -1;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 4px;
+  color: #2f3a45;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.form-control {
+  min-height: 38px;
+}
+
+.receivable-filter-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+@media (max-width: 1199px) {
+  .receivable-filters-grid {
+    grid-template-columns: repeat(2, minmax(180px, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .receivable-filters {
+    padding: 12px;
+  }
+
+  .receivable-filters-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .field-search {
+    grid-column: 1 / -1;
+  }
+
+  .field-quick-period {
+    grid-column: 1 / -1;
+  }
+
+  .receivable-filter-actions {
+    justify-content: stretch;
+    flex-direction: column;
+  }
+}

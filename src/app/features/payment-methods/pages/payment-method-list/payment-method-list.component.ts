@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import {
   ConfirmationService,
   LazyLoadEvent,
@@ -20,7 +20,7 @@ import { PaymentMethodService } from '../../services/payment-method.service';
   templateUrl: './payment-method-list.component.html',
   styleUrls: ['./payment-method-list.component.css'],
 })
-export class PaymentMethodListComponent implements OnInit {
+export class PaymentMethodListComponent {
   paymentMethods: PaymentMethod[] = [];
   pagination: Pagination = new Pagination();
   totalElements: number = 0;
@@ -39,9 +39,6 @@ export class PaymentMethodListComponent implements OnInit {
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
   ) {}
-
-  ngOnInit(): void {}
-
   list(page: number = 0): void {
     this.pagination.page = page;
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/core/auth/services/auth.service';
@@ -9,7 +9,7 @@ import { User } from 'src/app/features/users/models/user';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   user: User = new User();
 
   constructor(
@@ -17,13 +17,9 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private messageService: MessageService,
   ) {}
-
-  ngOnInit(): void {}
-
   save(): void {
     this.authService.login(this.user).subscribe({
-      next: (data) => {
-        
+      next: () => {
         this.messageService.add({
           severity: 'success',
           detail: 'Usuário autenticado com sucesso!',

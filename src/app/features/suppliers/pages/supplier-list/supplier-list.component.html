@@ -8,7 +8,7 @@
 </div>
 
 <div class="supplier-card">
-  <p-table [value]="suppliers" [responsive]="true" [paginator]="true" [rows]="pagination.linesPerPage"
+  <p-table [value]="suppliers" responsiveLayout="stack" breakpoint="991px" [paginator]="true" [rows]="pagination.linesPerPage"
     [lazy]="true" [totalRecords]="totalElements" (onLazyLoad)="changePage($event)" #supplierTable>
     <ng-template pTemplate="header">
       <tr><th>Nome</th><th>Nome fantasia</th><th>CNPJ</th><th>Telefone</th><th>Imagem</th><th class="actions"></th></tr>

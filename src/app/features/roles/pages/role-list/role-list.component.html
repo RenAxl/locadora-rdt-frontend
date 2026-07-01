@@ -22,7 +22,8 @@
     <div class="col-12">
       <p-table
         [value]="roles"
-        [responsive]="true"
+        responsiveLayout="stack"
+        breakpoint="991px"
         [paginator]="true"
         [rows]="pagination.linesPerPage"
         [lazy]="true"

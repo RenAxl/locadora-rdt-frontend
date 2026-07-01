@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 import { Table } from 'primeng/table';
@@ -26,7 +26,7 @@ import { PhotoUrlRegistry } from 'src/app/core/utils/photo-preview.util';
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.css'],
 })
-export class UserListComponent implements OnInit, OnDestroy {
+export class UserListComponent implements OnDestroy {
   users: User[] = [];
 
   pagination: Pagination = new Pagination();
@@ -53,13 +53,10 @@ export class UserListComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private authService: AuthService,
-    private sanitizer: DomSanitizer,
+    sanitizer: DomSanitizer,
   ) {
     this.photoUrls = new PhotoUrlRegistry(sanitizer);
   }
-
-  ngOnInit(): void {}
-
   ngOnDestroy(): void {
     this.photoUrls.clear();
   }

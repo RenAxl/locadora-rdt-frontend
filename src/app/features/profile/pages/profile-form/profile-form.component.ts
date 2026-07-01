@@ -29,7 +29,7 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
     private profileService: ProfileService,
     private messageService: MessageService,
     private router: Router,
-    private sanitizer: DomSanitizer,
+    sanitizer: DomSanitizer,
   ) {
     this.photoPreview = new PhotoPreview(sanitizer);
   }

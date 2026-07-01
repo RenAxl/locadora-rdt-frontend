@@ -21,7 +21,6 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
     ToastModule,
     ConfirmDialogModule,
 
-    // AQUI O TOKEN É ADICIONADO NAS REQUISIÇÕES HTTP.
      JwtModule.forRoot({
       config: {
         tokenGetter,

@@ -66,7 +66,7 @@ const routes: Routes = [
       {
         path: 'roles',
         canActivate: [AuthGuard],
-        data: { authorities: ['ROLE_READ', 'ROLE_WRITE'] }, // ANY: entra quem pode ler OU escrever
+        data: { authorities: ['ROLE_READ', 'ROLE_WRITE'] },
         loadChildren: () =>
           import('./features/roles/roles.module').then((m) => m.RolesModule),
       },

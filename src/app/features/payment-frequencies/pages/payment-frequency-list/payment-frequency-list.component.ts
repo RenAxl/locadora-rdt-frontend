@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import {
   ConfirmationService,
   LazyLoadEvent,
@@ -20,7 +20,7 @@ import { PaymentFrequencyService } from '../../services/payment-frequency.servic
   templateUrl: './payment-frequency-list.component.html',
   styleUrls: ['./payment-frequency-list.component.css'],
 })
-export class PaymentFrequencyListComponent implements OnInit {
+export class PaymentFrequencyListComponent {
   paymentFrequencies: PaymentFrequency[] = [];
   pagination: Pagination = new Pagination(0, 5, 'ASC', 'frequency');
   totalElements: number = 0;
@@ -39,9 +39,6 @@ export class PaymentFrequencyListComponent implements OnInit {
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
   ) {}
-
-  ngOnInit(): void {}
-
   list(page: number = 0): void {
     this.pagination.page = page;
 

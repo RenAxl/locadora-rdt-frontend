@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { Employee } from '../../models/Employee';
 import { Pagination } from 'src/app/core/models/Pagination';
 import { EmployeeService } from '../../services/employee.service';
@@ -23,7 +23,7 @@ import { PhotoUrlRegistry } from 'src/app/core/utils/photo-preview.util';
   templateUrl: './employee-list.component.html',
   styleUrls: ['./employee-list.component.css'],
 })
-export class EmployeeListComponent implements OnInit, OnDestroy {
+export class EmployeeListComponent implements OnDestroy {
   employees: Employee[] = [];
 
   pagination: Pagination = new Pagination();
@@ -54,14 +54,11 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
     private employeeService: EmployeeService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private sanitizer: DomSanitizer,
+    sanitizer: DomSanitizer,
     private authService: AuthService,
   ) {
     this.photoUrls = new PhotoUrlRegistry(sanitizer);
   }
-
-  ngOnInit(): void {}
-
   ngOnDestroy(): void {
     this.photoUrls.clear();
   }

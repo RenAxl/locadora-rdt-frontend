@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 
 import { Table } from 'primeng/table';
 import { LazyLoadEvent } from 'primeng/api';
@@ -13,7 +13,7 @@ import { Role } from '../../models/Role';
   templateUrl: './role-list.component.html',
   styleUrls: ['./role-list.component.css'],
 })
-export class RoleListComponent implements OnInit {
+export class RoleListComponent {
   roles: Role[] = [];
   selectedRoles: Role[] = [];
   pagination: Pagination = new Pagination(0, 4, 'ASC', 'authority');
@@ -29,9 +29,6 @@ export class RoleListComponent implements OnInit {
     private roleService: RolesService,
     private authService: AuthService
   ) {}
-
-  ngOnInit(): void {}
-
   list(page: number = 0): void {
     this.pagination.page = page;
 

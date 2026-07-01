@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from 'src/app/core/auth/services/auth.service';
 
 @Component({
@@ -6,11 +6,8 @@ import { AuthService } from 'src/app/core/auth/services/auth.service';
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css'],
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent {
   constructor(private authService: AuthService) {}
-
-  ngOnInit(): void {}
-
   hasAuthority(role: string) {
     return this.authService.hasAuthority(role);
   }

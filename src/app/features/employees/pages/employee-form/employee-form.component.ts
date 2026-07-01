@@ -43,7 +43,7 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private router: Router,
     private route: ActivatedRoute,
-    private sanitizer: DomSanitizer,
+    sanitizer: DomSanitizer,
   ) {
     this.photoPreview = new PhotoPreview(sanitizer);
   }

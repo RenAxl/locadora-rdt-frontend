@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { Pagination } from 'src/app/core/models/Pagination';
-import { User } from '../models/user';
 import { API } from 'src/app/core/config/api.config';
 import { UserDTO } from '../dtos/user.dto';
 import { PageResponse } from 'src/app/core/models/page-response';

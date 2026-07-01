@@ -18,7 +18,6 @@ export class ActivateAccountComponent {
   confirmPassword = '';
 
   loading = false;
-  apiUrl = 'http://localhost:8080';
 
   constructor(
     private route: ActivatedRoute,

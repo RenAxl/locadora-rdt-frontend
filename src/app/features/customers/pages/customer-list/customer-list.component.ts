@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { Customer } from '../../models/Customer';
 import { Pagination } from 'src/app/core/models/Pagination';
 import { CustomerService } from '../../services/customer.service';
@@ -23,7 +23,7 @@ import { PhotoUrlRegistry } from 'src/app/core/utils/photo-preview.util';
   templateUrl: './customer-list.component.html',
   styleUrls: ['./customer-list.component.css'],
 })
-export class CustomerListComponent implements OnInit, OnDestroy {
+export class CustomerListComponent implements OnDestroy {
   customers: Customer[] = [];
 
   pagination: Pagination = new Pagination();
@@ -54,14 +54,11 @@ export class CustomerListComponent implements OnInit, OnDestroy {
     private customerService: CustomerService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private sanitizer: DomSanitizer,
+    sanitizer: DomSanitizer,
     private authService: AuthService,
   ) {
     this.photoUrls = new PhotoUrlRegistry(sanitizer);
   }
-
-  ngOnInit(): void {}
-
   ngOnDestroy(): void {
     this.photoUrls.clear();
   }

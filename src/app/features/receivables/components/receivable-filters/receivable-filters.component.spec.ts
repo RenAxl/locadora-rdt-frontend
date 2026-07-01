@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { ReceivableFiltersComponent } from './receivable-filters.component';
+import { ReceivableQuickPeriodFilterComponent } from '../receivable-quick-period-filter/receivable-quick-period-filter.component';
 
 describe('ReceivableFiltersComponent', () => {
   let component: ReceivableFiltersComponent;
@@ -10,7 +11,10 @@ describe('ReceivableFiltersComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ReceivableFiltersComponent],
+      declarations: [
+        ReceivableFiltersComponent,
+        ReceivableQuickPeriodFilterComponent,
+      ],
       imports: [HttpClientTestingModule, ReactiveFormsModule],
     }).compileComponents();
 

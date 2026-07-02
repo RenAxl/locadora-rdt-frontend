@@ -39,8 +39,12 @@
 
   <div class="receivable-summary">
     <div class="summary-block amount">
-      <span>Valor</span>
+      <span>Valor Original</span>
       <strong>{{ receivable.amount | currency: "BRL" }}</strong>
+    </div>
+    <div class="summary-block current-amount">
+      <span>Valor Atual</span>
+      <strong>{{ getCurrentAmount() | currency: "BRL" }}</strong>
     </div>
     <div class="summary-block paid-amount">
       <span>Valor Pago</span>
@@ -48,13 +52,29 @@
     </div>
     <div class="summary-block">
       <span>Vencimento</span>
-      <strong>
+      <button
+        *ngIf="isOverdueOpenReceivable(); else dueDateText"
+        type="button"
+        class="due-date-button overdue"
+        pTooltip="Ver juros e multa"
+        tooltipPosition="top"
+        (click)="showOverdueDetails()"
+      >
         {{
           receivable.dueDate
             ? (receivable.dueDate | date: "dd/MM/yyyy")
             : "-"
         }}
-      </strong>
+      </button>
+      <ng-template #dueDateText>
+        <strong>
+          {{
+            receivable.dueDate
+              ? (receivable.dueDate | date: "dd/MM/yyyy")
+              : "-"
+          }}
+        </strong>
+      </ng-template>
     </div>
     <div class="summary-block">
       <span>Pagamento</span>

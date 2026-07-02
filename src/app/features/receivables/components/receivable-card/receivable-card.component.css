@@ -1,6 +1,6 @@
 .receivable-item {
   display: grid;
-  grid-template-columns: minmax(240px, 1.1fr) minmax(420px, 1.2fr) auto;
+  grid-template-columns: minmax(240px, 1fr) minmax(560px, 1.45fr) auto;
   gap: 14px;
   align-items: center;
   padding: 16px;
@@ -99,7 +99,7 @@
 
 .receivable-summary {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 10px;
 }
 
@@ -119,6 +119,10 @@
   background: #eef4f8;
 }
 
+.summary-block.current-amount {
+  background: #fff5f6;
+}
+
 .summary-block.paid-amount {
   background: #eef8f1;
 }
@@ -134,6 +138,30 @@
   color: #182536;
   font-size: 14px;
   overflow-wrap: anywhere;
+}
+
+.due-date-button {
+  align-self: flex-start;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #182536;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: left;
+}
+
+.due-date-button.overdue {
+  color: #dc3545;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.due-date-button.overdue:hover,
+.due-date-button.overdue:focus {
+  color: #b02a37;
 }
 
 .actions-wrap {

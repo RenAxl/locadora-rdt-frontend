@@ -1,0 +1,86 @@
+.financial-setting-form-container {
+  width: 100%;
+}
+
+.financial-setting-card {
+  padding: 24px;
+  background: #fff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  border-radius: 14px;
+}
+
+.financial-setting-form-inputs app-message {
+  display: block;
+  margin-top: 4px;
+  margin-bottom: -4px;
+}
+
+.financial-setting-loading {
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  color: #5f6b7a;
+  font-weight: 600;
+}
+
+.financial-setting-form-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.financial-setting-form-button {
+  height: 50px;
+  min-width: 120px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+.form-label-custom {
+  display: inline-block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #233247;
+}
+
+:host ::ng-deep .percent-input-host,
+:host ::ng-deep .percent-input-host .p-inputnumber,
+:host ::ng-deep .percent-input-host .p-inputtext {
+  width: 100%;
+}
+
+:host ::ng-deep .percent-input-host .p-inputtext {
+  height: 46px;
+  border-radius: 10px;
+}
+
+@media (min-width: 992px) {
+  .financial-setting-form-buttons {
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .financial-setting-card {
+    padding: 18px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .financial-setting-card {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .form-label-custom {
+    font-size: 13px;
+    margin-bottom: 5px;
+  }
+
+  :host ::ng-deep .percent-input-host .p-inputtext {
+    height: 44px;
+    font-size: 14px;
+  }
+}

@@ -30,6 +30,9 @@ export class ReceivableListComponent implements OnInit {
   detailsVisible = false;
   receivableDetails: Receivable | null = null;
 
+  overdueVisible = false;
+  overdueReceivable: Receivable | null = null;
+
   filesVisible = false;
   selectedReceivableId?: number;
   selectedReceivableDescription?: string;
@@ -290,6 +293,11 @@ export class ReceivableListComponent implements OnInit {
         this.receivableDetails = ReceivableMapper.fromDetailsDTO(details);
       },
     });
+  }
+
+  openOverdueDetails(receivable: Receivable): void {
+    this.overdueReceivable = receivable;
+    this.overdueVisible = true;
   }
 
   openFilesModal(receivable: Receivable): void {

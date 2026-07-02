@@ -110,17 +110,6 @@
     </div>
 
     <div class="field">
-      <label for="receivable-reference">Origem</label>
-      <select id="receivable-reference" class="form-control" formControlName="reference">
-        <option [ngValue]="null">Todas</option>
-        <option value="RENTAL">Locação</option>
-        <option value="SALE">Venda</option>
-        <option value="SERVICE">Serviço</option>
-        <option value="OTHER">Outros</option>
-      </select>
-    </div>
-
-    <div class="field">
       <label for="receivable-sort">Ordenação</label>
       <select id="receivable-sort" class="form-control" formControlName="sort">
         <option *ngFor="let option of sortOptions" [ngValue]="option">

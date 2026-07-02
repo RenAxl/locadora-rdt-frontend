@@ -28,7 +28,6 @@ export interface ReceivableFilters {
   paymentFrequencyId?: number | null;
   minimumAmount?: number | null;
   maximumAmount?: number | null;
-  reference?: string | null;
   orderBy?: string;
   direction?: string;
 }
@@ -66,7 +65,6 @@ export class ReceivableService {
     params = this.appendParam(params, 'paymentFrequencyId', filters.paymentFrequencyId);
     params = this.appendParam(params, 'minimumAmount', filters.minimumAmount);
     params = this.appendParam(params, 'maximumAmount', filters.maximumAmount);
-    params = this.appendParam(params, 'reference', filters.reference);
 
     return this.http.get<PageResponse<ReceivableDTO>>(API.RECEIVABLES.ROOT, {
       params,

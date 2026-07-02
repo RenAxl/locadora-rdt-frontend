@@ -16,6 +16,7 @@ export class ReceivableCardComponent {
   @Output() files = new EventEmitter<Receivable>();
   @Output() receipt = new EventEmitter<Receivable>();
   @Output() delete = new EventEmitter<Receivable>();
+  @Output() overdueDetails = new EventEmitter<Receivable>();
 
   getReceivableOpenAmount(): number {
     if (this.receivable.paid) {
@@ -59,6 +60,14 @@ export class ReceivableCardComponent {
     return 0;
   }
 
+  getCurrentAmount(): number {
+    if (this.receivable.paid) {
+      return Number(this.receivable.amount ?? 0);
+    }
+
+    return Number(this.receivable.currentAmountWithLateCharges ?? this.receivable.amount ?? 0);
+  }
+
   isPartiallyPaid(): boolean {
     if (this.receivable.paid || this.receivable.canceled) {
       return false;
@@ -77,6 +86,28 @@ export class ReceivableCardComponent {
 
   isReceivableSettled(): boolean {
     return Boolean(this.receivable.paid);
+  }
+
+  isOverdueOpenReceivable(): boolean {
+    if (this.receivable.paid || this.receivable.canceled || !this.receivable.dueDate) {
+      return false;
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const dueDate = new Date(this.receivable.dueDate);
+    dueDate.setHours(0, 0, 0, 0);
+
+    return dueDate.getTime() < today.getTime() && this.getReceivableOpenAmount() > 0;
+  }
+
+  showOverdueDetails(): void {
+    if (!this.isOverdueOpenReceivable()) {
+      return;
+    }
+
+    this.overdueDetails.emit(this.receivable);
   }
 
   getStatusLabel(): string {

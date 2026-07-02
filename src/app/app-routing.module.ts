@@ -186,6 +186,20 @@ const routes: Routes = [
     component: MainComponent,
     children: [
       {
+        path: 'financial-settings',
+        loadChildren: () =>
+          import('./features/financial-settings/financial-settings.module').then(
+            (m) => m.FinancialSettingsModule,
+          ),
+      },
+    ],
+  },
+
+  {
+    path: '',
+    component: MainComponent,
+    children: [
+      {
         path: 'receivables',
         loadChildren: () =>
           import('./features/receivables/receivables.module').then(

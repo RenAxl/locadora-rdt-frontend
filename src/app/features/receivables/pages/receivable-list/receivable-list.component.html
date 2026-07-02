@@ -25,6 +25,7 @@
       (pay)="pay($event)"
       (installment)="installment($event)"
       (details)="openDetails($event)"
+      (overdueDetails)="openOverdueDetails($event)"
       (files)="openFilesModal($event)"
       (receipt)="generateReceipt($event)"
       (delete)="delete($event)"
@@ -50,4 +51,10 @@
     [receivableId]="selectedReceivableId"
     [receivableDescription]="selectedReceivableDescription"
   ></app-receivable-files-modal>
+
+  <app-receivable-overdue-modal
+    [visible]="overdueVisible"
+    (visibleChange)="overdueVisible = $event"
+    [receivable]="overdueReceivable"
+  ></app-receivable-overdue-modal>
 </div>

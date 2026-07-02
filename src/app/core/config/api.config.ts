@@ -100,6 +100,10 @@ export const API = {
     DELETE_ALL: `${BASE_URL}/payment-frequencies/all`,
   },
 
+  FINANCIAL_SETTINGS: {
+    ROOT: `${BASE_URL}/financial-settings`,
+  },
+
   RECEIVABLES: {
     ROOT: `${BASE_URL}/receivables`,
     BY_ID: (id: number | string) => `${BASE_URL}/receivables/${id}`,

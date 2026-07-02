@@ -16,6 +16,10 @@ export interface ReceivableDTO {
   discount?: number | null;
   fee?: number | null;
   subtotal?: number | null;
+  currentAmountWithLateCharges?: number | null;
+  overdueDays?: number | null;
+  calculatedLateInterest?: number | null;
+  calculatedLateFee?: number | null;
   residual?: boolean | null;
   canceled?: boolean | null;
   parentReceivableId?: number | null;

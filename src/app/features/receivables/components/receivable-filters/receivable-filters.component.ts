@@ -58,7 +58,6 @@ export class ReceivableFiltersComponent implements OnInit {
       paymentFrequencyId: [null],
       minimumAmount: [null],
       maximumAmount: [null],
-      reference: [null],
       sort: [this.sortOptions[0]],
     });
   }
@@ -83,7 +82,6 @@ export class ReceivableFiltersComponent implements OnInit {
       paymentFrequencyId: value.paymentFrequencyId || null,
       minimumAmount: value.minimumAmount ?? null,
       maximumAmount: value.maximumAmount ?? null,
-      reference: value.reference || null,
       orderBy: sort.orderBy,
       direction: sort.direction,
     });
@@ -102,7 +100,6 @@ export class ReceivableFiltersComponent implements OnInit {
       paymentFrequencyId: null,
       minimumAmount: null,
       maximumAmount: null,
-      reference: null,
       sort: this.sortOptions[0],
     });
 

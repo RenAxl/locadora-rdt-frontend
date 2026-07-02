@@ -57,4 +57,28 @@
     (visibleChange)="overdueVisible = $event"
     [receivable]="overdueReceivable"
   ></app-receivable-overdue-modal>
+
+  <app-receivable-payment-choice-modal
+    [visible]="paymentChoiceVisible"
+    (visibleChange)="paymentChoiceVisible = $event"
+    (editCharges)="editPaymentCharges()"
+    (useDefaultCharges)="useDefaultPaymentCharges()"
+  ></app-receivable-payment-choice-modal>
+
+  <app-receivable-payment-charges-modal
+    [visible]="paymentEditChargesVisible"
+    (visibleChange)="paymentEditChargesVisible = $event"
+    [lateFee]="paymentCharges.lateFee"
+    [lateInterest]="paymentCharges.lateInterest"
+    (confirmCharges)="finishPaymentChargesEdit($event)"
+  ></app-receivable-payment-charges-modal>
+
+  <app-receivable-payment-modal
+    [visible]="paymentModalVisible"
+    (visibleChange)="paymentModalVisible = $event"
+    [receivable]="paymentReceivable"
+    [lateFee]="paymentCharges.lateFee"
+    [lateInterest]="paymentCharges.lateInterest"
+    (pay)="submitPayment($event)"
+  ></app-receivable-payment-modal>
 </div>

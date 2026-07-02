@@ -17,6 +17,9 @@ import { ReceivableFiltersComponent } from './components/receivable-filters/rece
 import { ReceivableQuickPeriodFilterComponent } from './components/receivable-quick-period-filter/receivable-quick-period-filter.component';
 import { ReceivableCardComponent } from './components/receivable-card/receivable-card.component';
 import { ReceivableOverdueModalComponent } from './components/receivable-overdue-modal/receivable-overdue-modal.component';
+import { ReceivablePaymentChargesModalComponent } from './components/receivable-payment-charges-modal/receivable-payment-charges-modal.component';
+import { ReceivablePaymentChoiceModalComponent } from './components/receivable-payment-choice-modal/receivable-payment-choice-modal.component';
+import { ReceivablePaymentModalComponent } from './components/receivable-payment-modal/receivable-payment-modal.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +28,9 @@ import { ReceivableOverdueModalComponent } from './components/receivable-overdue
     ReceivableDetailsModalComponent,
     ReceivableFilesModalComponent,
     ReceivableOverdueModalComponent,
+    ReceivablePaymentChoiceModalComponent,
+    ReceivablePaymentChargesModalComponent,
+    ReceivablePaymentModalComponent,
     ReceivableCardComponent,
     ReceivableFiltersComponent,
     ReceivableQuickPeriodFilterComponent,

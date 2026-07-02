@@ -7,6 +7,11 @@ import { ReceivableMapper } from '../../mapper/receivable.mapper';
 import { Receivable } from '../../models/Receivable';
 import { ReceivableFilters, ReceivableService } from '../../services/receivable.service';
 
+interface ReceivableCharges {
+  lateFee: number;
+  lateInterest: number;
+}
+
 @Component({
   selector: 'app-receivable-list',
   templateUrl: './receivable-list.component.html',
@@ -32,6 +37,12 @@ export class ReceivableListComponent implements OnInit {
 
   overdueVisible = false;
   overdueReceivable: Receivable | null = null;
+
+  paymentChoiceVisible = false;
+  paymentEditChargesVisible = false;
+  paymentModalVisible = false;
+  paymentReceivable: Receivable | null = null;
+  paymentCharges: ReceivableCharges = { lateFee: 0, lateInterest: 0 };
 
   filesVisible = false;
   selectedReceivableId?: number;
@@ -123,35 +134,15 @@ export class ReceivableListComponent implements OnInit {
       return;
     }
 
-    const paymentAmount = this.askPaymentAmount(amount);
-    if (paymentAmount == null) {
+    this.paymentReceivable = receivable;
+    this.paymentCharges = this.getDefaultCharges(receivable);
+
+    if (this.isOverdueOpenReceivable(receivable)) {
+      this.paymentChoiceVisible = true;
       return;
     }
 
-    const dto: ReceivablePaymentDTO = {
-      paymentAmount,
-      paymentDate: this.todayDateString(),
-      paymentMethodId: receivable.paymentMethodId ?? null,
-      subtotal: paymentAmount,
-      fee: 0,
-      lateInterest: 0,
-      lateFee: 0,
-      discount: 0,
-    };
-
-    const paymentType = paymentAmount === amount ? 'total' : 'parcial';
-    this.confirmationService.confirm({
-      message: `Confirmar baixa ${paymentType} de ${this.formatCurrency(paymentAmount)}?`,
-      accept: () => {
-        this.receivableService.pay(receivable.id!, dto).subscribe({
-          next: () => {
-            this.list(this.pagination.page);
-            this.messageService.add({ severity: 'success', detail: 'Baixa registrada!' });
-          },
-          error: (err) => this.showError(err, 'Erro ao registrar baixa.'),
-        });
-      },
-    });
+    this.paymentModalVisible = true;
   }
 
   getReceivableOpenAmount(receivable: Receivable): number {
@@ -182,62 +173,62 @@ export class ReceivableListComponent implements OnInit {
     return Boolean(receivable.paid || receivable.paymentDate);
   }
 
-  private askPaymentAmount(openAmount: number): number | null {
-    const typedValue = window.prompt('Valor da baixa', this.formatDecimal(openAmount));
-    if (typedValue == null) {
-      return null;
+  useDefaultPaymentCharges(): void {
+    if (!this.paymentReceivable) {
+      return;
     }
 
-    const paymentAmount = this.parseDecimal(typedValue);
-    if (paymentAmount == null || paymentAmount <= 0) {
-      this.messageService.add({
-        severity: 'warn',
-        detail: 'Informe um valor de baixa maior que zero.',
-      });
-      return null;
-    }
-
-    if (paymentAmount > openAmount) {
-      this.messageService.add({
-        severity: 'warn',
-        detail: 'Valor de baixa não pode ser maior que o saldo da conta.',
-      });
-      return null;
-    }
-
-    return paymentAmount;
+    this.paymentCharges = this.getDefaultCharges(this.paymentReceivable);
+    this.paymentChoiceVisible = false;
+    this.paymentModalVisible = true;
   }
 
-  private parseDecimal(value: string): number | null {
-    const normalized = value.trim().replace(/\./g, '').replace(',', '.');
-    if (!normalized) {
-      return null;
-    }
-
-    const parsed = Number(normalized);
-    return Number.isFinite(parsed) ? Math.round(parsed * 100) / 100 : null;
+  editPaymentCharges(): void {
+    this.paymentChoiceVisible = false;
+    this.paymentEditChargesVisible = true;
   }
 
-  private formatDecimal(value: number): string {
-    return value.toLocaleString('pt-BR', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
+  finishPaymentChargesEdit(charges: ReceivableCharges): void {
+    this.paymentCharges = charges;
+    this.paymentEditChargesVisible = false;
+    this.paymentModalVisible = true;
+  }
+
+  submitPayment(dto: ReceivablePaymentDTO): void {
+    if (!this.paymentReceivable?.id) {
+      return;
+    }
+
+    this.receivableService.pay(this.paymentReceivable.id, dto).subscribe({
+      next: () => {
+        this.paymentModalVisible = false;
+        this.paymentReceivable = null;
+        this.list(this.pagination.page);
+        this.messageService.add({ severity: 'success', detail: 'Baixa registrada!' });
+      },
+      error: (err) => this.showError(err, 'Erro ao registrar baixa.'),
     });
   }
 
-  private formatCurrency(value: number): string {
-    return value.toLocaleString('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    });
+  private getDefaultCharges(receivable: Receivable): ReceivableCharges {
+    return {
+      lateFee: Number(receivable.calculatedLateFee ?? 0),
+      lateInterest: Number(receivable.calculatedLateInterest ?? 0),
+    };
   }
 
-  private todayDateString(): string {
+  private isOverdueOpenReceivable(receivable: Receivable): boolean {
+    if (receivable.paid || receivable.canceled || !receivable.dueDate) {
+      return false;
+    }
+
     const today = new Date();
-    const month = `${today.getMonth() + 1}`.padStart(2, '0');
-    const day = `${today.getDate()}`.padStart(2, '0');
+    today.setHours(0, 0, 0, 0);
 
-    return `${today.getFullYear()}-${month}-${day}`;
+    const dueDate = new Date(receivable.dueDate);
+    dueDate.setHours(0, 0, 0, 0);
+
+    return dueDate.getTime() < today.getTime() && this.getReceivableOpenAmount(receivable) > 0;
   }
 
   installment(receivable: Receivable): void {

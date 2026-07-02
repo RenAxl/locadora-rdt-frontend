@@ -1,0 +1,85 @@
+<p-dialog
+  header="Baixar conta"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '560px', maxWidth: '95vw' }"
+  (onHide)="close()"
+>
+  <div class="payment-form" *ngIf="receivable">
+    <label>
+      <span>Valor Original</span>
+      <input
+        class="form-control"
+        type="text"
+        [value]="getOriginalAmount() | currency: 'BRL'"
+        readonly
+      />
+    </label>
+
+    <label>
+      <span>Forma de Pagamento</span>
+      <select class="form-control" [(ngModel)]="paymentMethodId">
+        <option [ngValue]="null">Selecione</option>
+        <option *ngFor="let method of paymentMethods" [ngValue]="method.id">
+          {{ method.name }}
+        </option>
+      </select>
+    </label>
+
+    <label>
+      <span>Data da Baixa</span>
+      <input class="form-control" type="date" [(ngModel)]="paymentDate" />
+    </label>
+
+    <label>
+      <span>Multa</span>
+      <input
+        class="form-control"
+        type="text"
+        [value]="getLateFee() | currency: 'BRL'"
+        readonly
+      />
+    </label>
+
+    <label>
+      <span>Juros</span>
+      <input
+        class="form-control"
+        type="text"
+        [value]="getLateInterest() | currency: 'BRL'"
+        readonly
+      />
+    </label>
+
+    <label>
+      <span>Desconto</span>
+      <input
+        class="form-control"
+        type="text"
+        [value]="getDiscount() | currency: 'BRL'"
+        readonly
+      />
+    </label>
+
+    <label class="current-amount">
+      <span>Valor Atual</span>
+      <input
+        class="form-control"
+        type="text"
+        [value]="getCurrentAmount() | currency: 'BRL'"
+        readonly
+      />
+    </label>
+  </div>
+
+  <div class="payment-actions">
+    <button
+      type="button"
+      class="btn btn-primary"
+      [disabled]="!paymentMethodId || !paymentDate"
+      (click)="submit()"
+    >
+      Baixar
+    </button>
+  </div>
+</p-dialog>

@@ -1,0 +1,26 @@
+.charges-form {
+  display: grid;
+  gap: 14px;
+}
+
+.charges-form label {
+  display: grid;
+  gap: 6px;
+}
+
+.charges-form span {
+  color: #0d2a4d;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.charges-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+
+.charges-actions .btn {
+  min-width: 120px;
+  font-weight: 700;
+}

@@ -1,0 +1,41 @@
+<p-dialog
+  header="Editar multa e juros"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '460px', maxWidth: '95vw' }"
+  (onHide)="close()"
+>
+  <div class="charges-form">
+    <label>
+      <span>Multa</span>
+      <p-inputNumber
+        [(ngModel)]="editedLateFee"
+        mode="currency"
+        currency="BRL"
+        locale="pt-BR"
+        [min]="0"
+        [minFractionDigits]="2"
+        [maxFractionDigits]="2"
+      ></p-inputNumber>
+    </label>
+
+    <label>
+      <span>Juros</span>
+      <p-inputNumber
+        [(ngModel)]="editedLateInterest"
+        mode="currency"
+        currency="BRL"
+        locale="pt-BR"
+        [min]="0"
+        [minFractionDigits]="2"
+        [maxFractionDigits]="2"
+      ></p-inputNumber>
+    </label>
+  </div>
+
+  <div class="charges-actions">
+    <button type="button" class="btn btn-primary" (click)="confirm()">
+      Continuar
+    </button>
+  </div>
+</p-dialog>

@@ -1,0 +1,52 @@
+.payment-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.payment-form label {
+  display: grid;
+  gap: 6px;
+}
+
+.payment-form span {
+  color: #0d2a4d;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.payment-form input[readonly] {
+  background: #f8fafc;
+}
+
+.current-amount {
+  grid-column: span 2;
+}
+
+.current-amount input {
+  border-color: rgba(25, 135, 84, 0.28);
+  color: #0f5132;
+  font-weight: 700;
+}
+
+.payment-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+
+.payment-actions .btn {
+  min-width: 120px;
+  font-weight: 700;
+}
+
+@media (max-width: 575.98px) {
+  .payment-form {
+    grid-template-columns: 1fr;
+  }
+
+  .current-amount {
+    grid-column: auto;
+  }
+}

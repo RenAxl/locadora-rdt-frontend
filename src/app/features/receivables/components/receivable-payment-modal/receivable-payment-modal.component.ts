@@ -22,6 +22,7 @@ export class ReceivablePaymentModalComponent implements OnInit, OnChanges {
   paymentMethods: PaymentMethodDTO[] = [];
   paymentMethodId: number | null = null;
   paymentDate = this.todayDateString();
+  paymentAmount: number | null = null;
 
   constructor(private paymentMethodService: PaymentMethodService) {}
 
@@ -33,6 +34,7 @@ export class ReceivablePaymentModalComponent implements OnInit, OnChanges {
     if (changes['visible']?.currentValue) {
       this.paymentDate = this.todayDateString();
       this.paymentMethodId = this.receivable?.paymentMethodId ?? this.paymentMethodId;
+      this.paymentAmount = this.getCurrentAmount();
     }
   }
 
@@ -42,6 +44,29 @@ export class ReceivablePaymentModalComponent implements OnInit, OnChanges {
 
   getOriginalAmount(): number {
     return Number(this.receivable?.amount ?? 0);
+  }
+
+  getOpenAmount(): number {
+    if (this.receivable?.paid) {
+      return 0;
+    }
+
+    const amount = this.getOriginalAmount();
+    const paidAmount = this.hasPaymentRecord() ? Number(this.receivable?.subtotal ?? 0) : 0;
+    if (amount > 0 && paidAmount >= amount) {
+      return 0;
+    }
+
+    if (amount > 0 && paidAmount > 0 && paidAmount < amount) {
+      return this.roundMoney(amount - paidAmount);
+    }
+
+    const remaining = this.receivable?.remainingBalance;
+    if (remaining != null && remaining > 0 && remaining < amount) {
+      return Number(remaining);
+    }
+
+    return amount;
   }
 
   getLateFee(): number {
@@ -62,17 +87,39 @@ export class ReceivablePaymentModalComponent implements OnInit, OnChanges {
 
   getCurrentAmount(): number {
     return this.roundMoney(
-      this.getOriginalAmount() + this.getLateFee() + this.getLateInterest() - this.getDiscount(),
+      this.getOpenAmount() + this.getLateFee() + this.getLateInterest() - this.getDiscount(),
     );
   }
 
+  getPaymentAmount(): number {
+    return this.roundMoney(Number(this.paymentAmount ?? 0));
+  }
+
+  isPaymentAmountInvalid(): boolean {
+    return this.isPaymentAmountEmptyOrZero() || this.isPaymentAmountGreaterThanCurrent();
+  }
+
+  isPaymentAmountEmptyOrZero(): boolean {
+    const paymentAmount = this.getPaymentAmount();
+
+    return paymentAmount <= 0;
+  }
+
+  isPaymentAmountGreaterThanCurrent(): boolean {
+    return this.getPaymentAmount() > this.getCurrentAmount();
+  }
+
+  onPaymentMethodChange(): void {
+    this.paymentAmount = this.getCurrentAmount();
+  }
+
   submit(): void {
-    if (!this.paymentMethodId) {
+    if (!this.paymentMethodId || this.isPaymentAmountInvalid()) {
       return;
     }
 
     this.pay.emit({
-      paymentAmount: this.getCurrentAmount(),
+      paymentAmount: this.getPaymentAmount(),
       paymentDate: this.paymentDate,
       paymentMethodId: this.paymentMethodId,
       subtotal: this.getOriginalAmount(),
@@ -90,6 +137,7 @@ export class ReceivablePaymentModalComponent implements OnInit, OnChanges {
         next: (data) => {
           this.paymentMethods = data.content;
           this.paymentMethodId = this.receivable?.paymentMethodId ?? this.paymentMethods[0]?.id ?? null;
+          this.paymentAmount = this.getCurrentAmount();
         },
       });
   }
@@ -99,6 +147,10 @@ export class ReceivablePaymentModalComponent implements OnInit, OnChanges {
     const name = this.normalize(method?.name ?? '');
 
     return name === 'pix' || name === 'boleto bancario';
+  }
+
+  private hasPaymentRecord(): boolean {
+    return Boolean(this.receivable?.paid || this.receivable?.paymentDate);
   }
 
   private normalize(value: string): string {

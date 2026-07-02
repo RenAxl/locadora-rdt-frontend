@@ -20,7 +20,8 @@
   background: #f8fafc;
 }
 
-.current-amount {
+.current-amount,
+.payment-amount {
   grid-column: span 2;
 }
 
@@ -28,6 +29,22 @@
   border-color: rgba(25, 135, 84, 0.28);
   color: #0f5132;
   font-weight: 700;
+}
+
+.payment-amount ::ng-deep .p-inputnumber,
+.payment-amount ::ng-deep .p-inputnumber-input {
+  width: 100%;
+}
+
+.payment-amount ::ng-deep .p-inputnumber-input {
+  border-color: rgba(25, 135, 84, 0.28);
+  color: #0f5132;
+  font-weight: 700;
+}
+
+.payment-amount small {
+  color: #dc3545;
+  font-size: 12px;
 }
 
 .payment-actions {
@@ -46,7 +63,8 @@
     grid-template-columns: 1fr;
   }
 
-  .current-amount {
+  .current-amount,
+  .payment-amount {
     grid-column: auto;
   }
 }

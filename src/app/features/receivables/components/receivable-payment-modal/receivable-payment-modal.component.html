@@ -18,7 +18,11 @@
 
     <label>
       <span>Forma de Pagamento</span>
-      <select class="form-control" [(ngModel)]="paymentMethodId">
+      <select
+        class="form-control"
+        [(ngModel)]="paymentMethodId"
+        (ngModelChange)="onPaymentMethodChange()"
+      >
         <option [ngValue]="null">Selecione</option>
         <option *ngFor="let method of paymentMethods" [ngValue]="method.id">
           {{ method.name }}
@@ -70,13 +74,33 @@
         readonly
       />
     </label>
+
+    <label class="payment-amount">
+      <span>Valor a Pagar</span>
+      <p-inputNumber
+        [(ngModel)]="paymentAmount"
+        mode="currency"
+        currency="BRL"
+        locale="pt-BR"
+        [min]="0.01"
+        [minFractionDigits]="2"
+        [maxFractionDigits]="2"
+        [inputStyleClass]="isPaymentAmountInvalid() ? 'form-control is-invalid' : 'form-control'"
+      ></p-inputNumber>
+      <small *ngIf="isPaymentAmountGreaterThanCurrent()">
+        O valor a ser pago é maior que o Valor Atual.
+      </small>
+      <small *ngIf="isPaymentAmountEmptyOrZero()">
+        Informe um valor a pagar maior que zero.
+      </small>
+    </label>
   </div>
 
   <div class="payment-actions">
     <button
       type="button"
       class="btn btn-primary"
-      [disabled]="!paymentMethodId || !paymentDate"
+      [disabled]="!paymentMethodId || !paymentDate || isPaymentAmountInvalid()"
       (click)="submit()"
     >
       Baixar

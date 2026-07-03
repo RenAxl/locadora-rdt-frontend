@@ -1,6 +1,12 @@
 .receivable-item {
+  --receivable-action-size: 32px;
+  --receivable-actions-width: 260px;
+
   display: grid;
-  grid-template-columns: minmax(240px, 1fr) minmax(560px, 1.45fr) auto;
+  grid-template-columns:
+    minmax(240px, 1fr)
+    minmax(560px, 1.45fr)
+    var(--receivable-actions-width);
   gap: 14px;
   align-items: center;
   padding: 16px;
@@ -170,14 +176,19 @@
   gap: 6px;
   align-items: center;
   flex-wrap: wrap;
-  min-width: 178px;
+  width: var(--receivable-actions-width);
+  min-width: var(--receivable-actions-width);
+}
+
+.actions-wrap .p-button,
+.action-placeholder {
+  width: var(--receivable-action-size);
+  height: var(--receivable-action-size);
+  flex: 0 0 var(--receivable-action-size);
 }
 
 .action-placeholder {
   display: inline-block;
-  width: 32px;
-  height: 32px;
-  flex: 0 0 32px;
 }
 
 @media (max-width: 1199px) {
@@ -192,6 +203,8 @@
 
   .actions-wrap {
     justify-content: flex-start;
+    width: auto;
+    min-width: 0;
   }
 }
 

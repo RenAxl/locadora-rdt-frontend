@@ -156,5 +156,10 @@
       tooltipPosition="top"
       (click)="delete.emit(receivable)"
     ></button>
+    <span
+      *ngIf="!isReceivableSettled()"
+      class="action-placeholder"
+      aria-hidden="true"
+    ></span>
   </div>
 </article>

@@ -173,6 +173,13 @@
   min-width: 178px;
 }
 
+.action-placeholder {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+}
+
 @media (max-width: 1199px) {
   .receivable-item {
     grid-template-columns: minmax(0, 1fr);

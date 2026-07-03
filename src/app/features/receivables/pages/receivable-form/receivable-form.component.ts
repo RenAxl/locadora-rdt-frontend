@@ -61,7 +61,7 @@ export class ReceivableFormComponent implements OnInit {
 
   save(form: NgForm): void {
     if (form.invalid) {
-      form.control.markAllAsTouched();
+      this.markFormControlsAsTouchedAndDirty(form);
       return;
     }
 
@@ -176,6 +176,11 @@ export class ReceivableFormComponent implements OnInit {
     if (this.selectedFileName) {
       this.receivable.fileName = this.selectedFileName;
     }
+  }
+
+  private markFormControlsAsTouchedAndDirty(form: NgForm): void {
+    form.control.markAllAsTouched();
+    Object.values(form.controls).forEach((control) => control.markAsDirty());
   }
 
   private showError(err: any, fallback: string): void {

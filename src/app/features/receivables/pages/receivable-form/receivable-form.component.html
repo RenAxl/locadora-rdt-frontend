@@ -13,9 +13,27 @@
             type="text"
             name="description"
             [(ngModel)]="receivable.description"
+            #description="ngModel"
             placeholder="Descrição"
+            required
+            minlength="3"
             class="form-control select-arrow"
+            (blur)="description.control.markAsDirty()"
           />
+
+          <app-message
+            [control]="description"
+            error="required"
+            text="Informe a descrição da conta"
+          ></app-message>
+
+          <app-message
+            [control]="description"
+            error="minlength"
+            text="Mínimo de {{
+              description.errors?.['minlength']?.requiredLength
+            }} caracteres"
+          ></app-message>
         </div>
 
         <div class="col-12 col-lg-3">
@@ -23,6 +41,7 @@
           <p-inputNumber
             [(ngModel)]="receivable.amount"
             name="amount"
+            #amount="ngModel"
             mode="currency"
             currency="BRL"
             locale="pt-BR"
@@ -31,7 +50,20 @@
             [minFractionDigits]="2"
             [maxFractionDigits]="2"
             [required]="true"
+            [min]="0.01"
           ></p-inputNumber>
+
+          <app-message
+            [control]="amount"
+            error="required"
+            text="Informe o valor da conta"
+          ></app-message>
+
+          <app-message
+            [control]="amount"
+            error="min"
+            text="O valor deve ser maior que zero"
+          ></app-message>
         </div>
 
         <div class="col-12 col-lg-3">
@@ -39,13 +71,22 @@
           <select
             name="customerId"
             [(ngModel)]="receivable.customerId"
+            #customerId="ngModel"
+            required
             class="form-control select-arrow"
+            (blur)="customerId.control.markAsDirty()"
           >
             <option [ngValue]="null">Selecione um cliente</option>
             <option *ngFor="let customer of customers" [ngValue]="customer.id">
               {{ customer.name }}
             </option>
           </select>
+
+          <app-message
+            [control]="customerId"
+            error="required"
+            text="Informe o cliente"
+          ></app-message>
         </div>
 
         <div class="col-12 col-lg-3">
@@ -87,7 +128,10 @@
           <select
             name="paymentFrequencyId"
             [(ngModel)]="receivable.paymentFrequencyId"
+            #paymentFrequencyId="ngModel"
+            required
             class="form-control select-arrow"
+            (blur)="paymentFrequencyId.control.markAsDirty()"
           >
             <option [ngValue]="null">Selecione uma frequência</option>
             <option
@@ -97,6 +141,12 @@
               {{ frequency.frequency }}
             </option>
           </select>
+
+          <app-message
+            [control]="paymentFrequencyId"
+            error="required"
+            text="Informe a frequência"
+          ></app-message>
         </div>
 
         <div class="col-12 col-lg-6">
@@ -127,6 +177,7 @@
             icon="pi pi-save"
             label="Salvar"
             class="receivable-form-button"
+            [disabled]="receivableForm.invalid"
           ></button>
           <a
             pButton

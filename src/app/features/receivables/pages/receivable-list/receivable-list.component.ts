@@ -258,14 +258,11 @@ export class ReceivableListComponent implements OnInit {
     }
 
     this.receivableService.receipt(receivable.id).subscribe({
-      next: (text) => {
-        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+      next: (pdf) => {
+        const blob = new Blob([pdf], { type: 'application/pdf' });
         const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `recibo-${receivable.id}.txt`;
-        link.click();
-        URL.revokeObjectURL(url);
+        window.open(url, '_blank');
+        setTimeout(() => URL.revokeObjectURL(url), 60000);
       },
       error: (err) => this.showError(err, 'Erro ao gerar recibo.'),
     });

@@ -120,9 +120,9 @@ export class ReceivableService {
     });
   }
 
-  receipt(id: number): Observable<string> {
+  receipt(id: number): Observable<Blob> {
     return this.http.get(API.RECEIVABLES.RECEIPT(id), {
-      responseType: 'text',
+      responseType: 'blob',
     });
   }
 

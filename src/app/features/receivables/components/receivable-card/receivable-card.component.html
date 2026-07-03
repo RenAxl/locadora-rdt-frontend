@@ -140,6 +140,7 @@
       (click)="files.emit(receivable)"
     ></button>
     <button
+      *ngIf="isReceivableSettled()"
       pButton
       class="p-button-rounded p-button-text"
       icon="pi pi-file"

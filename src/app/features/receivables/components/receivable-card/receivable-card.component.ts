@@ -15,6 +15,7 @@ export class ReceivableCardComponent {
   @Output() details = new EventEmitter<Receivable>();
   @Output() files = new EventEmitter<Receivable>();
   @Output() receipt = new EventEmitter<Receivable>();
+  @Output() fiscalCoupon = new EventEmitter<Receivable>();
   @Output() delete = new EventEmitter<Receivable>();
   @Output() overdueDetails = new EventEmitter<Receivable>();
 

@@ -1,0 +1,9 @@
+.choice-actions {
+  display: grid;
+  gap: 10px;
+}
+
+.choice-actions .btn {
+  min-height: 44px;
+  font-weight: 700;
+}

@@ -214,6 +214,20 @@ const routes: Routes = [
     component: MainComponent,
     children: [
       {
+        path: 'payables',
+        loadChildren: () =>
+          import('./features/payables/payables.module').then(
+            (m) => m.PayablesModule,
+          ),
+      },
+    ],
+  },
+
+  {
+    path: '',
+    component: MainComponent,
+    children: [
+      {
         path: 'suppliers',
         canActivate: [AuthGuard],
         loadChildren: () =>

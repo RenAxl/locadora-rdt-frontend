@@ -6,16 +6,16 @@ import { Pagination } from 'src/app/core/models/Pagination';
 import { PageResponse } from 'src/app/core/models/page-response';
 
 import {
-  ReceivableDTO,
-  ReceivableInstallmentDTO,
-  ReceivablePaymentDTO,
-  ReceivableReportDTO,
-} from '../dtos/receivable.dto';
-import { ReceivableDetailsDTO } from '../dtos/receivable-details.dto';
-import { ReceivableInsertDTO } from '../dtos/receivable-insert.dto';
-import { ReceivableUpdateDTO } from '../dtos/receivable-update.dto';
+  PayableDTO,
+  PayableInstallmentDTO,
+  PayablePaymentDTO,
+  PayableReportDTO,
+} from '../dtos/payable.dto';
+import { PayableDetailsDTO } from '../dtos/payable-details.dto';
+import { PayableInsertDTO } from '../dtos/payable-insert.dto';
+import { PayableUpdateDTO } from '../dtos/payable-update.dto';
 
-export interface ReceivableFilters {
+export interface PayableFilters {
   search?: string;
   description?: string;
   startDate?: string | null;
@@ -23,7 +23,8 @@ export interface ReceivableFilters {
   status?: string;
   dateType?: string;
   periodType?: string;
-  customerId?: number | null;
+  supplierId?: number | null;
+  employeeId?: number | null;
   paymentMethodId?: number | null;
   paymentFrequencyId?: number | null;
   minimumAmount?: number | null;
@@ -35,13 +36,13 @@ export interface ReceivableFilters {
 @Injectable({
   providedIn: 'root',
 })
-export class ReceivableService {
+export class PayableService {
   constructor(private http: HttpClient) {}
 
   list(
     pagination: Pagination,
-    filters: ReceivableFilters,
-  ): Observable<PageResponse<ReceivableDTO>> {
+    filters: PayableFilters,
+  ): Observable<PageResponse<PayableDTO>> {
     let params = new HttpParams()
       .set('page', String(pagination.page))
       .set('linesPerPage', String(pagination.linesPerPage))
@@ -60,48 +61,49 @@ export class ReceivableService {
       params = params.set('endDate', filters.endDate);
     }
 
-    params = this.appendParam(params, 'customerId', filters.customerId);
+    params = this.appendParam(params, 'supplierId', filters.supplierId);
+    params = this.appendParam(params, 'employeeId', filters.employeeId);
     params = this.appendParam(params, 'paymentMethodId', filters.paymentMethodId);
     params = this.appendParam(params, 'paymentFrequencyId', filters.paymentFrequencyId);
     params = this.appendParam(params, 'minimumAmount', filters.minimumAmount);
     params = this.appendParam(params, 'maximumAmount', filters.maximumAmount);
 
-    return this.http.get<PageResponse<ReceivableDTO>>(API.RECEIVABLES.ROOT, {
+    return this.http.get<PageResponse<PayableDTO>>(API.PAYABLES.ROOT, {
       params,
     });
   }
 
-  insert(dto: ReceivableInsertDTO): Observable<ReceivableDTO> {
-    return this.http.post<ReceivableDTO>(API.RECEIVABLES.ROOT, dto);
+  insert(dto: PayableInsertDTO): Observable<PayableDTO> {
+    return this.http.post<PayableDTO>(API.PAYABLES.ROOT, dto);
   }
 
-  findById(id: number | string): Observable<ReceivableDetailsDTO> {
-    return this.http.get<ReceivableDetailsDTO>(API.RECEIVABLES.BY_ID(id));
+  findById(id: number | string): Observable<PayableDetailsDTO> {
+    return this.http.get<PayableDetailsDTO>(API.PAYABLES.BY_ID(id));
   }
 
-  update(dto: ReceivableUpdateDTO): Observable<ReceivableDTO> {
-    return this.http.put<ReceivableDTO>(API.RECEIVABLES.BY_ID(dto.id), dto);
+  update(dto: PayableUpdateDTO): Observable<PayableDTO> {
+    return this.http.put<PayableDTO>(API.PAYABLES.BY_ID(dto.id), dto);
   }
 
   delete(id: number): Observable<void> {
-    return this.http.delete<void>(API.RECEIVABLES.BY_ID(id));
+    return this.http.delete<void>(API.PAYABLES.BY_ID(id));
   }
 
-  pay(id: number, dto: ReceivablePaymentDTO): Observable<ReceivableDTO> {
-    return this.http.post<ReceivableDTO>(API.RECEIVABLES.PAY(id), dto);
+  pay(id: number, dto: PayablePaymentDTO): Observable<PayableDTO> {
+    return this.http.post<PayableDTO>(API.PAYABLES.PAY(id), dto);
   }
 
   installment(
     id: number,
-    dto: ReceivableInstallmentDTO,
-  ): Observable<ReceivableDTO[]> {
-    return this.http.post<ReceivableDTO[]>(
-      API.RECEIVABLES.INSTALLMENTS(id),
+    dto: PayableInstallmentDTO,
+  ): Observable<PayableDTO[]> {
+    return this.http.post<PayableDTO[]>(
+      API.PAYABLES.INSTALLMENTS(id),
       dto,
     );
   }
 
-  report(filters: ReceivableFilters): Observable<ReceivableReportDTO> {
+  report(filters: PayableFilters): Observable<PayableReportDTO> {
     let params = new HttpParams()
       .set('description', filters.description || '')
       .set('status', filters.status || 'all')
@@ -115,20 +117,8 @@ export class ReceivableService {
       params = params.set('endDate', filters.endDate);
     }
 
-    return this.http.get<ReceivableReportDTO>(API.RECEIVABLES.REPORT, {
+    return this.http.get<PayableReportDTO>(API.PAYABLES.REPORT, {
       params,
-    });
-  }
-
-  receipt(id: number): Observable<Blob> {
-    return this.http.get(API.RECEIVABLES.RECEIPT(id), {
-      responseType: 'blob',
-    });
-  }
-
-  fiscalCoupon(id: number): Observable<Blob> {
-    return this.http.get(API.RECEIVABLES.FISCAL_COUPON(id), {
-      responseType: 'blob',
     });
   }
 

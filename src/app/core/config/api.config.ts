@@ -112,6 +112,8 @@ export const API = {
       `${BASE_URL}/receivables/${id}/installments`,
     REPORT: `${BASE_URL}/receivables/report`,
     RECEIPT: (id: number | string) => `${BASE_URL}/receivables/${id}/receipt`,
+    FISCAL_COUPON: (id: number | string) =>
+      `${BASE_URL}/receivables/${id}/fiscal-coupon`,
     FILES: {
       ROOT: (receivableId: number | string) =>
         `${BASE_URL}/receivables/${receivableId}/files`,
@@ -121,6 +123,25 @@ export const API = {
         `${BASE_URL}/receivables/${receivableId}/files/${fileId}`,
       DOWNLOAD: (receivableId: number | string, fileId: number | string) =>
         `${BASE_URL}/receivables/${receivableId}/files/${fileId}/download`,
+    },
+  },
+
+  PAYABLES: {
+    ROOT: `${BASE_URL}/payables`,
+    BY_ID: (id: number | string) => `${BASE_URL}/payables/${id}`,
+    PAY: (id: number | string) => `${BASE_URL}/payables/${id}/payments`,
+    INSTALLMENTS: (id: number | string) =>
+      `${BASE_URL}/payables/${id}/installments`,
+    REPORT: `${BASE_URL}/payables/report`,
+    FILES: {
+      ROOT: (payableId: number | string) =>
+        `${BASE_URL}/payables/${payableId}/files`,
+      VIEW: (payableId: number | string, fileId: number | string) =>
+        `${BASE_URL}/payables/${payableId}/files/${fileId}/view`,
+      BY_ID: (payableId: number | string, fileId: number | string) =>
+        `${BASE_URL}/payables/${payableId}/files/${fileId}`,
+      DOWNLOAD: (payableId: number | string, fileId: number | string) =>
+        `${BASE_URL}/payables/${payableId}/files/${fileId}/download`,
     },
   },
 

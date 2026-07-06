@@ -1,0 +1,103 @@
+.payable-card {
+  padding: 20px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.btn-crud-action {
+  width: 100%;
+  height: 50px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.payable-actions-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.action-link {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+}
+
+.payable-extra-filters {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(140px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.payable-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.empty-state {
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #5f6b7a;
+  font-weight: 700;
+}
+
+:host ::ng-deep .p-paginator {
+  margin-top: 16px;
+  border: 0;
+}
+
+@media (min-width: 768px) {
+  .payable-filter-container {
+    display: flex;
+    margin-bottom: 20px;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .payable-actions-group {
+    flex-direction: row;
+    width: auto;
+    gap: 12px;
+  }
+
+  .btn-crud-action {
+    width: auto;
+    height: 60px;
+    margin-bottom: 0;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 767px) {
+  .payable-card {
+    padding: 14px;
+  }
+
+  .payable-extra-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-crud-action {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.85rem;
+    line-height: 1.1;
+    width: auto;
+    height: 40px;
+    margin-bottom: 0;
+  }
+
+  .payable-actions-group {
+    flex-direction: row;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+}

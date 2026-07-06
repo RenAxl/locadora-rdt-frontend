@@ -1,6 +1,6 @@
-<div class="receivable-filter-container">
-  <div class="receivable-actions-group">
-    <a routerLink="/receivables/create" class="action-link">
+<div class="payable-filter-container">
+  <div class="payable-actions-group">
+    <a routerLink="/payables/create" class="action-link">
       <button class="btn btn-primary text-white btn-crud-action">
         NOVA CONTA
       </button>
@@ -8,29 +8,27 @@
   </div>
 </div>
 
-<app-receivable-filters
+<app-payable-filters
   (filter)="applyFilters($event)"
   (clear)="clearFilters()"
-></app-receivable-filters>
+></app-payable-filters>
 
-<div class="receivable-card">
-  <div class="empty-state" *ngIf="receivables.length === 0">
+<div class="payable-card">
+  <div class="empty-state" *ngIf="payables.length === 0">
     Nenhuma conta encontrada.
   </div>
 
-  <div class="receivable-list" *ngIf="receivables.length > 0">
-    <app-receivable-card
-      *ngFor="let receivable of receivables"
-      [receivable]="receivable"
+  <div class="payable-list" *ngIf="payables.length > 0">
+    <app-payable-card
+      *ngFor="let payable of payables"
+      [payable]="payable"
       (pay)="pay($event)"
       (installment)="installment($event)"
       (details)="openDetails($event)"
       (overdueDetails)="openOverdueDetails($event)"
       (files)="openFilesModal($event)"
-      (receipt)="generateReceipt($event)"
-      (fiscalCoupon)="generateFiscalCoupon($event)"
       (delete)="delete($event)"
-    ></app-receivable-card>
+    ></app-payable-card>
   </div>
 
   <p-paginator
@@ -40,46 +38,46 @@
     (onPageChange)="changePage($event)"
   ></p-paginator>
 
-  <app-receivable-details-modal
+  <app-payable-details-modal
     [visible]="detailsVisible"
     (visibleChange)="detailsVisible = $event"
-    [receivable]="receivableDetails"
-  ></app-receivable-details-modal>
+    [payable]="payableDetails"
+  ></app-payable-details-modal>
 
-  <app-receivable-files-modal
+  <app-payable-files-modal
     [visible]="filesVisible"
     (visibleChange)="filesVisible = $event"
-    [receivableId]="selectedReceivableId"
-    [receivableDescription]="selectedReceivableDescription"
-  ></app-receivable-files-modal>
+    [payableId]="selectedPayableId"
+    [payableDescription]="selectedPayableDescription"
+  ></app-payable-files-modal>
 
-  <app-receivable-overdue-modal
+  <app-payable-overdue-modal
     [visible]="overdueVisible"
     (visibleChange)="overdueVisible = $event"
-    [receivable]="overdueReceivable"
-  ></app-receivable-overdue-modal>
+    [payable]="overduePayable"
+  ></app-payable-overdue-modal>
 
-  <app-receivable-payment-choice-modal
+  <app-payable-payment-choice-modal
     [visible]="paymentChoiceVisible"
     (visibleChange)="paymentChoiceVisible = $event"
     (editCharges)="editPaymentCharges()"
     (useDefaultCharges)="useDefaultPaymentCharges()"
-  ></app-receivable-payment-choice-modal>
+  ></app-payable-payment-choice-modal>
 
-  <app-receivable-payment-charges-modal
+  <app-payable-payment-charges-modal
     [visible]="paymentEditChargesVisible"
     (visibleChange)="paymentEditChargesVisible = $event"
     [lateFee]="paymentCharges.lateFee"
     [lateInterest]="paymentCharges.lateInterest"
     (confirmCharges)="finishPaymentChargesEdit($event)"
-  ></app-receivable-payment-charges-modal>
+  ></app-payable-payment-charges-modal>
 
-  <app-receivable-payment-modal
+  <app-payable-payment-modal
     [visible]="paymentModalVisible"
     (visibleChange)="paymentModalVisible = $event"
-    [receivable]="paymentReceivable"
+    [payable]="paymentPayable"
     [lateFee]="paymentCharges.lateFee"
     [lateInterest]="paymentCharges.lateInterest"
     (pay)="submitPayment($event)"
-  ></app-receivable-payment-modal>
+  ></app-payable-payment-modal>
 </div>

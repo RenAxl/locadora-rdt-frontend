@@ -1,29 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
-import { Observable } from 'rxjs';
 import { Pagination } from 'src/app/core/models/Pagination';
 
-import { ReceivablePaymentDTO } from '../../dtos/receivable.dto';
-import { ReceivableMapper } from '../../mapper/receivable.mapper';
-import { Receivable } from '../../models/Receivable';
-import { ReceivableFilters, ReceivableService } from '../../services/receivable.service';
+import { PayablePaymentDTO } from '../../dtos/payable.dto';
+import { PayableMapper } from '../../mapper/payable.mapper';
+import { Payable } from '../../models/Payable';
+import { PayableFilters, PayableService } from '../../services/payable.service';
 
-interface ReceivableCharges {
+interface PayableCharges {
   lateFee: number;
   lateInterest: number;
 }
 
 @Component({
-  selector: 'app-receivable-list',
-  templateUrl: './receivable-list.component.html',
-  styleUrls: ['./receivable-list.component.css'],
+  selector: 'app-payable-list',
+  templateUrl: './payable-list.component.html',
+  styleUrls: ['./payable-list.component.css'],
 })
-export class ReceivableListComponent implements OnInit {
-  receivables: Receivable[] = [];
+export class PayableListComponent implements OnInit {
+  payables: Payable[] = [];
   pagination: Pagination = new Pagination(0, 10, 'ASC', 'dueDate');
   totalElements = 0;
 
-  filters: ReceivableFilters = {
+  filters: PayableFilters = {
     search: '',
     status: 'ALL',
     periodType: 'DUE_DATE',
@@ -34,23 +33,23 @@ export class ReceivableListComponent implements OnInit {
   };
 
   detailsVisible = false;
-  receivableDetails: Receivable | null = null;
+  payableDetails: Payable | null = null;
 
   overdueVisible = false;
-  overdueReceivable: Receivable | null = null;
+  overduePayable: Payable | null = null;
 
   paymentChoiceVisible = false;
   paymentEditChargesVisible = false;
   paymentModalVisible = false;
-  paymentReceivable: Receivable | null = null;
-  paymentCharges: ReceivableCharges = { lateFee: 0, lateInterest: 0 };
+  paymentPayable: Payable | null = null;
+  paymentCharges: PayableCharges = { lateFee: 0, lateInterest: 0 };
 
   filesVisible = false;
-  selectedReceivableId?: number;
-  selectedReceivableDescription?: string;
+  selectedPayableId?: number;
+  selectedPayableDescription?: string;
 
   constructor(
-    private receivableService: ReceivableService,
+    private payableService: PayableService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
   ) {}
@@ -62,9 +61,9 @@ export class ReceivableListComponent implements OnInit {
   list(page: number = 0): void {
     this.pagination.page = page;
 
-    this.receivableService.list(this.pagination, this.filters).subscribe({
+    this.payableService.list(this.pagination, this.filters).subscribe({
       next: (data) => {
-        this.receivables = data.content.map(ReceivableMapper.fromDTO);
+        this.payables = data.content.map(PayableMapper.fromDTO);
         this.totalElements = data.totalElements;
       },
       error: (err) => this.showError(err, 'Erro ao listar contas.'),
@@ -80,7 +79,7 @@ export class ReceivableListComponent implements OnInit {
     this.list(page);
   }
 
-  applyFilters(filters: ReceivableFilters): void {
+  applyFilters(filters: PayableFilters): void {
     this.filters = filters;
     this.pagination.orderBy = filters.orderBy || this.pagination.orderBy;
     this.pagination.direction = filters.direction || this.pagination.direction;
@@ -102,15 +101,15 @@ export class ReceivableListComponent implements OnInit {
     this.list(0);
   }
 
-  delete(receivable: Receivable): void {
-    if (!receivable.id) {
+  delete(payable: Payable): void {
+    if (!payable.id) {
       return;
     }
 
     this.confirmationService.confirm({
       message: 'Tem certeza que deseja excluir?',
       accept: () => {
-        this.receivableService.delete(receivable.id!).subscribe(() => {
+        this.payableService.delete(payable.id!).subscribe(() => {
           this.list(this.pagination.page);
           this.messageService.add({
             severity: 'success',
@@ -121,9 +120,9 @@ export class ReceivableListComponent implements OnInit {
     });
   }
 
-  pay(receivable: Receivable): void {
-    const amount = this.getReceivableOpenAmount(receivable);
-    if (!receivable.id) {
+  pay(payable: Payable): void {
+    const amount = this.getPayableOpenAmount(payable);
+    if (!payable.id) {
       return;
     }
 
@@ -135,10 +134,10 @@ export class ReceivableListComponent implements OnInit {
       return;
     }
 
-    this.paymentReceivable = receivable;
-    this.paymentCharges = this.getDefaultCharges(receivable);
+    this.paymentPayable = payable;
+    this.paymentCharges = this.getDefaultCharges(payable);
 
-    if (this.isOverdueOpenReceivable(receivable)) {
+    if (this.isOverdueOpenPayable(payable)) {
       this.paymentChoiceVisible = true;
       return;
     }
@@ -146,13 +145,13 @@ export class ReceivableListComponent implements OnInit {
     this.paymentModalVisible = true;
   }
 
-  getReceivableOpenAmount(receivable: Receivable): number {
-    if (receivable.paid) {
+  getPayableOpenAmount(payable: Payable): number {
+    if (payable.paid) {
       return 0;
     }
 
-    const amount = Number(receivable.amount ?? 0);
-    const paidAmount = this.hasPaymentRecord(receivable) ? Number(receivable.subtotal ?? 0) : 0;
+    const amount = Number(payable.amount ?? 0);
+    const paidAmount = this.hasPaymentRecord(payable) ? Number(payable.subtotal ?? 0) : 0;
     if (amount > 0 && paidAmount >= amount) {
       return 0;
     }
@@ -161,7 +160,7 @@ export class ReceivableListComponent implements OnInit {
       return Math.round((amount - paidAmount) * 100) / 100;
     }
 
-    const remaining = receivable.remainingBalance;
+    const remaining = payable.remainingBalance;
 
     if (remaining != null && remaining > 0 && remaining < amount) {
       return Number(remaining);
@@ -170,16 +169,16 @@ export class ReceivableListComponent implements OnInit {
     return amount;
   }
 
-  private hasPaymentRecord(receivable: Receivable): boolean {
-    return Boolean(receivable.paid || receivable.paymentDate);
+  private hasPaymentRecord(payable: Payable): boolean {
+    return Boolean(payable.paid || payable.paymentDate);
   }
 
   useDefaultPaymentCharges(): void {
-    if (!this.paymentReceivable) {
+    if (!this.paymentPayable) {
       return;
     }
 
-    this.paymentCharges = this.getDefaultCharges(this.paymentReceivable);
+    this.paymentCharges = this.getDefaultCharges(this.paymentPayable);
     this.paymentChoiceVisible = false;
     this.paymentModalVisible = true;
   }
@@ -189,21 +188,21 @@ export class ReceivableListComponent implements OnInit {
     this.paymentEditChargesVisible = true;
   }
 
-  finishPaymentChargesEdit(charges: ReceivableCharges): void {
+  finishPaymentChargesEdit(charges: PayableCharges): void {
     this.paymentCharges = charges;
     this.paymentEditChargesVisible = false;
     this.paymentModalVisible = true;
   }
 
-  submitPayment(dto: ReceivablePaymentDTO): void {
-    if (!this.paymentReceivable?.id) {
+  submitPayment(dto: PayablePaymentDTO): void {
+    if (!this.paymentPayable?.id) {
       return;
     }
 
-    this.receivableService.pay(this.paymentReceivable.id, dto).subscribe({
+    this.payableService.pay(this.paymentPayable.id, dto).subscribe({
       next: () => {
         this.paymentModalVisible = false;
-        this.paymentReceivable = null;
+        this.paymentPayable = null;
         this.list(this.pagination.page);
         this.messageService.add({ severity: 'success', detail: 'Baixa registrada!' });
       },
@@ -211,29 +210,29 @@ export class ReceivableListComponent implements OnInit {
     });
   }
 
-  private getDefaultCharges(receivable: Receivable): ReceivableCharges {
+  private getDefaultCharges(payable: Payable): PayableCharges {
     return {
-      lateFee: Number(receivable.calculatedLateFee ?? 0),
-      lateInterest: Number(receivable.calculatedLateInterest ?? 0),
+      lateFee: Number(payable.calculatedLateFee ?? 0),
+      lateInterest: Number(payable.calculatedLateInterest ?? 0),
     };
   }
 
-  private isOverdueOpenReceivable(receivable: Receivable): boolean {
-    if (receivable.paid || receivable.canceled || !receivable.dueDate) {
+  private isOverdueOpenPayable(payable: Payable): boolean {
+    if (payable.paid || payable.canceled || !payable.dueDate) {
       return false;
     }
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const dueDate = new Date(receivable.dueDate);
+    const dueDate = new Date(payable.dueDate);
     dueDate.setHours(0, 0, 0, 0);
 
-    return dueDate.getTime() < today.getTime() && this.getReceivableOpenAmount(receivable) > 0;
+    return dueDate.getTime() < today.getTime() && this.getPayableOpenAmount(payable) > 0;
   }
 
-  installment(receivable: Receivable): void {
-    if (!receivable.id) {
+  installment(payable: Payable): void {
+    if (!payable.id) {
       return;
     }
 
@@ -242,8 +241,8 @@ export class ReceivableListComponent implements OnInit {
       return;
     }
 
-    this.receivableService
-      .installment(receivable.id, { installments })
+    this.payableService
+      .installment(payable.id, { installments })
       .subscribe({
         next: () => {
           this.list(this.pagination.page);
@@ -253,63 +252,29 @@ export class ReceivableListComponent implements OnInit {
       });
   }
 
-  generateReceipt(receivable: Receivable): void {
-    if (!receivable.id) {
-      return;
-    }
-
-    this.openPdfPreview(
-      this.receivableService.receipt(receivable.id),
-      'Erro ao gerar recibo.',
-    );
-  }
-
-  generateFiscalCoupon(receivable: Receivable): void {
-    if (!receivable.id) {
-      return;
-    }
-
-    this.openPdfPreview(
-      this.receivableService.fiscalCoupon(receivable.id),
-      'Erro ao gerar cupom fiscal.',
-    );
-  }
-
-  private openPdfPreview(request: Observable<Blob>, fallback: string): void {
-    request.subscribe({
-      next: (pdf) => {
-        const blob = new Blob([pdf], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
-        window.open(url, '_blank');
-        setTimeout(() => URL.revokeObjectURL(url), 60000);
-      },
-      error: (err) => this.showError(err, fallback),
-    });
-  }
-
-  openDetails(receivable: Receivable): void {
-    if (!receivable.id) {
+  openDetails(payable: Payable): void {
+    if (!payable.id) {
       return;
     }
 
     this.detailsVisible = true;
-    this.receivableDetails = null;
+    this.payableDetails = null;
 
-    this.receivableService.findById(receivable.id).subscribe({
+    this.payableService.findById(payable.id).subscribe({
       next: (details) => {
-        this.receivableDetails = ReceivableMapper.fromDetailsDTO(details);
+        this.payableDetails = PayableMapper.fromDetailsDTO(details);
       },
     });
   }
 
-  openOverdueDetails(receivable: Receivable): void {
-    this.overdueReceivable = receivable;
+  openOverdueDetails(payable: Payable): void {
+    this.overduePayable = payable;
     this.overdueVisible = true;
   }
 
-  openFilesModal(receivable: Receivable): void {
-    this.selectedReceivableId = receivable.id;
-    this.selectedReceivableDescription = receivable.description;
+  openFilesModal(payable: Payable): void {
+    this.selectedPayableId = payable.id;
+    this.selectedPayableDescription = payable.description;
     this.filesVisible = true;
   }
 

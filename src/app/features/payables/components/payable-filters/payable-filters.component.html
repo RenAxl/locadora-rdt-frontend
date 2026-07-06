@@ -1,0 +1,148 @@
+<form class="payable-filters" [formGroup]="form" (ngSubmit)="applyFilters()">
+  <div class="payable-filters-grid">
+    <div class="field field-search">
+      <label for="payable-search">Busca</label>
+      <input
+        id="payable-search"
+        type="text"
+        class="form-control"
+        formControlName="search"
+        placeholder="Pesquisar descrição, fornecedor, funcionário, referência ou número da conta"
+      />
+    </div>
+
+    <div class="field field-quick-period">
+      <app-payable-quick-period-filter
+        [startDate]="form.get('startDate')?.value"
+        [endDate]="form.get('endDate')?.value"
+        (periodChange)="onQuickPeriodChange($event)"
+      ></app-payable-quick-period-filter>
+    </div>
+
+    <div class="field">
+      <label for="payable-period-type">Tipo de Período</label>
+      <select id="payable-period-type" class="form-control" formControlName="periodType">
+        <option value="DUE_DATE">Vencimento</option>
+        <option value="PAYMENT_DATE">Pagamento</option>
+        <option value="CREATED_DATE">Cadastro</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="payable-start-date">Data Inicial</label>
+      <input id="payable-start-date" type="date" class="form-control" formControlName="startDate" />
+    </div>
+
+    <div class="field">
+      <label for="payable-end-date">Data Final</label>
+      <input id="payable-end-date" type="date" class="form-control" formControlName="endDate" />
+    </div>
+
+    <div class="field">
+      <label for="payable-status">Status</label>
+      <select id="payable-status" class="form-control" formControlName="status">
+        <option value="ALL">Todos</option>
+        <option value="PENDING">Pendentes</option>
+        <option value="PAID">Pagas</option>
+        <option value="OVERDUE">Vencidas</option>
+        <option value="PARTIALLY_PAID">Pagamento Parcial</option>
+        <option value="CANCELED">Canceladas</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="payable-supplier">Fornecedor</label>
+      <input
+        id="payable-supplier"
+        type="text"
+        class="form-control"
+        list="payable-suppliers"
+        formControlName="supplierSearch"
+        (input)="onSupplierInput()"
+      />
+      <datalist id="payable-suppliers">
+        <option *ngFor="let supplier of suppliers" [value]="supplier.name"></option>
+      </datalist>
+    </div>
+
+    <div class="field">
+      <label for="payable-employee">Funcionário</label>
+      <input
+        id="payable-employee"
+        type="text"
+        class="form-control"
+        list="payable-employees"
+        formControlName="employeeSearch"
+        (input)="onEmployeeInput()"
+      />
+      <datalist id="payable-employees">
+        <option *ngFor="let employee of employees" [value]="employee.name"></option>
+      </datalist>
+    </div>
+
+    <div class="field">
+      <label for="payable-payment-method">Forma de Pagamento</label>
+      <select id="payable-payment-method" class="form-control" formControlName="paymentMethodId">
+        <option [ngValue]="null">Todas</option>
+        <option *ngFor="let method of paymentMethods" [ngValue]="method.id">
+          {{ method.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="payable-payment-frequency">Frequência</label>
+      <select id="payable-payment-frequency" class="form-control" formControlName="paymentFrequencyId">
+        <option [ngValue]="null">Todas</option>
+        <option *ngFor="let frequency of paymentFrequencies" [ngValue]="frequency.id">
+          {{ frequency.frequency }}
+        </option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="payable-minimum-amount">Valor Inicial</label>
+      <input
+        id="payable-minimum-amount"
+        type="number"
+        min="0"
+        step="0.01"
+        class="form-control"
+        formControlName="minimumAmount"
+      />
+    </div>
+
+    <div class="field">
+      <label for="payable-maximum-amount">Valor Final</label>
+      <input
+        id="payable-maximum-amount"
+        type="number"
+        min="0"
+        step="0.01"
+        class="form-control"
+        formControlName="maximumAmount"
+      />
+    </div>
+
+    <div class="field">
+      <label for="payable-sort">Ordenação</label>
+      <select id="payable-sort" class="form-control" formControlName="sort">
+        <option *ngFor="let option of sortOptions" [ngValue]="option">
+          {{ option.label }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div class="payable-filter-actions">
+    <button pButton type="submit" icon="pi pi-search" label="Filtrar"></button>
+    <button
+      pButton
+      type="button"
+      class="p-button-outlined p-button-secondary"
+      icon="pi pi-filter-slash"
+      label="Limpar"
+      (click)="clearFilters()"
+    ></button>
+  </div>
+</form>

@@ -153,45 +153,81 @@
         [disabled]="loading"
         (click)="clearFilters()"
       ></button>
-    </div>
-  </form>
-
-  <form class="report-card voucher-card" [formGroup]="form">
-    <h2>Recibos e Comprovantes</h2>
-
-    <div class="report-grid voucher-grid">
-      <div class="field">
-        <label for="voucher-account-type">Tipo de Conta</label>
-        <select id="voucher-account-type" class="form-control" formControlName="voucherAccountType">
-          <option value="receivable">Conta a Receber</option>
-          <option value="payable">Conta a Pagar</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label for="voucher-account-id">Número da Conta</label>
-        <input id="voucher-account-id" type="number" min="1" class="form-control" formControlName="voucherAccountId" />
-      </div>
-    </div>
-
-    <div class="report-actions">
       <button
         pButton
         type="button"
-        icon="pi pi-file-pdf"
-        label="Gerar PDF"
-        [disabled]="loading"
-        (click)="generateVoucher('pdf')"
-      ></button>
-      <button
-        pButton
-        type="button"
-        icon="pi pi-file-excel"
-        label="Gerar Excel"
-        class="p-button-success"
-        [disabled]="loading"
-        (click)="generateVoucher('xlsx')"
+        icon="pi pi-chart-bar"
+        label="Atualizar Gráfico"
+        class="p-button-outlined"
+        [disabled]="chartLoading"
+        (click)="loadComparison()"
       ></button>
     </div>
   </form>
+
+  <section class="report-card comparison-card">
+    <div class="comparison-header">
+      <div>
+        <h2>Recebimentos / Despesas {{ chartYear }}</h2>
+      </div>
+      <span class="loading-label" *ngIf="chartLoading">Carregando...</span>
+    </div>
+
+    <div class="comparison-summary">
+      <div class="summary-item">
+        <span>Contas à Receber</span>
+        <strong>{{ comparison.receivableTotal | currency:'BRL':'symbol':'1.2-2' }}</strong>
+        <small>{{ comparison.receivableCount }} conta(s)</small>
+      </div>
+      <div class="summary-item">
+        <span>Contas a Pagar</span>
+        <strong>{{ comparison.payableTotal | currency:'BRL':'symbol':'1.2-2' }}</strong>
+        <small>{{ comparison.payableCount }} conta(s)</small>
+      </div>
+      <div class="summary-item balance" [ngClass]="balanceClass">
+        <span>Saldo</span>
+        <strong>{{ comparison.balance | currency:'BRL':'symbol':'1.2-2' }}</strong>
+        <small>Receber - Pagar</small>
+      </div>
+    </div>
+
+    <div class="chart-legend">
+      <span><i class="legend-marker receivable"></i> Contas à Receber</span>
+      <span><i class="legend-marker payable"></i> Contas a Pagar</span>
+    </div>
+
+    <div class="monthly-chart" aria-label="Gráfico mensal de Recebimentos e Despesas">
+      <div class="chart-y-axis">
+        <span>{{ chartTickValue(1) | number:'1.0-0' }}</span>
+        <span>{{ chartTickValue(0.75) | number:'1.0-0' }}</span>
+        <span>{{ chartTickValue(0.5) | number:'1.0-0' }}</span>
+        <span>{{ chartTickValue(0.25) | number:'1.0-0' }}</span>
+        <span>0</span>
+      </div>
+
+      <div class="chart-plot">
+        <div class="grid-line line-100"></div>
+        <div class="grid-line line-75"></div>
+        <div class="grid-line line-50"></div>
+        <div class="grid-line line-25"></div>
+        <div class="grid-line line-0"></div>
+
+        <div class="month-group" *ngFor="let month of comparison.months">
+          <div class="month-bars">
+            <div
+              class="month-column receivable"
+              [style.height]="chartColumnHeight(month.receivableTotal)"
+              [title]="'Contas à Receber: ' + (month.receivableTotal | currency:'BRL':'symbol':'1.2-2')"
+            ></div>
+            <div
+              class="month-column payable"
+              [style.height]="chartColumnHeight(month.payableTotal)"
+              [title]="'Contas a Pagar: ' + (month.payableTotal | currency:'BRL':'symbol':'1.2-2')"
+            ></div>
+          </div>
+          <div class="month-label">{{ month.label }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>

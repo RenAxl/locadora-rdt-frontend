@@ -149,8 +149,7 @@ export const API = {
     ROOT: `${BASE_URL}/reports`,
     GENERATE: (reportType: string, format: string) =>
       `${BASE_URL}/reports/${reportType}/${format}`,
-    VOUCHER: (accountType: string, accountId: number | string, format: string) =>
-      `${BASE_URL}/reports/vouchers/${accountType}/${accountId}/${format}`,
+    COMPARISON: `${BASE_URL}/reports/comparison`,
   },
 
   POSITIONS: {

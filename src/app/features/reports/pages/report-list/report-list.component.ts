@@ -11,6 +11,7 @@ import { PaymentMethodService } from 'src/app/features/payment-methods/services/
 import { SupplierDTO } from 'src/app/features/suppliers/dtos/supplier.dto';
 import { SupplierService } from 'src/app/features/suppliers/services/supplier.service';
 
+import { ReportComparisonDTO } from '../../dtos/report-comparison.dto';
 import { ReportFilterDTO } from '../../dtos/report-filter.dto';
 import { ReportService } from '../../services/report.service';
 
@@ -32,6 +33,16 @@ export class ReportListComponent implements OnInit {
   employees: EmployeeDTO[] = [];
   paymentMethods: PaymentMethodDTO[] = [];
   loading = false;
+  chartLoading = false;
+  comparison: ReportComparisonDTO = {
+    receivableTotal: 0,
+    payableTotal: 0,
+    balance: 0,
+    receivableCount: 0,
+    payableCount: 0,
+    year: new Date().getFullYear(),
+    months: [],
+  };
 
   reportOptions: ReportOption[] = [
     { value: 'receivables', label: 'Contas a Receber', fileName: 'contas-a-receber' },
@@ -66,13 +77,12 @@ export class ReportListComponent implements OnInit {
       minimumAmount: [null],
       maximumAmount: [null],
       year: [new Date().getFullYear()],
-      voucherAccountType: ['receivable'],
-      voucherAccountId: [null],
     });
   }
 
   ngOnInit(): void {
     this.loadOptions();
+    this.loadComparison();
   }
 
   get selectedReportType(): string {
@@ -129,30 +139,6 @@ export class ReportListComponent implements OnInit {
     });
   }
 
-  generateVoucher(format: 'pdf' | 'xlsx'): void {
-    const accountId = Number(this.form.get('voucherAccountId')?.value);
-
-    if (!accountId || accountId <= 0) {
-      this.messageService.add({ severity: 'warn', detail: 'Informe o número da conta.' });
-      return;
-    }
-
-    const accountType = this.form.get('voucherAccountType')?.value || 'receivable';
-    const fileName = `comprovante-${accountType}-${accountId}.${format}`;
-
-    this.loading = true;
-    this.reportService.voucher(accountType, accountId, format).subscribe({
-      next: (blob) => {
-        this.loading = false;
-        this.openOrDownload(blob, format, fileName);
-      },
-      error: (err) => {
-        this.loading = false;
-        this.showError(err, 'Erro ao gerar comprovante.');
-      },
-    });
-  }
-
   clearFilters(): void {
     this.form.reset({
       reportType: 'receivables',
@@ -168,9 +154,79 @@ export class ReportListComponent implements OnInit {
       minimumAmount: null,
       maximumAmount: null,
       year: new Date().getFullYear(),
-      voucherAccountType: 'receivable',
-      voucherAccountId: null,
     });
+    this.loadComparison();
+  }
+
+  loadComparison(): void {
+    const validationMessage = this.validateFilters();
+
+    if (validationMessage) {
+      this.messageService.add({ severity: 'warn', detail: validationMessage });
+      return;
+    }
+
+    this.chartLoading = true;
+    this.reportService.comparison(this.buildFilters()).subscribe({
+      next: (comparison) => {
+        this.chartLoading = false;
+        this.comparison = comparison;
+      },
+      error: (err) => {
+        this.chartLoading = false;
+        this.showError(err, 'Erro ao carregar gráfico.');
+      },
+    });
+  }
+
+  get receivableBarWidth(): string {
+    return this.getBarWidth(this.comparison.receivableTotal);
+  }
+
+  get payableBarWidth(): string {
+    return this.getBarWidth(this.comparison.payableTotal);
+  }
+
+  get chartYear(): number {
+    return this.comparison.year || this.form.get('year')?.value || new Date().getFullYear();
+  }
+
+  get chartMaxValue(): number {
+    const values = this.comparison.months.flatMap((month) => [
+      month.receivableTotal || 0,
+      month.payableTotal || 0,
+    ]);
+    const max = Math.max(...values, 0);
+
+    if (max <= 0) {
+      return 100;
+    }
+
+    return Math.ceil(max / 100) * 100;
+  }
+
+  chartColumnHeight(value: number): string {
+    if (this.chartMaxValue <= 0 || value <= 0) {
+      return '0%';
+    }
+
+    return `${Math.max((value / this.chartMaxValue) * 100, 2)}%`;
+  }
+
+  chartTickValue(multiplier: number): number {
+    return this.chartMaxValue * multiplier;
+  }
+
+  get balanceClass(): string {
+    if (this.comparison.balance > 0) {
+      return 'positive';
+    }
+
+    if (this.comparison.balance < 0) {
+      return 'negative';
+    }
+
+    return 'neutral';
   }
 
   private buildFilters(): ReportFilterDTO {
@@ -254,5 +310,15 @@ export class ReportListComponent implements OnInit {
       summary: 'Erro',
       detail: err?.error?.message || err?.error?.error || fallback,
     });
+  }
+
+  private getBarWidth(value: number): string {
+    const max = Math.max(this.comparison.receivableTotal || 0, this.comparison.payableTotal || 0);
+
+    if (max <= 0) {
+      return '0%';
+    }
+
+    return `${Math.max((value / max) * 100, 4)}%`;
   }
 }

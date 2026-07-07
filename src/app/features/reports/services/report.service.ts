@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API } from 'src/app/core/config/api.config';
 
+import { ReportComparisonDTO } from '../dtos/report-comparison.dto';
 import { ReportFilterDTO } from '../dtos/report-filter.dto';
 
 @Injectable({
@@ -20,10 +21,10 @@ export class ReportService {
     });
   }
 
-  voucher(accountType: string, accountId: number, format: string): Observable<Blob> {
-    return this.http.get(API.REPORTS.VOUCHER(accountType, accountId, format), {
-      responseType: 'blob',
-    });
+  comparison(filters: ReportFilterDTO): Observable<ReportComparisonDTO> {
+    const params = this.buildParams(filters);
+
+    return this.http.get<ReportComparisonDTO>(API.REPORTS.COMPARISON, { params });
   }
 
   download(blob: Blob, fileName: string): void {

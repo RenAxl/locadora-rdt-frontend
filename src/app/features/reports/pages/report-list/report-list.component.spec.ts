@@ -18,7 +18,16 @@ describe('ReportListComponent', () => {
   let messageService: jasmine.SpyObj<MessageService>;
 
   beforeEach(async () => {
-    reportService = jasmine.createSpyObj('ReportService', ['generate', 'voucher', 'download', 'openPdf']);
+    reportService = jasmine.createSpyObj('ReportService', ['generate', 'comparison', 'download', 'openPdf']);
+    reportService.comparison.and.returnValue(of({
+      receivableTotal: 0,
+      payableTotal: 0,
+      balance: 0,
+      receivableCount: 0,
+      payableCount: 0,
+      year: 2026,
+      months: [],
+    }));
     messageService = jasmine.createSpyObj('MessageService', ['add']);
 
     const listService = jasmine.createSpyObj('ListService', ['list']);
@@ -77,11 +86,22 @@ describe('ReportListComponent', () => {
     expect(messageService.add).toHaveBeenCalled();
   });
 
-  it('should show message when voucher account is empty', () => {
-    component.generateVoucher('pdf');
+  it('should load comparison chart data', () => {
+    reportService.comparison.and.returnValue(of({
+      receivableTotal: 100,
+      payableTotal: 40,
+      balance: 60,
+      receivableCount: 2,
+      payableCount: 1,
+      year: 2026,
+      months: [],
+    }));
 
-    expect(reportService.voucher).not.toHaveBeenCalled();
-    expect(messageService.add).toHaveBeenCalled();
+    component.loadComparison();
+
+    expect(component.comparison.receivableTotal).toBe(100);
+    expect(component.comparison.payableTotal).toBe(40);
+    expect(component.balanceClass).toBe('positive');
   });
 
   it('should show error message when generation fails', () => {

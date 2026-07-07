@@ -1,0 +1,197 @@
+<div class="report-page">
+  <div class="report-header">
+    <h1>Relatórios</h1>
+  </div>
+
+  <form class="report-card" [formGroup]="form">
+    <div class="report-grid">
+      <div class="field field-large">
+        <label for="report-type">Relatório</label>
+        <select id="report-type" class="form-control" formControlName="reportType">
+          <option *ngFor="let option of reportOptions" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="field" *ngIf="showAnnualFilter()">
+        <label for="report-year">Ano</label>
+        <input id="report-year" type="number" class="form-control" formControlName="year" />
+      </div>
+
+      <div class="field" *ngIf="showPeriodFilters()">
+        <label for="report-period-type">Tipo de Período</label>
+        <select id="report-period-type" class="form-control" formControlName="periodType">
+          <option value="DUE_DATE">Vencimento</option>
+          <option value="PAYMENT_DATE">Pagamento</option>
+          <option value="CREATED_DATE">Cadastro</option>
+        </select>
+      </div>
+
+      <div class="field" *ngIf="showPeriodFilters()">
+        <label for="report-start-date">Data Inicial</label>
+        <input id="report-start-date" type="date" class="form-control" formControlName="startDate" />
+      </div>
+
+      <div class="field" *ngIf="showPeriodFilters()">
+        <label for="report-end-date">Data Final</label>
+        <input id="report-end-date" type="date" class="form-control" formControlName="endDate" />
+      </div>
+
+      <div class="field" *ngIf="showStatusFilter()">
+        <label for="report-status">Situação</label>
+        <select id="report-status" class="form-control" formControlName="status">
+          <option value="ALL">Todas</option>
+          <option value="PENDING">Em Aberto</option>
+          <option value="PAID">Pago</option>
+          <option value="OVERDUE">Vencido</option>
+          <option value="PARTIALLY_PAID">Pago Parcialmente</option>
+          <option value="CANCELED">Cancelado</option>
+        </select>
+      </div>
+
+      <div class="field field-large" *ngIf="showPeriodFilters()">
+        <label for="report-search">Busca</label>
+        <input
+          id="report-search"
+          type="text"
+          class="form-control"
+          formControlName="search"
+          placeholder="Descrição, referência ou nome"
+        />
+      </div>
+
+      <div class="field" *ngIf="showCustomerFilter()">
+        <label for="report-customer">Cliente</label>
+        <select id="report-customer" class="form-control" formControlName="customerId">
+          <option [ngValue]="null">Todos</option>
+          <option *ngFor="let customer of customers" [ngValue]="customer.id">
+            {{ customer.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="field" *ngIf="showSupplierFilter()">
+        <label for="report-supplier">Fornecedor</label>
+        <select id="report-supplier" class="form-control" formControlName="supplierId">
+          <option [ngValue]="null">Todos</option>
+          <option *ngFor="let supplier of suppliers" [ngValue]="supplier.id">
+            {{ supplier.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="field" *ngIf="showEmployeeFilter()">
+        <label for="report-employee">Funcionário</label>
+        <select id="report-employee" class="form-control" formControlName="employeeId">
+          <option [ngValue]="null">Todos</option>
+          <option *ngFor="let employee of employees" [ngValue]="employee.id">
+            {{ employee.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="field" *ngIf="showPeriodFilters()">
+        <label for="report-payment-method">Forma de Pagamento</label>
+        <select id="report-payment-method" class="form-control" formControlName="paymentMethodId">
+          <option [ngValue]="null">Todas</option>
+          <option *ngFor="let method of paymentMethods" [ngValue]="method.id">
+            {{ method.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="field" *ngIf="showPeriodFilters()">
+        <label for="report-minimum-amount">Valor Inicial</label>
+        <input
+          id="report-minimum-amount"
+          type="number"
+          min="0"
+          step="0.01"
+          class="form-control"
+          formControlName="minimumAmount"
+        />
+      </div>
+
+      <div class="field" *ngIf="showPeriodFilters()">
+        <label for="report-maximum-amount">Valor Final</label>
+        <input
+          id="report-maximum-amount"
+          type="number"
+          min="0"
+          step="0.01"
+          class="form-control"
+          formControlName="maximumAmount"
+        />
+      </div>
+    </div>
+
+    <div class="report-actions">
+      <button
+        pButton
+        type="button"
+        icon="pi pi-file-pdf"
+        label="Gerar PDF"
+        [disabled]="loading"
+        (click)="generate('pdf')"
+      ></button>
+      <button
+        pButton
+        type="button"
+        icon="pi pi-file-excel"
+        label="Gerar Excel"
+        class="p-button-success"
+        [disabled]="loading"
+        (click)="generate('xlsx')"
+      ></button>
+      <button
+        pButton
+        type="button"
+        icon="pi pi-filter-slash"
+        label="Limpar"
+        class="p-button-outlined p-button-secondary"
+        [disabled]="loading"
+        (click)="clearFilters()"
+      ></button>
+    </div>
+  </form>
+
+  <form class="report-card voucher-card" [formGroup]="form">
+    <h2>Recibos e Comprovantes</h2>
+
+    <div class="report-grid voucher-grid">
+      <div class="field">
+        <label for="voucher-account-type">Tipo de Conta</label>
+        <select id="voucher-account-type" class="form-control" formControlName="voucherAccountType">
+          <option value="receivable">Conta a Receber</option>
+          <option value="payable">Conta a Pagar</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="voucher-account-id">Número da Conta</label>
+        <input id="voucher-account-id" type="number" min="1" class="form-control" formControlName="voucherAccountId" />
+      </div>
+    </div>
+
+    <div class="report-actions">
+      <button
+        pButton
+        type="button"
+        icon="pi pi-file-pdf"
+        label="Gerar PDF"
+        [disabled]="loading"
+        (click)="generateVoucher('pdf')"
+      ></button>
+      <button
+        pButton
+        type="button"
+        icon="pi pi-file-excel"
+        label="Gerar Excel"
+        class="p-button-success"
+        [disabled]="loading"
+        (click)="generateVoucher('xlsx')"
+      ></button>
+    </div>
+  </form>
+</div>

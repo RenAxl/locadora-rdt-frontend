@@ -228,6 +228,20 @@ const routes: Routes = [
     component: MainComponent,
     children: [
       {
+        path: 'reports',
+        loadChildren: () =>
+          import('./features/reports/reports.module').then(
+            (m) => m.ReportsModule,
+          ),
+      },
+    ],
+  },
+
+  {
+    path: '',
+    component: MainComponent,
+    children: [
+      {
         path: 'suppliers',
         canActivate: [AuthGuard],
         loadChildren: () =>

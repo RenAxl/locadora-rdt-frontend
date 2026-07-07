@@ -40,6 +40,52 @@
           <span>Home</span>
         </a>
       </li>
+
+      <li class="treeview">
+        <a
+          class="d-flex align-items-center justify-content-between nav-link px-3 collapsed"
+          data-bs-toggle="collapse"
+          data-bs-target="#submenuAdministracaoDesktop"
+        >
+          <span class="d-flex align-items-center">
+            <i class="fa-solid fa-user-shield me-2"></i>
+            <span>Administração</span>
+          </span>
+
+          <span>
+            <i class="fa-solid fa-caret-right submenu-toggle-icon closed"></i>
+            <i class="fa-solid fa-caret-down submenu-toggle-icon open"></i>
+          </span>
+        </a>
+
+        <ul
+          class="treeview-menu collapse list-unstyled mb-0"
+          id="submenuAdministracaoDesktop"
+        >
+          <li>
+            <a
+              routerLink="/users"
+              routerLinkActive="active"
+              class="d-flex align-items-center nav-link px-4"
+            >
+              <i class="fa-solid fa-user me-2"></i>
+              <span>Usuários</span>
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/roles"
+              routerLinkActive="active"
+              class="d-flex align-items-center nav-link px-4"
+              *ngIf="hasAuthority('ROLE_READ')"
+            >
+              <i class="fa-solid fa-user-shield me-2"></i>
+              <span>Perfis</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
       <li class="treeview">
         <a
           class="d-flex align-items-center justify-content-between nav-link px-3 collapsed"
@@ -63,27 +109,6 @@
         >
           <li>
             <a
-              routerLink="/users"
-              routerLinkActive="active"
-              class="d-flex align-items-center nav-link px-4"
-            >
-              <i class="fa-solid fa-user me-2"></i>
-              <span>Usuários</span>
-            </a>
-          </li>
-          <li>
-            <a
-              routerLink="/roles"
-              routerLinkActive="active"
-              class="d-flex align-items-center nav-link px-4"
-              *ngIf="hasAuthority('ROLE_READ')"
-            >
-              <i class="fa-solid fa-user-shield me-2"></i>
-              <span>Perfis</span>
-            </a>
-          </li>
-          <li>
-            <a
               routerLink="/customers"
               routerLinkActive="active"
               class="d-flex align-items-center nav-link px-4"
@@ -105,26 +130,6 @@
           </li>
           <li>
             <a
-              routerLink="/positions"
-              routerLinkActive="active"
-              class="d-flex align-items-center nav-link px-4"
-            >
-              <i class="fa-solid fa-briefcase me-2"></i>
-              <span>Cargos</span>
-            </a>
-          </li>
-          <li>
-            <a
-              routerLink="/departments"
-              routerLinkActive="active"
-              class="d-flex align-items-center nav-link px-4"
-            >
-              <i class="fa-solid fa-building me-2"></i>
-              <span>Setores</span>
-            </a>
-          </li>
-          <li>
-            <a
               routerLink="/employees"
               routerLinkActive="active"
               class="d-flex align-items-center nav-link px-4"
@@ -133,36 +138,30 @@
               <span>Funcionários</span>
             </a>
           </li>
-          <li>
-            <a
-              routerLink="/payment-methods"
-              routerLinkActive="active"
-              class="d-flex align-items-center nav-link px-4"
-            >
-              <i class="fa-solid fa-credit-card me-2"></i>
-              <span>Formas de Pagamento</span>
-            </a>
-          </li>
-          <li>
-            <a
-              routerLink="/payment-frequencies"
-              routerLinkActive="active"
-              class="d-flex align-items-center nav-link px-4"
-            >
-              <i class="fa-solid fa-calendar-days me-2"></i>
-              <span>Frequências de Pagamento</span>
-            </a>
-          </li>
-          <li>
-            <a
-              routerLink="/financial-settings"
-              routerLinkActive="active"
-              class="d-flex align-items-center nav-link px-4"
-            >
-              <i class="fa-solid fa-percent me-2"></i>
-              <span>Configurações Financeiras</span>
-            </a>
-          </li>
+        </ul>
+      </li>
+
+      <li class="treeview">
+        <a
+          class="d-flex align-items-center justify-content-between nav-link px-3 collapsed"
+          data-bs-toggle="collapse"
+          data-bs-target="#submenuFinanceiroDesktop"
+        >
+          <span class="d-flex align-items-center">
+            <i class="fa-solid fa-file-invoice-dollar me-2"></i>
+            <span>Financeiro</span>
+          </span>
+
+          <span>
+            <i class="fa-solid fa-caret-right submenu-toggle-icon closed"></i>
+            <i class="fa-solid fa-caret-down submenu-toggle-icon open"></i>
+          </span>
+        </a>
+
+        <ul
+          class="treeview-menu collapse list-unstyled mb-0"
+          id="submenuFinanceiroDesktop"
+        >
           <li>
             <a
               routerLink="/receivables"
@@ -183,7 +182,48 @@
               <span>Contas a Pagar</span>
             </a>
           </li>
+          <li>
+            <a
+              routerLink="/payment-methods"
+              routerLinkActive="active"
+              class="d-flex align-items-center nav-link px-4"
+            >
+              <i class="fa-solid fa-credit-card me-2"></i>
+              <span>Formas de Pagamento</span>
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/payment-frequencies"
+              routerLinkActive="active"
+              class="d-flex align-items-center nav-link px-4"
+            >
+              <i class="fa-solid fa-calendar-days me-2"></i>
+              <span>Frequências</span>
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/financial-settings"
+              routerLinkActive="active"
+              class="d-flex align-items-center nav-link px-4"
+            >
+              <i class="fa-solid fa-percent me-2"></i>
+              <span>Configurações Financeiras</span>
+            </a>
+          </li>
         </ul>
+      </li>
+
+      <li class="treeview">
+        <a
+          routerLink="/reports"
+          routerLinkActive="active"
+          class="d-flex align-items-center nav-link px-3"
+        >
+          <i class="fa-solid fa-chart-column me-2"></i>
+          <span>Relatórios</span>
+        </a>
       </li>
     </ul>
   </nav>
@@ -233,11 +273,11 @@
         <a
           class="d-flex align-items-center justify-content-between nav-link px-3 collapsed"
           data-bs-toggle="collapse"
-          data-bs-target="#submenuCadastrosMobile"
+          data-bs-target="#submenuAdministracaoMobile"
         >
           <span class="d-flex align-items-center">
-            <i class="fa-solid fa-layer-group me-2"></i>
-            <span>Cadastros</span>
+            <i class="fa-solid fa-user-shield me-2"></i>
+            <span>Administração</span>
           </span>
 
           <span>
@@ -248,7 +288,7 @@
 
         <ul
           class="treeview-menu collapse list-unstyled mb-0"
-          id="submenuCadastrosMobile"
+          id="submenuAdministracaoMobile"
         >
           <li>
             <a
@@ -271,6 +311,30 @@
               <span>Perfis</span>
             </a>
           </li>
+        </ul>
+      </li>
+
+      <li class="treeview">
+        <a
+          class="d-flex align-items-center justify-content-between nav-link px-3 collapsed"
+          data-bs-toggle="collapse"
+          data-bs-target="#submenuCadastrosMobile"
+        >
+          <span class="d-flex align-items-center">
+            <i class="fa-solid fa-layer-group me-2"></i>
+            <span>Cadastros</span>
+          </span>
+
+          <span>
+            <i class="fa-solid fa-caret-right submenu-toggle-icon closed"></i>
+            <i class="fa-solid fa-caret-down submenu-toggle-icon open"></i>
+          </span>
+        </a>
+
+        <ul
+          class="treeview-menu collapse list-unstyled mb-0"
+          id="submenuCadastrosMobile"
+        >
           <li>
             <a
               routerLink="/customers"
@@ -294,26 +358,6 @@
           </li>
           <li>
             <a
-              routerLink="/positions"
-              routerLinkActive="active"
-              class="d-flex align-items-center nav-link px-4"
-            >
-              <i class="fa-solid fa-briefcase me-2"></i>
-              <span>Cargos</span>
-            </a>
-          </li>
-          <li>
-            <a
-              routerLink="/departments"
-              routerLinkActive="active"
-              class="d-flex align-items-center nav-link px-4"
-            >
-              <i class="fa-solid fa-building me-2"></i>
-              <span>Setores</span>
-            </a>
-          </li>
-          <li>
-            <a
               routerLink="/employees"
               routerLinkActive="active"
               class="d-flex align-items-center nav-link px-4"
@@ -322,36 +366,30 @@
               <span>Funcionários</span>
             </a>
           </li>
-          <li>
-            <a
-              routerLink="/payment-methods"
-              routerLinkActive="active"
-              class="d-flex align-items-center nav-link px-4"
-            >
-              <i class="fa-solid fa-credit-card me-2"></i>
-              <span>Formas de Pagamento</span>
-            </a>
-          </li>
-          <li>
-            <a
-              routerLink="/payment-frequencies"
-              routerLinkActive="active"
-              class="d-flex align-items-center nav-link px-4"
-            >
-              <i class="fa-solid fa-calendar-days me-2"></i>
-              <span>Frequências de Pagamento</span>
-            </a>
-          </li>
-          <li>
-            <a
-              routerLink="/financial-settings"
-              routerLinkActive="active"
-              class="d-flex align-items-center nav-link px-4"
-            >
-              <i class="fa-solid fa-percent me-2"></i>
-              <span>Configurações Financeiras</span>
-            </a>
-          </li>
+        </ul>
+      </li>
+
+      <li class="treeview">
+        <a
+          class="d-flex align-items-center justify-content-between nav-link px-3 collapsed"
+          data-bs-toggle="collapse"
+          data-bs-target="#submenuFinanceiroMobile"
+        >
+          <span class="d-flex align-items-center">
+            <i class="fa-solid fa-file-invoice-dollar me-2"></i>
+            <span>Financeiro</span>
+          </span>
+
+          <span>
+            <i class="fa-solid fa-caret-right submenu-toggle-icon closed"></i>
+            <i class="fa-solid fa-caret-down submenu-toggle-icon open"></i>
+          </span>
+        </a>
+
+        <ul
+          class="treeview-menu collapse list-unstyled mb-0"
+          id="submenuFinanceiroMobile"
+        >
           <li>
             <a
               routerLink="/receivables"
@@ -372,7 +410,48 @@
               <span>Contas a Pagar</span>
             </a>
           </li>
+          <li>
+            <a
+              routerLink="/payment-methods"
+              routerLinkActive="active"
+              class="d-flex align-items-center nav-link px-4"
+            >
+              <i class="fa-solid fa-credit-card me-2"></i>
+              <span>Formas de Pagamento</span>
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/payment-frequencies"
+              routerLinkActive="active"
+              class="d-flex align-items-center nav-link px-4"
+            >
+              <i class="fa-solid fa-calendar-days me-2"></i>
+              <span>Frequências</span>
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/financial-settings"
+              routerLinkActive="active"
+              class="d-flex align-items-center nav-link px-4"
+            >
+              <i class="fa-solid fa-percent me-2"></i>
+              <span>Configurações Financeiras</span>
+            </a>
+          </li>
         </ul>
+      </li>
+
+      <li class="treeview">
+        <a
+          routerLink="/reports"
+          routerLinkActive="active"
+          class="d-flex align-items-center nav-link px-3"
+        >
+          <i class="fa-solid fa-chart-column me-2"></i>
+          <span>Relatórios</span>
+        </a>
       </li>
     </ul>
   </nav>

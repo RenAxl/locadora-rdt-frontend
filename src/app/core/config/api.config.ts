@@ -145,6 +145,14 @@ export const API = {
     },
   },
 
+  REPORTS: {
+    ROOT: `${BASE_URL}/reports`,
+    GENERATE: (reportType: string, format: string) =>
+      `${BASE_URL}/reports/${reportType}/${format}`,
+    VOUCHER: (accountType: string, accountId: number | string, format: string) =>
+      `${BASE_URL}/reports/vouchers/${accountType}/${accountId}/${format}`,
+  },
+
   POSITIONS: {
     ROOT: `${BASE_URL}/positions`,
     BY_ID: (id: number | string) => `${BASE_URL}/positions/${id}`,

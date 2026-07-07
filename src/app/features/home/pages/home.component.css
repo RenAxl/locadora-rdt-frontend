@@ -187,10 +187,21 @@
 }
 
 .financial-card {
+  position: relative;
+  overflow: hidden;
   background: #ffffff;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 24px;
+  border: 1px solid transparent;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  will-change: transform;
+}
+
+.financial-card:hover {
+  transform: var(--lift);
+  box-shadow: var(--shadowHover);
+  border-color: transparent;
 }
 
 .financial-header {
@@ -210,6 +221,12 @@
   font-weight: 800;
   letter-spacing: 0.02em;
   text-transform: uppercase;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.financial-card:hover .financial-header h2 {
+  color: #0b1726;
+  border-left-color: #ea580c;
 }
 
 .loading-label {
@@ -229,6 +246,18 @@
   border-radius: 8px;
   padding: 16px;
   background: #f8fafc;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.financial-card:hover .summary-item {
+  background: #ffffff;
+  border-color: #d7e2ee;
+  box-shadow: 0 10px 24px rgba(15, 35, 56, 0.08);
+}
+
+.summary-item:hover {
+  transform: translateY(-4px);
+  border-color: #d7e2ee;
 }
 
 .summary-item span,
@@ -367,7 +396,18 @@
   min-height: 0;
   border-radius: 4px 4px 0 0;
   box-shadow: 0 8px 18px rgba(15, 35, 56, 0.12);
-  transition: height 180ms ease;
+  transition: height 180ms ease, transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+  transform-origin: bottom;
+}
+
+.financial-card:hover .month-column {
+  filter: saturate(1.08);
+  box-shadow: 0 10px 20px rgba(15, 35, 56, 0.16);
+}
+
+.month-group:hover .month-column {
+  transform: scaleY(1.04);
+  filter: brightness(1.04) saturate(1.12);
 }
 
 .month-label {

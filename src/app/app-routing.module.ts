@@ -158,6 +158,34 @@ const routes: Routes = [
     component: MainComponent,
     children: [
       {
+        path: 'rental/categories',
+        loadChildren: () =>
+          import('./features/rental/categories/categories.module').then(
+            (m) => m.CategoriesModule,
+          ),
+      },
+    ],
+  },
+
+  {
+    path: '',
+    component: MainComponent,
+    children: [
+      {
+        path: 'rental/rentaltypes',
+        loadChildren: () =>
+          import('./features/rental/rentaltypes/rentaltypes.module').then(
+            (m) => m.RentalTypesModule,
+          ),
+      },
+    ],
+  },
+
+  {
+    path: '',
+    component: MainComponent,
+    children: [
+      {
         path: 'payment-methods',
         loadChildren: () =>
           import('./features/payment-methods/payment-methods.module').then(

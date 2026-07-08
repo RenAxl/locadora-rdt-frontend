@@ -88,6 +88,26 @@ export const API = {
     },
   },
 
+  RENTAL: {
+    CATEGORIES: {
+      ROOT: `${BASE_URL}/rental/categories`,
+      BY_ID: (id: number | string) => `${BASE_URL}/rental/categories/${id}`,
+      IMAGE: (id: number | string) =>
+        `${BASE_URL}/rental/categories/${id}/image`,
+      DELETE_ALL: `${BASE_URL}/rental/categories/all`,
+      CHANGE_ACTIVE: (id: number | string) =>
+        `${BASE_URL}/rental/categories/${id}/active`,
+    },
+    RENTAL_TYPES: {
+      ROOT: `${BASE_URL}/rental/rentaltypes`,
+      BY_ID: (id: number | string) =>
+        `${BASE_URL}/rental/rentaltypes/${id}`,
+      DELETE_ALL: `${BASE_URL}/rental/rentaltypes/all`,
+      CHANGE_ACTIVE: (id: number | string) =>
+        `${BASE_URL}/rental/rentaltypes/${id}/active`,
+    },
+  },
+
   PAYMENT_METHODS: {
     ROOT: `${BASE_URL}/payment-methods`,
     BY_ID: (id: number | string) => `${BASE_URL}/payment-methods/${id}`,

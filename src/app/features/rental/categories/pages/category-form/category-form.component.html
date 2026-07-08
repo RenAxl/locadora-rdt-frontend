@@ -1,0 +1,111 @@
+<div class="category-form-container">
+  <div class="category-card">
+    <form #categoryForm="ngForm" (ngSubmit)="save(categoryForm)">
+      <div class="col-12 mb-3">
+        <h1>Dados da Categoria</h1>
+      </div>
+
+      <div class="row g-3 category-form-inputs">
+        <div class="col-12">
+          <label class="form-label-custom">Nome</label>
+          <input
+            pInputText
+            placeholder="Nome"
+            type="text"
+            name="name"
+            [(ngModel)]="category.name"
+            #name="ngModel"
+            required
+            minlength="3"
+            maxlength="60"
+            class="form-control"
+          />
+
+          <app-message
+            [control]="name"
+            error="required"
+            text="Informe o nome da categoria"
+          ></app-message>
+
+          <app-message
+            [control]="name"
+            error="minlength"
+            text="Mínimo de {{
+              name.errors?.['minlength']?.requiredLength
+            }} caracteres"
+          ></app-message>
+        </div>
+
+        <div class="col-12">
+          <div class="category-image-section">
+            <div class="category-image-area">
+              <div class="category-image-frame">
+                <ng-container *ngIf="imagePreviewUrl; else noImage">
+                  <img
+                    class="category-image"
+                    [src]="imagePreviewUrl"
+                    alt="Imagem da categoria"
+                  />
+                </ng-container>
+
+                <ng-template #noImage>
+                  <div class="category-image-placeholder" aria-label="Sem imagem">
+                    <i class="pi pi-tags category-image-icon"></i>
+                  </div>
+                </ng-template>
+              </div>
+
+              <div class="category-image-meta">
+                <div class="category-image-title">Imagem da categoria</div>
+
+                <div class="category-image-subtitle">
+                  Adicione uma imagem opcional para identificação. Formatos
+                  aceitos: JPG, PNG ou WEBP com até 2MB.
+                </div>
+
+                <div class="category-image-actions">
+                  <label class="upload-btn" for="image">
+                    <i class="pi pi-upload upload-btn-icon"></i>
+                    <span>Selecionar imagem</span>
+                  </label>
+
+                  <input
+                    id="image"
+                    type="file"
+                    name="image"
+                    accept="image/png,image/jpeg,image/webp"
+                    (change)="onImageSelected($event)"
+                    class="upload-input"
+                  />
+
+                  <span class="file-chip" *ngIf="selectedImageName">
+                    {{ selectedImageName }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="category-form-buttons mt-4">
+        <button
+          type="submit"
+          [disabled]="categoryForm.invalid"
+          class="btn btn-primary category-form-button"
+        >
+          SALVAR
+        </button>
+
+        <a routerLink="/rental/categories">
+          <button
+            type="button"
+            class="btn btn-outline-danger category-form-button"
+          >
+            CANCELAR
+          </button>
+        </a>
+      </div>
+    </form>
+  </div>
+</div>

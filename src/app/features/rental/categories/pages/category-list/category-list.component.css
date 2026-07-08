@@ -1,0 +1,133 @@
+.category-card {
+  padding: 20px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+}
+
+.btn-crud-action {
+  width: 100%;
+  height: 50px;
+  border-radius: 10px;
+  font-size: 16px;
+  letter-spacing: -0.015em;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.category-actions-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.action-link {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+}
+
+.category-image {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.category-image-placeholder {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: rgba(11, 30, 57, 0.06);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.category-image-icon {
+  font-size: 20px;
+  opacity: 0.6;
+}
+
+:host ::ng-deep .p-datatable thead th {
+  background: #2f3a45;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.col-image {
+  text-align: center;
+}
+
+.actions {
+  width: 120px;
+}
+
+.col-actions {
+  white-space: nowrap;
+}
+
+.actions-wrap {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  align-items: center;
+}
+
+:host ::ng-deep .row-inactive td {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+:host ::ng-deep .row-inactive td:not(.col-actions) {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+:host ::ng-deep .row-inactive td:not(.col-actions) .p-column-title {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+:host ::ng-deep .row-inactive .category-image {
+  filter: grayscale(100%);
+  opacity: 0.8;
+}
+
+@media (min-width: 768px) {
+  .category-filter-container {
+    display: flex;
+    margin-bottom: 20px;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .category-actions-group {
+    flex-direction: row;
+    width: auto;
+    gap: 12px;
+  }
+
+  .btn-crud-action {
+    width: auto;
+    height: 60px;
+    margin-bottom: 0;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 767px) {
+  .btn-crud-action {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.85rem;
+    line-height: 1.1;
+    width: auto;
+    height: 40px;
+    margin-bottom: 0;
+  }
+
+  .category-actions-group {
+    flex-direction: row;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+}

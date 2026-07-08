@@ -1,0 +1,90 @@
+<div class="rental-type-form-container">
+  <div class="rental-type-card">
+    <form #rentalTypeForm="ngForm" (ngSubmit)="save(rentalTypeForm)">
+      <div class="col-12 mb-3">
+        <h1>Dados do Tipo de Locação</h1>
+      </div>
+
+      <div class="row g-3 rental-type-form-inputs">
+        <div class="col-12 col-lg-6">
+          <label class="form-label-custom">Nome</label>
+          <input
+            pInputText
+            placeholder="Nome"
+            type="text"
+            name="name"
+            [(ngModel)]="rentalType.name"
+            #name="ngModel"
+            required
+            minlength="3"
+            maxlength="60"
+            class="form-control"
+          />
+
+          <app-message
+            [control]="name"
+            error="required"
+            text="Informe o nome do tipo de locação"
+          ></app-message>
+
+          <app-message
+            [control]="name"
+            error="minlength"
+            text="Mínimo de {{
+              name.errors?.['minlength']?.requiredLength
+            }} caracteres"
+          ></app-message>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <label class="form-label-custom">Tipo</label>
+          <input
+            pInputText
+            placeholder="Ex.: HORA, DIA, MÊS"
+            type="text"
+            name="type"
+            [(ngModel)]="rentalType.type"
+            #type="ngModel"
+            required
+            minlength="2"
+            maxlength="30"
+            class="form-control"
+          />
+
+          <app-message
+            [control]="type"
+            error="required"
+            text="Informe o tipo de locação"
+          ></app-message>
+
+          <app-message
+            [control]="type"
+            error="minlength"
+            text="Mínimo de {{
+              type.errors?.['minlength']?.requiredLength
+            }} caracteres"
+          ></app-message>
+        </div>
+      </div>
+
+      <div class="rental-type-form-buttons mt-4">
+        <button
+          type="submit"
+          [disabled]="rentalTypeForm.invalid"
+          class="btn btn-primary rental-type-form-button"
+        >
+          SALVAR
+        </button>
+
+        <a routerLink="/rental/rentaltypes">
+          <button
+            type="button"
+            class="btn btn-outline-danger rental-type-form-button"
+          >
+            CANCELAR
+          </button>
+        </a>
+      </div>
+    </form>
+  </div>
+</div>

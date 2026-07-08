@@ -1,0 +1,129 @@
+<div class="category-filter-container">
+  <div class="category-actions-group">
+    <a routerLink="/rental/categories/create" class="action-link">
+      <button class="btn btn-primary text-white btn-crud-action">
+        NOVA CATEGORIA
+      </button>
+    </a>
+    <button
+      *ngIf="selectedCategoryIds.length > 0"
+      class="btn btn-danger text-white btn-crud-action"
+      type="button"
+      (click)="deleteSelectedCategories()"
+    >
+      EXCLUIR CATEGORIAS
+    </button>
+  </div>
+
+  <app-name-filter
+    text="Digite o nome da categoria"
+    (search)="searchCategory($event)"
+  ></app-name-filter>
+</div>
+
+<div class="category-card">
+  <div class="grid">
+    <div class="col-12">
+      <p-table
+        [value]="categories"
+        dataKey="id"
+        (onRowSelect)="onRowSelect($event)"
+        (onRowUnselect)="onRowUnselect($event)"
+        responsiveLayout="stack"
+        breakpoint="991px"
+        [paginator]="true"
+        [rows]="pagination.linesPerPage"
+        [lazy]="true"
+        [totalRecords]="totalElements"
+        (onLazyLoad)="changePage($event)"
+        #categoryTable
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th></th>
+            <th>Nome</th>
+            <th>Imagem</th>
+            <th class="actions"></th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-category>
+          <tr [ngClass]="{ 'row-inactive': category?.active === false }">
+            <td>
+              <p-tableCheckbox [value]="category"></p-tableCheckbox>
+            </td>
+
+            <td class="columns">
+              <span class="p-column-title">Nome:</span>
+              {{ category.name }}
+            </td>
+
+            <td class="columns col-image">
+              <span class="p-column-title">Imagem:</span>
+              <ng-container *ngIf="imageMap[category.id!]; else noImage">
+                <img
+                  class="category-image"
+                  [src]="imageMap[category.id!]"
+                  alt="Imagem da categoria"
+                />
+              </ng-container>
+
+              <ng-template #noImage>
+                <div class="category-image-placeholder">
+                  <i class="pi pi-tags category-image-icon"></i>
+                </div>
+              </ng-template>
+            </td>
+
+            <td class="col-actions">
+              <div class="actions-wrap">
+                <a
+                  pButton
+                  class="p-button-rounded p-button-text"
+                  icon="pi pi-pencil"
+                  pTooltip="Atualizar categoria"
+                  tooltipPosition="top"
+                  [routerLink]="['/rental/categories/', category.id, 'edit']"
+                ></a>
+
+                <button
+                  pButton
+                  class="p-button-rounded p-button-text p-button-danger"
+                  icon="pi pi-trash"
+                  pTooltip="Excluir categoria"
+                  tooltipPosition="top"
+                  (click)="delete(category)"
+                ></button>
+
+                <button
+                  pButton
+                  class="p-button-rounded p-button-text"
+                  icon="pi pi-eye"
+                  pTooltip="Detalhamento da Categoria"
+                  tooltipPosition="top"
+                  (click)="openDetails(category)"
+                ></button>
+
+                <button
+                  pButton
+                  class="p-button-rounded p-button-text p-button-warning"
+                  [icon]="category.active ? 'pi pi-ban' : 'pi pi-check'"
+                  pTooltip="Ativar / Desativar Categoria"
+                  tooltipPosition="top"
+                  (click)="changeActive(category)"
+                ></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <app-category-details-modal
+        [visible]="detailsVisible"
+        (visibleChange)="detailsVisible = $event"
+        [title]="'Detalhamento da Categoria'"
+        [category]="categoryDetails"
+      ></app-category-details-modal>
+    </div>
+  </div>
+</div>

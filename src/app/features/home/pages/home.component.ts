@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ReportComparisonDTO } from '../../reports/dtos/report-comparison.dto';
-import { ReportService } from '../../reports/services/report.service';
+import { ReportComparisonDTO } from '../../reports/financial-reports/dtos/report-comparison.dto';
+import { ReportService } from '../../reports/financial-reports/services/report.service';
 
 @Component({
   selector: 'app-home',

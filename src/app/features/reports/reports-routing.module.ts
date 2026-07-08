@@ -1,12 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { ReportListComponent } from './pages/report-list/report-list.component';
-
 const routes: Routes = [
   {
     path: '',
-    component: ReportListComponent,
+    redirectTo: 'financial-reports',
+    pathMatch: 'full',
+  },
+  {
+    path: 'financial-reports',
+    loadChildren: () =>
+      import('./financial-reports/financial-reports.module').then(
+        (m) => m.FinancialReportsModule,
+      ),
   },
 ];
 

@@ -146,10 +146,10 @@ export const API = {
   },
 
   REPORTS: {
-    ROOT: `${BASE_URL}/reports`,
+    ROOT: `${BASE_URL}/reports/financial-reports`,
     GENERATE: (reportType: string, format: string) =>
-      `${BASE_URL}/reports/${reportType}/${format}`,
-    COMPARISON: `${BASE_URL}/reports/comparison`,
+      `${BASE_URL}/reports/financial-reports/${reportType}/${format}`,
+    COMPARISON: `${BASE_URL}/reports/financial-reports/comparison`,
   },
 
   POSITIONS: {

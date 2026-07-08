@@ -217,13 +217,36 @@
 
       <li class="treeview">
         <a
-          routerLink="/reports"
-          routerLinkActive="active"
-          class="d-flex align-items-center nav-link px-3"
+          class="d-flex align-items-center justify-content-between nav-link px-3 collapsed"
+          data-bs-toggle="collapse"
+          data-bs-target="#submenuRelatoriosDesktop"
         >
-          <i class="fa-solid fa-chart-column me-2"></i>
-          <span>Relatórios</span>
+          <span class="d-flex align-items-center">
+            <i class="fa-solid fa-chart-column me-2"></i>
+            <span>Relatórios</span>
+          </span>
+
+          <span>
+            <i class="fa-solid fa-caret-right submenu-toggle-icon closed"></i>
+            <i class="fa-solid fa-caret-down submenu-toggle-icon open"></i>
+          </span>
         </a>
+
+        <ul
+          class="treeview-menu collapse list-unstyled mb-0"
+          id="submenuRelatoriosDesktop"
+        >
+          <li>
+            <a
+              routerLink="/reports/financial-reports"
+              routerLinkActive="active"
+              class="d-flex align-items-center nav-link px-4"
+            >
+              <i class="fa-solid fa-chart-line me-2"></i>
+              <span>Relatórios Financeiros</span>
+            </a>
+          </li>
+        </ul>
       </li>
     </ul>
   </nav>
@@ -445,13 +468,36 @@
 
       <li class="treeview">
         <a
-          routerLink="/reports"
-          routerLinkActive="active"
-          class="d-flex align-items-center nav-link px-3"
+          class="d-flex align-items-center justify-content-between nav-link px-3 collapsed"
+          data-bs-toggle="collapse"
+          data-bs-target="#submenuRelatoriosMobile"
         >
-          <i class="fa-solid fa-chart-column me-2"></i>
-          <span>Relatórios</span>
+          <span class="d-flex align-items-center">
+            <i class="fa-solid fa-chart-column me-2"></i>
+            <span>Relatórios</span>
+          </span>
+
+          <span>
+            <i class="fa-solid fa-caret-right submenu-toggle-icon closed"></i>
+            <i class="fa-solid fa-caret-down submenu-toggle-icon open"></i>
+          </span>
         </a>
+
+        <ul
+          class="treeview-menu collapse list-unstyled mb-0"
+          id="submenuRelatoriosMobile"
+        >
+          <li>
+            <a
+              routerLink="/reports/financial-reports"
+              routerLinkActive="active"
+              class="d-flex align-items-center nav-link px-4"
+            >
+              <i class="fa-solid fa-chart-line me-2"></i>
+              <span>Relatórios Financeiros</span>
+            </a>
+          </li>
+        </ul>
       </li>
     </ul>
   </nav>

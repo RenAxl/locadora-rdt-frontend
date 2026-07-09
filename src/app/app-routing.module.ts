@@ -186,6 +186,20 @@ const routes: Routes = [
     component: MainComponent,
     children: [
       {
+        path: 'items',
+        loadChildren: () =>
+          import('./features/items/items.module').then(
+            (m) => m.ItemsModule,
+          ),
+      },
+    ],
+  },
+
+  {
+    path: '',
+    component: MainComponent,
+    children: [
+      {
         path: 'payment-methods',
         loadChildren: () =>
           import('./features/payment-methods/payment-methods.module').then(

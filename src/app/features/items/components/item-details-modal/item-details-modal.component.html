@@ -1,0 +1,81 @@
+<p-dialog
+  [header]="title"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '760px', maxWidth: '95vw' }"
+  (onHide)="close()"
+>
+  <div class="details-grid" *ngIf="item; else loading">
+    <div class="wide">
+      <span>Nome</span>
+      <strong>{{ item.name || "-" }}</strong>
+    </div>
+    <div>
+      <span>Categoria</span>
+      <strong>{{ item.category?.name || "-" }}</strong>
+    </div>
+    <div>
+      <span>Tipo de locação</span>
+      <strong>{{ item.rentalType?.name || "-" }}</strong>
+    </div>
+    <div>
+      <span>Preço</span>
+      <strong>{{
+        item.price != null
+          ? (item.price | currency: "BRL":"symbol":"1.2-2":"pt-BR")
+          : "-"
+      }}</strong>
+    </div>
+    <div>
+      <span>Quantidade</span>
+      <strong>{{ item.quantity ?? "-" }}</strong>
+    </div>
+    <div>
+      <span>Quantidade alugada</span>
+      <strong>{{ item.rentedQuantity ?? "-" }}</strong>
+    </div>
+    <div>
+      <span>Ativo</span>
+      <strong>{{ getActiveLabel(item.active) }}</strong>
+    </div>
+    <div>
+      <span>Data cadastro</span>
+      <strong>{{
+        item.createdAt ? (item.createdAt | date: "dd/MM/yyyy") : "-"
+      }}</strong>
+    </div>
+    <div>
+      <span>Data atualização</span>
+      <strong>{{
+        item.updatedAt ? (item.updatedAt | date: "dd/MM/yyyy") : "-"
+      }}</strong>
+    </div>
+    <div>
+      <span>Criado por</span>
+      <strong>{{ item.createdBy ?? "-" }}</strong>
+    </div>
+    <div>
+      <span>Atualizado por</span>
+      <strong>{{ item.updatedBy ?? "-" }}</strong>
+    </div>
+    <div class="wide image">
+      <span>Imagem</span>
+      <strong>
+        <ng-container *ngIf="imagePreviewUrl; else noImage">
+          <img
+            [src]="imagePreviewUrl"
+            alt="Imagem do item"
+            (error)="onImgError()"
+          />
+        </ng-container>
+        <ng-template #noImage>
+          <span class="image-placeholder">Sem imagem</span>
+        </ng-template>
+      </strong>
+    </div>
+  </div>
+
+  <ng-template #loading>
+    <div class="empty">Carregando...</div>
+  </ng-template>
+</p-dialog>

@@ -106,6 +106,14 @@ export const API = {
       CHANGE_ACTIVE: (id: number | string) =>
         `${BASE_URL}/rental/rentaltypes/${id}/active`,
     },
+    ITEMS: {
+      ROOT: `${BASE_URL}/rental/items`,
+      BY_ID: (id: number | string) => `${BASE_URL}/rental/items/${id}`,
+      IMAGE: (id: number | string) => `${BASE_URL}/rental/items/${id}/image`,
+      DELETE_ALL: `${BASE_URL}/rental/items/all`,
+      CHANGE_ACTIVE: (id: number | string) =>
+        `${BASE_URL}/rental/items/${id}/active`,
+    },
   },
 
   PAYMENT_METHODS: {

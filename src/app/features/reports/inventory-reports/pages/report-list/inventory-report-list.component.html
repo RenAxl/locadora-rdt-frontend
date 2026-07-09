@@ -1,0 +1,93 @@
+<div class="report-page">
+  <div class="report-header">
+    <h1>Relatórios de Estoque</h1>
+  </div>
+
+  <form class="report-card" [formGroup]="form">
+    <div class="report-grid">
+      <div class="field">
+        <label for="report-type">Relatório</label>
+        <select id="report-type" class="form-control" formControlName="reportType">
+          <option *ngFor="let option of reportOptions" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="report-item">Item</label>
+        <select id="report-item" class="form-control" formControlName="itemId">
+          <option [ngValue]="null">Todos</option>
+          <option *ngFor="let item of items" [ngValue]="item.id">
+            {{ item.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="field" *ngIf="showMovementFilters()">
+        <label for="report-start-date">Data Inicial</label>
+        <input
+          id="report-start-date"
+          type="date"
+          class="form-control"
+          formControlName="startDate"
+        />
+      </div>
+
+      <div class="field" *ngIf="showMovementFilters()">
+        <label for="report-end-date">Data Final</label>
+        <input
+          id="report-end-date"
+          type="date"
+          class="form-control"
+          formControlName="endDate"
+        />
+      </div>
+
+      <div class="field" *ngIf="showMovementTypeFilter()">
+        <label for="report-movement-type">Tipo de Movimentação</label>
+        <select
+          id="report-movement-type"
+          class="form-control"
+          formControlName="movementType"
+        >
+          <option value="ALL">Todos</option>
+          <option value="ENTRY">Entrada</option>
+          <option value="EXIT">Saída</option>
+          <option value="RESERVE">Reserva</option>
+          <option value="RETURN">Devolução</option>
+          <option value="ADJUSTMENT">Ajuste</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="report-actions">
+      <button
+        pButton
+        type="button"
+        icon="pi pi-file-pdf"
+        label="Gerar PDF"
+        [disabled]="loading"
+        (click)="generate('pdf')"
+      ></button>
+      <button
+        pButton
+        type="button"
+        icon="pi pi-file-excel"
+        label="Gerar Excel"
+        class="p-button-success"
+        [disabled]="loading"
+        (click)="generate('xlsx')"
+      ></button>
+      <button
+        pButton
+        type="button"
+        icon="pi pi-filter-slash"
+        label="Limpar"
+        class="p-button-outlined p-button-secondary"
+        [disabled]="loading"
+        (click)="clearFilters()"
+      ></button>
+    </div>
+  </form>
+</div>

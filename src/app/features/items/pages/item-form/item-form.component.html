@@ -54,36 +54,6 @@
         </div>
 
         <div class="col-12 col-lg-6">
-          <label class="form-label-custom">Tipo de locação</label>
-          <div class="select-wrapper">
-            <select
-              name="rentalType"
-              [(ngModel)]="item.rentalType"
-              [compareWith]="compareById"
-              #rentalType="ngModel"
-              required
-              class="form-control select-arrow"
-            >
-              <option [ngValue]="undefined">
-                Selecione um tipo de locação
-              </option>
-              <option
-                *ngFor="let rentalType of rentalTypes"
-                [ngValue]="rentalType"
-              >
-                {{ rentalType.name }}
-              </option>
-            </select>
-          </div>
-
-          <app-message
-            [control]="rentalType"
-            error="required"
-            text="Informe o tipo de locação"
-          ></app-message>
-        </div>
-
-        <div class="col-12 col-lg-3">
           <label class="form-label-custom">Preço</label>
           <p-inputNumber
             [(ngModel)]="item.price"
@@ -97,27 +67,6 @@
             placeholder="Preço"
             [required]="true"
           ></p-inputNumber>
-        </div>
-
-        <div class="col-12 col-lg-3">
-          <label class="form-label-custom">Quantidade</label>
-          <input
-            pInputText
-            placeholder="Quantidade"
-            type="number"
-            name="quantity"
-            [(ngModel)]="item.quantity"
-            #quantity="ngModel"
-            required
-            min="0"
-            class="form-control"
-          />
-
-          <app-message
-            [control]="quantity"
-            error="required"
-            text="Informe a quantidade"
-          ></app-message>
         </div>
 
         <div class="col-12">
@@ -180,7 +129,7 @@
           SALVAR
         </button>
 
-        <a routerLink="/rental/items">
+        <a routerLink="/items">
           <button type="button" class="btn btn-outline-danger item-form-button">
             CANCELAR
           </button>

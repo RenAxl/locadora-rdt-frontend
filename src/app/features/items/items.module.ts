@@ -13,9 +13,19 @@ import { ItemDetailsModalComponent } from './components/item-details-modal/item-
 import { ItemsRoutingModule } from './items-routing.module';
 import { ItemFormComponent } from './pages/item-form/item-form.component';
 import { ItemListComponent } from './pages/item-list/item-list.component';
+import { StockBalanceListComponent } from './pages/stock-balance-list/stock-balance-list.component';
+import { StockMovementFormComponent } from './pages/stock-movement-form/stock-movement-form.component';
+import { StockMovementListComponent } from './pages/stock-movement-list/stock-movement-list.component';
 
 @NgModule({
-  declarations: [ItemListComponent, ItemFormComponent, ItemDetailsModalComponent],
+  declarations: [
+    ItemListComponent,
+    ItemFormComponent,
+    ItemDetailsModalComponent,
+    StockBalanceListComponent,
+    StockMovementListComponent,
+    StockMovementFormComponent,
+  ],
   imports: [
     CommonModule,
     FormsModule,

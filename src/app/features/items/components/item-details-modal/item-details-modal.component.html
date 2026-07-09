@@ -15,24 +15,12 @@
       <strong>{{ item.category?.name || "-" }}</strong>
     </div>
     <div>
-      <span>Tipo de locação</span>
-      <strong>{{ item.rentalType?.name || "-" }}</strong>
-    </div>
-    <div>
       <span>Preço</span>
       <strong>{{
         item.price != null
           ? (item.price | currency: "BRL":"symbol":"1.2-2":"pt-BR")
           : "-"
       }}</strong>
-    </div>
-    <div>
-      <span>Quantidade</span>
-      <strong>{{ item.quantity ?? "-" }}</strong>
-    </div>
-    <div>
-      <span>Quantidade alugada</span>
-      <strong>{{ item.rentedQuantity ?? "-" }}</strong>
     </div>
     <div>
       <span>Ativo</span>

@@ -1,0 +1,87 @@
+.item-form-container {
+  width: 100%;
+}
+
+.item-card {
+  padding: 24px;
+  background: #fff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  border-radius: 14px;
+}
+
+.item-form-inputs .form-control {
+  height: 46px;
+  border-radius: 10px;
+}
+
+.item-form-inputs app-message {
+  display: block;
+  margin-top: 4px;
+  margin-bottom: -4px;
+}
+
+.item-form-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.item-form-button {
+  height: 50px;
+  min-width: 120px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+.form-label-custom {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #233247;
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.select-arrow {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 40px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23666' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 5.5l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 14px;
+}
+
+@media (min-width: 992px) {
+  .item-form-buttons {
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .item-card {
+    padding: 18px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .item-card {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .item-form-inputs .form-control {
+    height: 44px;
+    font-size: 14px;
+  }
+
+  .form-label-custom {
+    font-size: 13px;
+    margin-bottom: 5px;
+  }
+}

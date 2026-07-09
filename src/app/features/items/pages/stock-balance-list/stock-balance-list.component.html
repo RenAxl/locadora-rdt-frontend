@@ -1,0 +1,177 @@
+<div class="item-filter-container">
+  <div class="item-actions-group">
+    <a routerLink="/items/stock-movements/create" class="action-link">
+      <button class="btn btn-primary text-white btn-crud-action">
+        MOVIMENTAR ESTOQUE
+      </button>
+    </a>
+  </div>
+
+  <app-name-filter
+    text="Digite o nome do item"
+    (search)="searchItem($event)"
+  ></app-name-filter>
+</div>
+
+<div class="item-card">
+  <div class="grid">
+    <div class="col-12">
+      <p-table
+        [value]="balances"
+        dataKey="id"
+        responsiveLayout="stack"
+        breakpoint="991px"
+        [paginator]="true"
+        [rows]="pagination.linesPerPage"
+        [lazy]="true"
+        [totalRecords]="totalElements"
+        (onLazyLoad)="changePage($event)"
+        #stockTable
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Item</th>
+            <th>Total</th>
+            <th>Disponível</th>
+            <th>Reservado</th>
+            <th>Indisponível</th>
+            <th>Mínimo</th>
+            <th>Alerta</th>
+            <th class="actions"></th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-balance>
+          <tr>
+            <td class="columns">
+              <span class="p-column-title">Item:</span>
+              {{ balance.itemName || "-" }}
+            </td>
+            <td class="columns">
+              <span class="p-column-title">Total:</span>
+              {{ balance.totalQuantity ?? 0 }}
+            </td>
+            <td class="columns">
+              <span class="p-column-title">Disponível:</span>
+              {{ balance.availableQuantity ?? 0 }}
+            </td>
+            <td class="columns">
+              <span class="p-column-title">Reservado:</span>
+              {{ balance.reservedQuantity ?? 0 }}
+            </td>
+            <td class="columns">
+              <span class="p-column-title">Indisponível:</span>
+              {{ balance.unavailableQuantity ?? 0 }}
+            </td>
+            <td class="columns">
+              <span class="p-column-title">Mínimo:</span>
+              {{ balance.minimumQuantity ?? 0 }}
+            </td>
+            <td class="columns">
+              <span class="p-column-title">Alerta:</span>
+              <span [ngClass]="{ 'low-stock-alert': balance.lowStock }">
+                {{ balance.lowStock ? "Estoque baixo" : "-" }}
+              </span>
+            </td>
+            <td class="col-actions">
+              <div class="actions-wrap">
+                <button
+                  pButton
+                  class="p-button-rounded p-button-text"
+                  icon="pi pi-pencil"
+                  pTooltip="Editar saldo"
+                  tooltipPosition="top"
+                  (click)="edit(balance)"
+                ></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>
+
+<p-dialog
+  header="Editar Saldo"
+  [visible]="!!editingBalance"
+  (visibleChange)="editingBalance = $event ? editingBalance : null"
+  [modal]="true"
+  [style]="{ width: '720px', maxWidth: '95vw' }"
+  styleClass="stock-balance-dialog"
+  (onHide)="cancelEdit()"
+>
+  <div *ngIf="editingBalance" class="stock-balance-modal">
+    <div class="stock-balance-info">
+      <span>Item</span>
+      <strong>{{ editingBalance.itemName || "-" }}</strong>
+    </div>
+
+    <div class="stock-balance-summary">
+      <div>
+        <span>Total</span>
+        <strong>{{ editingBalance.totalQuantity ?? 0 }}</strong>
+      </div>
+      <div>
+        <span>Disponível</span>
+        <strong>{{ editingBalance.availableQuantity ?? 0 }}</strong>
+      </div>
+      <div>
+        <span>Reservado</span>
+        <strong>{{ editingBalance.reservedQuantity ?? 0 }}</strong>
+      </div>
+      <div>
+        <span>Indisponível</span>
+        <strong>{{ editingBalance.unavailableQuantity ?? 0 }}</strong>
+      </div>
+      <div>
+        <span>Estoque mínimo</span>
+        <strong>{{ editingBalance.minimumQuantity ?? 0 }}</strong>
+      </div>
+    </div>
+
+    <div class="stock-balance-form">
+      <label>
+        <span>Campo para editar</span>
+        <select
+          class="form-control"
+          [(ngModel)]="editField"
+          (ngModelChange)="changeEditField()"
+        >
+          <option
+            *ngFor="let option of editFieldOptions"
+            [ngValue]="option.value"
+          >
+            {{ option.label }}
+          </option>
+        </select>
+      </label>
+
+      <label>
+        <span>Quantidade</span>
+        <input
+          pInputText
+          type="number"
+          min="0"
+          class="form-control"
+          [(ngModel)]="editQuantity"
+          (ngModelChange)="updateEditedQuantity()"
+        />
+      </label>
+
+    </div>
+
+    <div class="stock-balance-actions">
+      <button class="btn btn-primary stock-balance-button" (click)="saveBalance()">
+        SALVAR
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-danger stock-balance-button"
+        (click)="cancelEdit()"
+      >
+        CANCELAR
+      </button>
+    </div>
+  </div>
+</p-dialog>

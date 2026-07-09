@@ -14,6 +14,13 @@ const routes: Routes = [
         (m) => m.FinancialReportsModule,
       ),
   },
+  {
+    path: 'inventory-reports',
+    loadChildren: () =>
+      import('./inventory-reports/inventory-reports.module').then(
+        (m) => m.InventoryReportsModule,
+      ),
+  },
 ];
 
 @NgModule({

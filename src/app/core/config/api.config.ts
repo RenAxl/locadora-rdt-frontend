@@ -107,12 +107,24 @@ export const API = {
         `${BASE_URL}/rental/rentaltypes/${id}/active`,
     },
     ITEMS: {
-      ROOT: `${BASE_URL}/rental/items`,
-      BY_ID: (id: number | string) => `${BASE_URL}/rental/items/${id}`,
-      IMAGE: (id: number | string) => `${BASE_URL}/rental/items/${id}/image`,
-      DELETE_ALL: `${BASE_URL}/rental/items/all`,
+      ROOT: `${BASE_URL}/inventory/items`,
+      BY_ID: (id: number | string) => `${BASE_URL}/inventory/items/${id}`,
+      IMAGE: (id: number | string) => `${BASE_URL}/inventory/items/${id}/image`,
+      DELETE_ALL: `${BASE_URL}/inventory/items/all`,
       CHANGE_ACTIVE: (id: number | string) =>
-        `${BASE_URL}/rental/items/${id}/active`,
+        `${BASE_URL}/inventory/items/${id}/active`,
+    },
+    STOCK_BALANCES: {
+      ROOT: `${BASE_URL}/inventory/stock-balances`,
+      BY_ID: (id: number | string) =>
+        `${BASE_URL}/inventory/stock-balances/${id}`,
+      BY_ITEM: (itemId: number | string) =>
+        `${BASE_URL}/inventory/stock-balances/item/${itemId}`,
+    },
+    STOCK_MOVEMENTS: {
+      ROOT: `${BASE_URL}/inventory/stock-movements`,
+      BY_ID: (id: number | string) =>
+        `${BASE_URL}/inventory/stock-movements/${id}`,
     },
   },
 
@@ -178,6 +190,12 @@ export const API = {
     GENERATE: (reportType: string, format: string) =>
       `${BASE_URL}/reports/financial-reports/${reportType}/${format}`,
     COMPARISON: `${BASE_URL}/reports/financial-reports/comparison`,
+  },
+
+  INVENTORY_REPORTS: {
+    ROOT: `${BASE_URL}/reports/inventory-reports`,
+    GENERATE: (reportType: string, format: string) =>
+      `${BASE_URL}/reports/inventory-reports/${reportType}/${format}`,
   },
 
   POSITIONS: {

@@ -1,0 +1,83 @@
+<div class="item-filter-container">
+  <div class="item-actions-group">
+    <a routerLink="/items/stock-movements/create" class="action-link">
+      <button class="btn btn-primary text-white btn-crud-action">
+        NOVA MOVIMENTAÇÃO
+      </button>
+    </a>
+  </div>
+
+  <app-name-filter
+    text="Digite o nome do item"
+    (search)="searchItem($event)"
+  ></app-name-filter>
+</div>
+
+<div class="item-card">
+  <div class="grid">
+    <div class="col-12">
+      <p-table
+        [value]="movements"
+        dataKey="id"
+        responsiveLayout="stack"
+        breakpoint="991px"
+        [paginator]="true"
+        [rows]="pagination.linesPerPage"
+        [lazy]="true"
+        [totalRecords]="totalElements"
+        (onLazyLoad)="changePage($event)"
+        #movementTable
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Data</th>
+            <th>Item</th>
+            <th>Tipo</th>
+            <th>Quantidade</th>
+            <th>Motivo</th>
+            <th>Referência</th>
+            <th>Usuário</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-movement>
+          <tr>
+            <td class="columns">
+              <span class="p-column-title">Data:</span>
+              {{
+                movement.createdAt
+                  ? (movement.createdAt | date: "dd/MM/yyyy HH:mm")
+                  : "-"
+              }}
+            </td>
+            <td class="columns">
+              <span class="p-column-title">Item:</span>
+              {{ movement.itemName || "-" }}
+            </td>
+            <td class="columns">
+              <span class="p-column-title">Tipo:</span>
+              {{ getTypeLabel(movement.type) }}
+            </td>
+            <td class="columns">
+              <span class="p-column-title">Quantidade:</span>
+              {{ movement.quantity ?? 0 }}
+            </td>
+            <td class="columns">
+              <span class="p-column-title">Motivo:</span>
+              {{ movement.reason || "-" }}
+            </td>
+            <td class="columns">
+              <span class="p-column-title">Referência:</span>
+              {{ movement.referenceType || "-" }}
+              <span *ngIf="movement.referenceId">#{{ movement.referenceId }}</span>
+            </td>
+            <td class="columns">
+              <span class="p-column-title">Usuário:</span>
+              {{ movement.createdBy || "-" }}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

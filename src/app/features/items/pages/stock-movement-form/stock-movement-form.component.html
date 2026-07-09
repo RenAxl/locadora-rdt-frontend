@@ -1,0 +1,128 @@
+<div class="item-form-container">
+  <div class="item-card">
+    <form #movementForm="ngForm" (ngSubmit)="save(movementForm)">
+      <div class="col-12 mb-3">
+        <h1>Movimentar Estoque</h1>
+      </div>
+
+      <div class="row g-3 item-form-inputs">
+        <div class="col-12 col-lg-6">
+          <label class="form-label-custom">Item</label>
+          <div class="select-wrapper">
+            <select
+              name="itemId"
+              [(ngModel)]="movement.itemId"
+              #itemId="ngModel"
+              required
+              class="form-control select-arrow"
+            >
+              <option [ngValue]="undefined">Selecione um item</option>
+              <option *ngFor="let item of items" [ngValue]="item.id">
+                {{ item.name }}
+              </option>
+            </select>
+          </div>
+
+          <app-message
+            [control]="itemId"
+            error="required"
+            text="Informe o item"
+          ></app-message>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <label class="form-label-custom">Tipo</label>
+          <div class="select-wrapper">
+            <select
+              name="type"
+              [(ngModel)]="movement.type"
+              #type="ngModel"
+              required
+              class="form-control select-arrow"
+            >
+              <option
+                *ngFor="let movementType of movementTypes"
+                [value]="movementType.value"
+              >
+                {{ movementType.label }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-4">
+          <label class="form-label-custom">Quantidade</label>
+          <input
+            pInputText
+            placeholder="Quantidade"
+            type="number"
+            name="quantity"
+            [(ngModel)]="movement.quantity"
+            #quantity="ngModel"
+            required
+            min="1"
+            class="form-control"
+          />
+
+          <app-message
+            [control]="quantity"
+            error="required"
+            text="Informe a quantidade"
+          ></app-message>
+        </div>
+
+        <div class="col-12 col-lg-8">
+          <label class="form-label-custom">Motivo</label>
+          <input
+            pInputText
+            placeholder="Motivo"
+            type="text"
+            name="reason"
+            [(ngModel)]="movement.reason"
+            class="form-control"
+          />
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <label class="form-label-custom">Tipo de referência</label>
+          <input
+            pInputText
+            placeholder="Ex: ALUGUEL, VENDA"
+            type="text"
+            name="referenceType"
+            [(ngModel)]="movement.referenceType"
+            class="form-control"
+          />
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <label class="form-label-custom">ID da referência</label>
+          <input
+            pInputText
+            placeholder="ID da Locação, por exemplo"
+            type="number"
+            name="referenceId"
+            [(ngModel)]="movement.referenceId"
+            class="form-control"
+          />
+        </div>
+      </div>
+
+      <div class="item-form-buttons mt-4">
+        <button
+          type="submit"
+          [disabled]="movementForm.invalid"
+          class="btn btn-primary item-form-button"
+        >
+          SALVAR
+        </button>
+
+        <a routerLink="/items/stock-balances">
+          <button type="button" class="btn btn-outline-danger item-form-button">
+            CANCELAR
+          </button>
+        </a>
+      </div>
+    </form>
+  </div>
+</div>

@@ -10,9 +10,6 @@ import { PhotoPreview } from 'src/app/core/utils/photo-preview.util';
 import { CategoryMapper } from '../../../rental/categories/mapper/category.mapper';
 import { Category } from '../../../rental/categories/models/Category';
 import { CategoryService } from '../../../rental/categories/services/category.service';
-import { RentalTypeMapper } from '../../../rental/rentaltypes/mapper/rental-type.mapper';
-import { RentalType } from '../../../rental/rentaltypes/models/RentalType';
-import { RentalTypeService } from '../../../rental/rentaltypes/services/rental-type.service';
 import { ItemMapper } from '../../mapper/item.mapper';
 import { Item } from '../../models/Item';
 import { ItemService } from '../../services/item.service';
@@ -26,7 +23,6 @@ export class ItemFormComponent implements OnInit, OnDestroy {
   item: Item = new Item();
 
   categories: Category[] = [];
-  rentalTypes: RentalType[] = [];
 
   selectedImage: File | null = null;
   selectedImageName?: string;
@@ -38,7 +34,6 @@ export class ItemFormComponent implements OnInit, OnDestroy {
   constructor(
     private itemService: ItemService,
     private categoryService: CategoryService,
-    private rentalTypeService: RentalTypeService,
     private messageService: MessageService,
     private router: Router,
     private route: ActivatedRoute,
@@ -49,7 +44,6 @@ export class ItemFormComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadCategories();
-    this.loadRentalTypes();
 
     const id = this.route.snapshot.paramMap.get('itemId');
 
@@ -172,28 +166,6 @@ export class ItemFormComponent implements OnInit, OnDestroy {
     this.subs.push(sub);
   }
 
-  private loadRentalTypes(): void {
-    const pagination = new Pagination(0, 1000, 'ASC', 'name');
-
-    const sub = this.rentalTypeService.list(pagination, '').subscribe({
-      next: (response) => {
-        this.rentalTypes = (response?.content ?? []).map(
-          RentalTypeMapper.fromDTO,
-        );
-      },
-      error: () => {
-        this.rentalTypes = [];
-        this.messageService.add({
-          severity: 'warn',
-          summary: 'Atenção',
-          detail: 'Não foi possível carregar os tipos de locação.',
-        });
-      },
-    });
-
-    this.subs.push(sub);
-  }
-
   private loadItemImage(itemId: number): void {
     const sub = this.itemService.getItemImage(itemId).subscribe({
       next: (blob) => {
@@ -226,7 +198,7 @@ export class ItemFormComponent implements OnInit, OnDestroy {
           detail: err?.error?.message || uploadErrorMessage,
         });
 
-        this.router.navigate(['/rental/items']);
+        this.router.navigate(['/items']);
       },
     });
 
@@ -245,6 +217,6 @@ export class ItemFormComponent implements OnInit, OnDestroy {
     this.selectedImageName = undefined;
     this.imagePreviewUrl = null;
 
-    this.router.navigate(['/rental/items']);
+    this.router.navigate(['/items']);
   }
 }

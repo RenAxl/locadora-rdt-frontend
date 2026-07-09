@@ -1,6 +1,6 @@
 <div class="item-filter-container">
   <div class="item-actions-group">
-    <a routerLink="/rental/items/create" class="action-link">
+    <a routerLink="/items/create" class="action-link">
       <button class="btn btn-primary text-white btn-crud-action">
         NOVO ITEM
       </button>
@@ -43,9 +43,7 @@
             <th></th>
             <th>Nome</th>
             <th>Categoria</th>
-            <th>Tipo de locação</th>
             <th>Preço</th>
-            <th>Qtd.</th>
             <th>Imagem</th>
             <th class="actions"></th>
           </tr>
@@ -68,22 +66,12 @@
             </td>
 
             <td class="columns">
-              <span class="p-column-title">Tipo de locação:</span>
-              {{ item.rentalType?.name || "-" }}
-            </td>
-
-            <td class="columns">
               <span class="p-column-title">Preço:</span>
               {{
                 item.price != null
                   ? (item.price | currency: "BRL":"symbol":"1.2-2":"pt-BR")
                   : "-"
               }}
-            </td>
-
-            <td class="columns">
-              <span class="p-column-title">Qtd.:</span>
-              {{ item.quantity ?? "-" }}
             </td>
 
             <td class="columns col-image">
@@ -111,7 +99,7 @@
                   icon="pi pi-pencil"
                   pTooltip="Atualizar item"
                   tooltipPosition="top"
-                  [routerLink]="['/rental/items/', item.id, 'edit']"
+                  [routerLink]="['/items/', item.id, 'edit']"
                 ></a>
 
                 <button

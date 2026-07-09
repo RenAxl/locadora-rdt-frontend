@@ -266,6 +266,16 @@
               <span>Relatórios Financeiros</span>
             </a>
           </li>
+          <li>
+            <a
+              routerLink="/reports/inventory-reports"
+              routerLinkActive="active"
+              class="d-flex align-items-center nav-link px-4"
+            >
+              <i class="fa-solid fa-warehouse me-2"></i>
+              <span>Relatórios de Estoque</span>
+            </a>
+          </li>
         </ul>
       </li>
 
@@ -294,10 +304,31 @@
             <a
               routerLink="/items"
               routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
               class="d-flex align-items-center nav-link px-4"
             >
               <i class="fa-solid fa-box-open me-2"></i>
               <span>Items</span>
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/items/stock-balances"
+              routerLinkActive="active"
+              class="d-flex align-items-center nav-link px-4"
+            >
+              <i class="fa-solid fa-warehouse me-2"></i>
+              <span>Saldos</span>
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/items/stock-movements"
+              routerLinkActive="active"
+              class="d-flex align-items-center nav-link px-4"
+            >
+              <i class="fa-solid fa-right-left me-2"></i>
+              <span>Movimentações</span>
             </a>
           </li>
         </ul>
@@ -571,6 +602,16 @@
               <span>Relatórios Financeiros</span>
             </a>
           </li>
+          <li>
+            <a
+              routerLink="/reports/inventory-reports"
+              routerLinkActive="active"
+              class="d-flex align-items-center nav-link px-4"
+            >
+              <i class="fa-solid fa-warehouse me-2"></i>
+              <span>Relatórios de Estoque</span>
+            </a>
+          </li>
         </ul>
       </li>
 
@@ -599,10 +640,31 @@
             <a
               routerLink="/items"
               routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
               class="d-flex align-items-center nav-link px-4"
             >
               <i class="fa-solid fa-box-open me-2"></i>
               <span>Items</span>
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/items/stock-balances"
+              routerLinkActive="active"
+              class="d-flex align-items-center nav-link px-4"
+            >
+              <i class="fa-solid fa-warehouse me-2"></i>
+              <span>Saldos</span>
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/items/stock-movements"
+              routerLinkActive="active"
+              class="d-flex align-items-center nav-link px-4"
+            >
+              <i class="fa-solid fa-right-left me-2"></i>
+              <span>Movimentações</span>
             </a>
           </li>
         </ul>

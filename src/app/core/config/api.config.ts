@@ -9,6 +9,12 @@ export const API = {
     TOKEN: `${BASE_URL}/oauth/token`,
   },
 
+  CATALOG: {
+    ROOT: `${BASE_URL}/catalog`,
+    BY_ID: (id: number | string) => `${BASE_URL}/catalog/${id}`,
+    IMAGE: (id: number | string) => `${BASE_URL}/catalog/${id}/image`,
+  },
+
   USERS: {
     ROOT: `${BASE_URL}/users`,
     BY_ID: (id: number | string) => `${BASE_URL}/users/${id}`,

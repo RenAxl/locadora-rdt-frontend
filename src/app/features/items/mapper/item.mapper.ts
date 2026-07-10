@@ -10,6 +10,7 @@ export class ItemMapper {
     return new Item({
       id: dto.id,
       name: dto.name,
+      description: dto.description ?? '',
       price: dto.price ?? undefined,
       active: dto.active,
       category: dto.category
@@ -26,6 +27,7 @@ export class ItemMapper {
     return new Item({
       id: dto.id,
       name: dto.name,
+      description: dto.description ?? '',
       price: dto.price ?? undefined,
       active: dto.active,
       createdAt: dto.createdAt ? new Date(dto.createdAt) : undefined,
@@ -45,6 +47,7 @@ export class ItemMapper {
   static toInsertDTO(item: Item): ItemInsertDTO {
     return {
       name: item.name,
+      description: item.description,
       categoryId: item.category?.id ?? null,
       price: item.price ?? null,
     };
@@ -54,6 +57,7 @@ export class ItemMapper {
     return {
       id: item.id!,
       name: item.name,
+      description: item.description,
       categoryId: item.category?.id ?? null,
       price: item.price ?? null,
     };

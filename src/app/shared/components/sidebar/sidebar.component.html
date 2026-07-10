@@ -150,12 +150,57 @@
           </li>
           <li>
             <a
+              routerLink="/items"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              class="d-flex align-items-center nav-link px-4"
+            >
+              <i class="fa-solid fa-box-open me-2"></i>
+              <span>Items</span>
+            </a>
+          </li>
+          <li>
+            <a
               routerLink="/rental/rentaltypes"
               routerLinkActive="active"
               class="d-flex align-items-center nav-link px-4"
             >
               <i class="fa-solid fa-clock me-2"></i>
               <span>Tipos de locação</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="treeview">
+        <a
+          class="d-flex align-items-center justify-content-between nav-link px-3 collapsed"
+          data-bs-toggle="collapse"
+          data-bs-target="#submenuLocacoesDesktop"
+        >
+          <span class="d-flex align-items-center">
+            <i class="fa-solid fa-gamepad me-2"></i>
+            <span>Locações</span>
+          </span>
+
+          <span>
+            <i class="fa-solid fa-caret-right submenu-toggle-icon closed"></i>
+            <i class="fa-solid fa-caret-down submenu-toggle-icon open"></i>
+          </span>
+        </a>
+
+        <ul
+          class="treeview-menu collapse list-unstyled mb-0"
+          id="submenuLocacoesDesktop"
+        >
+          <li>
+            <a
+              routerLink="/catalog"
+              routerLinkActive="active"
+              class="d-flex align-items-center nav-link px-4"
+            >
+              <i class="fa-solid fa-grip me-2"></i>
+              <span>Catálogo</span>
             </a>
           </li>
         </ul>
@@ -300,17 +345,6 @@
           class="treeview-menu collapse list-unstyled mb-0"
           id="submenuEstoqueDesktop"
         >
-          <li>
-            <a
-              routerLink="/items"
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }"
-              class="d-flex align-items-center nav-link px-4"
-            >
-              <i class="fa-solid fa-box-open me-2"></i>
-              <span>Items</span>
-            </a>
-          </li>
           <li>
             <a
               routerLink="/items/stock-balances"
@@ -486,12 +520,57 @@
           </li>
           <li>
             <a
+              routerLink="/items"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              class="d-flex align-items-center nav-link px-4"
+            >
+              <i class="fa-solid fa-box-open me-2"></i>
+              <span>Items</span>
+            </a>
+          </li>
+          <li>
+            <a
               routerLink="/rental/rentaltypes"
               routerLinkActive="active"
               class="d-flex align-items-center nav-link px-4"
             >
               <i class="fa-solid fa-clock me-2"></i>
               <span>Tipos de locação</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="treeview">
+        <a
+          class="d-flex align-items-center justify-content-between nav-link px-3 collapsed"
+          data-bs-toggle="collapse"
+          data-bs-target="#submenuLocacoesMobile"
+        >
+          <span class="d-flex align-items-center">
+            <i class="fa-solid fa-gamepad me-2"></i>
+            <span>Locações</span>
+          </span>
+
+          <span>
+            <i class="fa-solid fa-caret-right submenu-toggle-icon closed"></i>
+            <i class="fa-solid fa-caret-down submenu-toggle-icon open"></i>
+          </span>
+        </a>
+
+        <ul
+          class="treeview-menu collapse list-unstyled mb-0"
+          id="submenuLocacoesMobile"
+        >
+          <li>
+            <a
+              routerLink="/catalog"
+              routerLinkActive="active"
+              class="d-flex align-items-center nav-link px-4"
+            >
+              <i class="fa-solid fa-grip me-2"></i>
+              <span>Catálogo</span>
             </a>
           </li>
         </ul>
@@ -636,17 +715,6 @@
           class="treeview-menu collapse list-unstyled mb-0"
           id="submenuEstoqueMobile"
         >
-          <li>
-            <a
-              routerLink="/items"
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }"
-              class="d-flex align-items-center nav-link px-4"
-            >
-              <i class="fa-solid fa-box-open me-2"></i>
-              <span>Items</span>
-            </a>
-          </li>
           <li>
             <a
               routerLink="/items/stock-balances"

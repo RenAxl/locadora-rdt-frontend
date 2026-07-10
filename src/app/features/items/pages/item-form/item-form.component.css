@@ -14,6 +14,11 @@
   border-radius: 10px;
 }
 
+.item-form-inputs .description-field {
+  min-height: 112px;
+  resize: vertical;
+}
+
 :host ::ng-deep p-inputnumber,
 :host ::ng-deep .p-inputnumber,
 :host ::ng-deep .p-inputnumber-input {

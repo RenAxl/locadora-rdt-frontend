@@ -1,0 +1,100 @@
+<div class="catalog-filter-container">
+  <app-catalog-filter (search)="searchCatalog($event)"></app-catalog-filter>
+</div>
+
+<div class="catalog-grid" *ngIf="items.length > 0; else emptyCatalog">
+  <app-catalog-item-card
+    *ngFor="let item of items"
+    [item]="item"
+    [imageUrl]="imageMap[item.id!]"
+    (details)="openDetails($event)"
+  ></app-catalog-item-card>
+</div>
+
+<ng-template #emptyCatalog>
+  <div class="catalog-empty">
+    <i class="pi pi-box"></i>
+    <span>Nenhum item encontrado.</span>
+  </div>
+</ng-template>
+
+<div class="catalog-paginator">
+  <p-paginator
+    [rows]="pagination.linesPerPage"
+    [first]="pagination.page * pagination.linesPerPage"
+    [totalRecords]="totalElements"
+    (onPageChange)="changePage($event)"
+  ></p-paginator>
+</div>
+
+<p-dialog
+  header="Detalhamento do Item"
+  [(visible)]="detailsVisible"
+  [modal]="true"
+  [style]="{ width: '760px', maxWidth: '95vw' }"
+  (onHide)="closeDetails()"
+>
+  <div class="details-grid" *ngIf="itemDetails; else loadingDetails">
+    <div class="wide">
+      <span>Nome</span>
+      <strong>{{ itemDetails.name || "-" }}</strong>
+    </div>
+    <div class="wide">
+      <span>Descrição</span>
+      <strong>{{ itemDetails.description || "-" }}</strong>
+    </div>
+    <div>
+      <span>Categoria</span>
+      <strong>{{ itemDetails.category?.name || "-" }}</strong>
+    </div>
+    <div>
+      <span>Preço</span>
+      <strong>
+        {{
+          itemDetails.price != null
+            ? (itemDetails.price | currency: "BRL":"symbol":"1.2-2":"pt-BR")
+            : "-"
+        }}
+      </strong>
+    </div>
+    <div>
+      <span>Ativo</span>
+      <strong>{{ getActiveLabel(itemDetails.active) }}</strong>
+    </div>
+    <div>
+      <span>Data cadastro</span>
+      <strong>{{
+        itemDetails.createdAt ? (itemDetails.createdAt | date: "dd/MM/yyyy") : "-"
+      }}</strong>
+    </div>
+    <div>
+      <span>Data atualização</span>
+      <strong>{{
+        itemDetails.updatedAt ? (itemDetails.updatedAt | date: "dd/MM/yyyy") : "-"
+      }}</strong>
+    </div>
+    <div>
+      <span>Criado por</span>
+      <strong>{{ itemDetails.createdBy ?? "-" }}</strong>
+    </div>
+    <div>
+      <span>Atualizado por</span>
+      <strong>{{ itemDetails.updatedBy ?? "-" }}</strong>
+    </div>
+    <div class="wide image">
+      <span>Imagem</span>
+      <strong>
+        <ng-container *ngIf="detailsImageUrl; else noDetailsImage">
+          <img [src]="detailsImageUrl" alt="Imagem do item" />
+        </ng-container>
+        <ng-template #noDetailsImage>
+          <span class="image-placeholder">Sem imagem</span>
+        </ng-template>
+      </strong>
+    </div>
+  </div>
+
+  <ng-template #loadingDetails>
+    <div class="empty-details">Carregando...</div>
+  </ng-template>
+</p-dialog>

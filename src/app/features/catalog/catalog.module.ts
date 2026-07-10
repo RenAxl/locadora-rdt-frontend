@@ -1,0 +1,33 @@
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+import { PaginatorModule } from 'primeng/paginator';
+import { TooltipModule } from 'primeng/tooltip';
+
+import { SharedModule } from 'src/app/shared/shared.module';
+import { CatalogRoutingModule } from './catalog-routing.module';
+import { CatalogFilterComponent } from './components/catalog-filter/catalog-filter.component';
+import { CatalogItemCardComponent } from './components/catalog-item-card/catalog-item-card.component';
+import { CatalogListComponent } from './pages/catalog-list/catalog-list.component';
+
+@NgModule({
+  declarations: [
+    CatalogListComponent,
+    CatalogItemCardComponent,
+    CatalogFilterComponent,
+  ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ButtonModule,
+    TooltipModule,
+    DialogModule,
+    PaginatorModule,
+    SharedModule,
+    CatalogRoutingModule,
+  ],
+})
+export class CatalogModule {}

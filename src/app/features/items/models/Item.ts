@@ -3,6 +3,7 @@ import { Category } from '../../rental/categories/models/Category';
 export class Item {
   id?: number;
   name: string = '';
+  description: string = '';
   category?: Category | null;
   price?: number | null;
   active?: boolean;

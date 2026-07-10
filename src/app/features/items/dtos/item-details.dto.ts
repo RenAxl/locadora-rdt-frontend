@@ -2,6 +2,7 @@ export interface ItemDetailsDTO {
   id: number;
   version?: number;
   name: string;
+  description?: string | null;
   category?: { id: number; name: string; active?: boolean } | null;
   price?: number | null;
   active?: boolean;

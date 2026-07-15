@@ -1,3 +1,5 @@
+import { Address } from '../models/address';
+
 export class UserUpdateDTO {
   id?: number;
 
@@ -9,7 +11,7 @@ export class UserUpdateDTO {
 
   telephone: string = '';
 
-  address?: string;
+  address: Address = new Address();
 
   roleIds: number[] = [];
 

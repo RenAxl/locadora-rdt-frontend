@@ -3,6 +3,7 @@ export interface RentalTypeDetailsDTO {
   version?: number;
   name: string;
   type: string;
+  days: number;
   active?: boolean;
 
   createdAt?: string | null;

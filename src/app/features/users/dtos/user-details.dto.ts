@@ -1,4 +1,5 @@
 import { RoleDTO } from '../../roles/dtos/role.dto';
+import { Address } from '../models/address';
 
 export class UserDetailsDTO {
   id?: number;
@@ -9,7 +10,7 @@ export class UserDetailsDTO {
   active?: boolean;
 
   telephone?: string;
-  address?: string;
+  address?: Address;
 
   photoContentType?: string;
 

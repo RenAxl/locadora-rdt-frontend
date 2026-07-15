@@ -12,7 +12,13 @@
     <div class="wide"><span>Email</span><strong>{{ customer.email || "-" }}</strong></div>
     <div><span>Data cadastro</span><strong>{{ customer.createdAt ? (customer.createdAt | date: "dd/MM/yyyy") : "-" }}</strong></div>
     <div><span>Data atualização</span><strong>{{ customer.updatedAt ? (customer.updatedAt | date: "dd/MM/yyyy") : "-" }}</strong></div>
-    <div class="wide"><span>Endereço</span><strong>{{ customer.address || "-" }}</strong></div>
+    <div><span>CEP</span><strong>{{ customer.address.zipCode || "-" }}</strong></div>
+    <div><span>Rua</span><strong>{{ customer.address.street || "-" }}</strong></div>
+    <div><span>Número</span><strong>{{ customer.address.number || "-" }}</strong></div>
+    <div><span>Complemento</span><strong>{{ customer.address.complement || "-" }}</strong></div>
+    <div><span>Bairro</span><strong>{{ customer.address.neighborhood || "-" }}</strong></div>
+    <div><span>Cidade</span><strong>{{ customer.address.city || "-" }}</strong></div>
+    <div><span>UF</span><strong>{{ customer.address.state || "-" }}</strong></div>
     <div class="wide photo">
       <span>Foto</span>
       <strong>

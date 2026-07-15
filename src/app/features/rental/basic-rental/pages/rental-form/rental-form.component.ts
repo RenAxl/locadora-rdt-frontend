@@ -77,6 +77,16 @@ export class RentalFormComponent implements OnInit {
 
   removeItem(index: number): void { this.rental.items.splice(index, 1); this.calculate(); }
 
+  changeRentalType(rentalTypeId?: number): void {
+    this.rental.rentalTypeId = rentalTypeId;
+    this.calculateExpectedReturnDate();
+  }
+
+  changeStartDate(startDate: string): void {
+    this.rental.startDate = startDate;
+    this.calculateExpectedReturnDate();
+  }
+
   calculate(): void {
     this.rental.items.forEach((item) => item.subtotal = Math.max(0,
       item.quantity * Number(item.unitPrice || 0) - Number(item.discount || 0) + Number(item.additionalFee || 0)));
@@ -117,6 +127,7 @@ export class RentalFormComponent implements OnInit {
         this.currentCustomer = customer;
         this.rental.customerId = customer.id;
         this.rental.customerName = customer.name;
+        this.rental.deliveryAddress = this.formatDeliveryAddress(customer);
       },
       error: () => {
         this.currentCustomer = undefined;
@@ -126,4 +137,48 @@ export class RentalFormComponent implements OnInit {
 
   private emptyRental(): Rental { return { discount: 0, shippingFee: 0, additionalFee: 0, downPayment: 0, items: [] }; }
   private toLocalDate(value?: string): string { return value ? value.substring(0, 16) : ''; }
+
+  private formatDeliveryAddress(customer: CustomerDTO): string {
+    const address = customer.address;
+
+    if (!address) {
+      return '';
+    }
+
+    const streetAndNumber = [address.street, address.number].filter(Boolean).join(', ');
+    const parts = [
+      streetAndNumber,
+      address.complement,
+      address.neighborhood,
+      address.city,
+      address.state,
+      address.zipCode,
+    ];
+
+    return parts.filter((part) => part && part.trim()).join(' - ');
+  }
+
+  private calculateExpectedReturnDate(): void {
+    const rentalType = this.rentalTypes.find((type) => type.id === Number(this.rental.rentalTypeId));
+    const days = Number(rentalType?.days);
+
+    if (!rentalType || !this.rental.startDate || days < 1) {
+      this.rental.expectedReturnDate = '';
+      return;
+    }
+
+    const expectedDate = new Date(this.rental.startDate);
+    expectedDate.setDate(expectedDate.getDate() + days);
+
+    this.rental.expectedReturnDate = this.formatLocalDate(expectedDate);
+  }
+
+  private formatLocalDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hour = String(date.getHours()).padStart(2, '0');
+    const minute = String(date.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day}T${hour}:${minute}`;
+  }
 }

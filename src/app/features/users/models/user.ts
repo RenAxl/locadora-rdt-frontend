@@ -1,4 +1,5 @@
 import { Role } from '../../roles/models/Role';
+import { Address } from './address';
 
 export class User {
   id?: number;
@@ -13,7 +14,7 @@ export class User {
 
   telephone: string = '';
 
-  address?: string;
+  address: Address = new Address();
 
   photo?: any;
 
@@ -32,6 +33,8 @@ export class User {
 
     this.roles =
       init?.roles?.map((role) => new Role(role)) || [];
+
+    this.address = new Address(init?.address);
 
     this.createdAt = init?.createdAt
       ? new Date(init.createdAt)

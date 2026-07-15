@@ -47,7 +47,7 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
   private loadProfile(): void {
     const sub = this.profileService.getMe().subscribe({
       next: (data) => {
-        this.profile = { ...this.profile, ...data };
+        this.profile = new Profile({ ...this.profile, ...data });
       },
       error: () => {
         this.messageService.add({

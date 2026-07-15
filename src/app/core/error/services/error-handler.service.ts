@@ -56,13 +56,14 @@ export class ErrorHandlerService {
     const body: any = errorResponse.error;
 
     if (body && typeof body === 'object') {
-      if (typeof body.error === 'string') return body.error;
-      if (typeof body.message === 'string') return body.message;
-
       if (Array.isArray(body.errors) && body.errors.length > 0) {
         const first = body.errors[0];
         if (typeof first === 'string') return first;
+        if (first && typeof first.message === 'string') return first.message;
       }
+
+      if (typeof body.message === 'string') return body.message;
+      if (typeof body.error === 'string') return body.error;
     }
 
     if (typeof body === 'string' && body.trim().length > 0) {

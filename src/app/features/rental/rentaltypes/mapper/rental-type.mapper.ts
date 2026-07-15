@@ -10,6 +10,7 @@ export class RentalTypeMapper {
       id: dto.id,
       name: dto.name,
       type: dto.type,
+      days: dto.days,
       active: dto.active,
     });
   }
@@ -19,6 +20,7 @@ export class RentalTypeMapper {
       id: dto.id,
       name: dto.name,
       type: dto.type,
+      days: dto.days,
       active: dto.active,
       createdAt: dto.createdAt ? new Date(dto.createdAt) : undefined,
       updatedAt: dto.updatedAt ? new Date(dto.updatedAt) : undefined,
@@ -31,6 +33,7 @@ export class RentalTypeMapper {
     return {
       name: rentalType.name,
       type: rentalType.type,
+      days: rentalType.days!,
     };
   }
 
@@ -39,6 +42,7 @@ export class RentalTypeMapper {
       id: rentalType.id!,
       name: rentalType.name,
       type: rentalType.type,
+      days: rentalType.days!,
     };
   }
 }

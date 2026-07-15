@@ -12,7 +12,13 @@
     <div><span>CNPJ</span><strong>{{ supplier.cnpj || "-" }}</strong></div>
     <div><span>E-mail</span><strong>{{ supplier.email || "-" }}</strong></div>
     <div><span>Telefone</span><strong>{{ supplier.phoneNumber || "-" }}</strong></div>
-    <div class="wide"><span>Endereço</span><strong>{{ supplier.address || "-" }}</strong></div>
+    <div><span>CEP</span><strong>{{ supplier.address.zipCode || "-" }}</strong></div>
+    <div><span>Rua</span><strong>{{ supplier.address.street || "-" }}</strong></div>
+    <div><span>Número</span><strong>{{ supplier.address.number || "-" }}</strong></div>
+    <div><span>Complemento</span><strong>{{ supplier.address.complement || "-" }}</strong></div>
+    <div><span>Bairro</span><strong>{{ supplier.address.neighborhood || "-" }}</strong></div>
+    <div><span>Cidade</span><strong>{{ supplier.address.city || "-" }}</strong></div>
+    <div><span>UF</span><strong>{{ supplier.address.state || "-" }}</strong></div>
     <div class="wide photo" *ngIf="imagePreviewUrl">
       <span>Imagem</span>
       <strong><img [src]="imagePreviewUrl" alt="Imagem do fornecedor" /></strong>

@@ -14,7 +14,13 @@
     <div><span>Data atualização</span><strong>{{ user.updatedAt ? (user.updatedAt | date: "dd/MM/yyyy") : "-" }}</strong></div>
     <div><span>Criado por</span><strong>{{ user.createdBy ?? "-" }}</strong></div>
     <div><span>Atualizado por</span><strong>{{ user.updatedBy ?? "-" }}</strong></div>
-    <div class="wide"><span>Endereço</span><strong>{{ user.address || "-" }}</strong></div>
+    <div><span>Rua</span><strong>{{ user.address.street || "-" }}</strong></div>
+    <div><span>Número</span><strong>{{ user.address.number || "-" }}</strong></div>
+    <div><span>Complemento</span><strong>{{ user.address.complement || "-" }}</strong></div>
+    <div><span>Bairro</span><strong>{{ user.address.neighborhood || "-" }}</strong></div>
+    <div><span>Cidade</span><strong>{{ user.address.city || "-" }}</strong></div>
+    <div><span>UF</span><strong>{{ user.address.state || "-" }}</strong></div>
+    <div><span>CEP</span><strong>{{ user.address.zipCode || "-" }}</strong></div>
     <div class="wide">
       <span>Perfis</span>
       <strong>

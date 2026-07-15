@@ -41,7 +41,7 @@ export class CustomerMapper {
       cpf: customer.cpf,
       email: customer.email ?? null,
       phone: customer.phone ?? null,
-      address: customer.address ?? null,
+      address: customer.address,
       active: customer.active ?? true,
     };
   }
@@ -53,7 +53,7 @@ export class CustomerMapper {
       cpf: customer.cpf,
       email: customer.email ?? null,
       phone: customer.phone ?? null,
-      address: customer.address ?? null,
+      address: customer.address,
       active: customer.active ?? true,
     };
   }

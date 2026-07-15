@@ -1,10 +1,12 @@
+import { Address } from './address';
+
 export class Supplier {
   id?: number;
   name!: string;
   tradeName!: string;
   companyName!: string;
   cnpj!: string;
-  address!: string;
+  address: Address = new Address();
   email?: string | null;
   phoneNumber?: string | null;
   image?: unknown;
@@ -17,5 +19,6 @@ export class Supplier {
 
   constructor(init?: Partial<Supplier>) {
     Object.assign(this, init);
+    this.address = new Address(init?.address);
   }
 }

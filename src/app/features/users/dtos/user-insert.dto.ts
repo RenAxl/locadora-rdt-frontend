@@ -1,3 +1,5 @@
+import { Address } from '../models/address';
+
 export class UserInsertDTO {
   name: string = '';
 
@@ -5,7 +7,7 @@ export class UserInsertDTO {
 
   telephone: string = '';
 
-  address?: string;
+  address: Address = new Address();
 
   roleIds: number[] = [];
 

@@ -104,25 +104,67 @@
           ></app-message>
         </div>
 
-        <div class="col-12">
-          <label class="form-label-custom">Endereço</label>
+        <div class="col-12 col-lg-3">
+          <label class="form-label-custom">CEP</label>
+          <input pInputText placeholder="CEP" type="text" name="zipCode" mask="00000-000"
+            [(ngModel)]="user.address.zipCode" #zipCode="ngModel" required class="form-control" />
+          <app-message [control]="zipCode" error="required" text="Informe o CEP"></app-message>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <label class="form-label-custom">Rua</label>
           <input
             pInputText
-            placeholder="Endereço"
+            placeholder="Rua"
             type="text"
-            name="address"
-            [(ngModel)]="user.address"
-            #address="ngModel"
+            name="street"
+            [(ngModel)]="user.address.street"
+            #street="ngModel"
             required
             class="form-control"
           />
 
           <app-message
-            [control]="address"
+            [control]="street"
             error="required"
-            text="Informe o endereço do usuário"
+            text="Informe a rua do usuário"
           ></app-message>
         </div>
+
+        <div class="col-12 col-lg-3">
+          <label class="form-label-custom">Número</label>
+          <input pInputText placeholder="Número" type="text" name="number"
+            [(ngModel)]="user.address.number" #number="ngModel" required class="form-control" />
+          <app-message [control]="number" error="required" text="Informe o número"></app-message>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <label class="form-label-custom">Complemento</label>
+          <input pInputText placeholder="Complemento" type="text" name="complement"
+            [(ngModel)]="user.address.complement" class="form-control" />
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <label class="form-label-custom">Bairro</label>
+          <input pInputText placeholder="Bairro" type="text" name="neighborhood"
+            [(ngModel)]="user.address.neighborhood" #neighborhood="ngModel" required class="form-control" />
+          <app-message [control]="neighborhood" error="required" text="Informe o bairro"></app-message>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <label class="form-label-custom">Cidade</label>
+          <input pInputText placeholder="Cidade" type="text" name="city"
+            [(ngModel)]="user.address.city" #city="ngModel" required class="form-control" />
+          <app-message [control]="city" error="required" text="Informe a cidade"></app-message>
+        </div>
+
+        <div class="col-12 col-lg-3">
+          <label class="form-label-custom">UF</label>
+          <input pInputText placeholder="UF" type="text" name="state" maxlength="2"
+            [(ngModel)]="user.address.state" #state="ngModel" required class="form-control" />
+          <app-message [control]="state" error="required" text="Informe a UF"></app-message>
+        </div>
+
       </div>
 
       <div class="user-form-buttons mt-4">

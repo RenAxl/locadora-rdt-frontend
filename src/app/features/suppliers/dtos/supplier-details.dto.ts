@@ -1,10 +1,12 @@
+import { Address } from '../models/address';
+
 export interface SupplierDetailsDTO {
   id?: number;
   name: string;
   tradeName: string;
   companyName: string;
   cnpj: string;
-  address: string;
+  address: Address;
   email?: string | null;
   phoneNumber?: string | null;
   imageContentType?: string | null;

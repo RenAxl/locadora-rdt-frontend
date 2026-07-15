@@ -2,6 +2,7 @@ export class RentalType {
   id?: number;
   name: string = '';
   type: string = '';
+  days?: number;
   active?: boolean;
 
   createdAt?: Date;

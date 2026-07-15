@@ -1,4 +1,5 @@
 import { RoleDTO } from '../../roles/dtos/role.dto';
+import { Address } from '../models/address';
 
 export class UserDTO {
   id?: number;
@@ -10,7 +11,7 @@ export class UserDTO {
 
   telephone?: string;
   photoContentType?: string;
-  address?: string;
+  address?: Address;
 
   roles: RoleDTO[] = [];
 

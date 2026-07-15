@@ -65,6 +65,34 @@
             }} caracteres"
           ></app-message>
         </div>
+
+        <div class="col-12 col-lg-6">
+          <label class="form-label-custom">Dias</label>
+          <input
+            pInputText
+            placeholder="Quantidade de dias"
+            type="number"
+            name="days"
+            [(ngModel)]="rentalType.days"
+            #days="ngModel"
+            required
+            min="1"
+            step="1"
+            class="form-control"
+          />
+
+          <app-message
+            [control]="days"
+            error="required"
+            text="Informe a quantidade de dias"
+          ></app-message>
+
+          <app-message
+            [control]="days"
+            error="min"
+            text="A quantidade de dias deve ser maior que zero"
+          ></app-message>
+        </div>
       </div>
 
       <div class="rental-type-form-buttons mt-4">

@@ -4,11 +4,11 @@
   <section class="form-card">
     <div class="form-grid">
       <label>Cliente<input class="form-control" [value]="rental.customerName || 'Carregando...'" disabled /></label>
-      <label>Tipo de locação<select class="form-select" [(ngModel)]="rental.rentalTypeId"><option [ngValue]="undefined">Selecione</option><option *ngFor="let t of rentalTypes" [ngValue]="t.id">{{ t.name }}</option></select></label>
-      <label>Data inicial<input type="datetime-local" class="form-control" [(ngModel)]="rental.startDate" /></label>
-      <label>Devolução prevista<input type="datetime-local" class="form-control" [(ngModel)]="rental.expectedReturnDate" /></label>
-      <label>Forma de pagamento<select class="form-select" [(ngModel)]="rental.paymentMethodId"><option [ngValue]="null">Não informada</option><option *ngFor="let p of paymentMethods" [ngValue]="p.id">{{ p.name }}</option></select></label>
-      <label>Endereço de entrega<input class="form-control" [(ngModel)]="rental.deliveryAddress" /></label>
+      <label>Tipo de locação<select class="form-select" [ngModel]="rental.rentalTypeId" (ngModelChange)="changeRentalType($event)"><option [ngValue]="undefined">Selecione</option><option *ngFor="let t of rentalTypes" [ngValue]="t.id">{{ t.name }}</option></select></label>
+      <label *ngIf="rental.rentalTypeId">Data inicial<input type="datetime-local" class="form-control" [ngModel]="rental.startDate" (ngModelChange)="changeStartDate($event)" /></label>
+      <label *ngIf="rental.rentalTypeId">Devolução prevista<input type="datetime-local" class="form-control" [(ngModel)]="rental.expectedReturnDate" readonly /></label>
+      <label *ngIf="rental.rentalTypeId">Forma de pagamento<select class="form-select" [(ngModel)]="rental.paymentMethodId"><option [ngValue]="null">Não informada</option><option *ngFor="let p of paymentMethods" [ngValue]="p.id">{{ p.name }}</option></select></label>
+      <label *ngIf="rental.rentalTypeId">Endereço de entrega<input class="form-control" [(ngModel)]="rental.deliveryAddress" readonly /></label>
     </div>
   </section>
 

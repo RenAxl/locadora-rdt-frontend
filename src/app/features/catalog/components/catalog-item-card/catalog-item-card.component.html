@@ -1,6 +1,10 @@
 <article
   class="catalog-item-card"
   [ngClass]="{ 'catalog-item-inactive': item.active === false }"
+  tabindex="0"
+  role="button"
+  (click)="openDetails()"
+  (keydown.enter)="openDetails()"
 >
   <div class="catalog-image-wrap">
     <ng-container *ngIf="imageUrl; else noImage">
@@ -35,6 +39,6 @@
     class="p-button-sm catalog-details-button"
     icon="pi pi-eye"
     label="Detalhes"
-    (click)="openDetails()"
+    (click)="$event.stopPropagation(); openDetails()"
   ></button>
 </article>

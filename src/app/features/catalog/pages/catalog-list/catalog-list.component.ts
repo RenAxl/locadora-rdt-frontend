@@ -1,11 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { catchError, EMPTY } from 'rxjs';
 import { Pagination } from 'src/app/core/models/Pagination';
-import {
-  PhotoPreview,
-  PhotoUrlRegistry,
-} from 'src/app/core/utils/photo-preview.util';
+import { PhotoUrlRegistry } from 'src/app/core/utils/photo-preview.util';
 import { ItemMapper } from 'src/app/features/items/mapper/item.mapper';
 import { Item } from 'src/app/features/items/models/Item';
 import { CatalogFilter } from '../../components/catalog-filter/catalog-filter.component';
@@ -23,19 +21,14 @@ export class CatalogListComponent implements OnInit, OnDestroy {
   filterName: string = '';
   filterCategoryId?: number | null;
   imageMap: { [key: number]: SafeUrl } = {};
-  detailsVisible = false;
-  itemDetails: Item | null = null;
-  detailsImageUrl?: SafeUrl;
-
   private imageUrls: PhotoUrlRegistry;
-  private detailsImage: PhotoPreview;
 
   constructor(
     private catalogService: CatalogService,
+    private router: Router,
     sanitizer: DomSanitizer,
   ) {
     this.imageUrls = new PhotoUrlRegistry(sanitizer);
-    this.detailsImage = new PhotoPreview(sanitizer);
   }
 
   ngOnInit(): void {
@@ -44,7 +37,6 @@ export class CatalogListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.imageUrls.clear();
-    this.detailsImage.clear();
   }
 
   list(page: number = 0): void {
@@ -78,30 +70,7 @@ export class CatalogListComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.detailsVisible = true;
-    this.itemDetails = null;
-
-    this.catalogService.findById(id).subscribe({
-      next: (details) => {
-        this.itemDetails = ItemMapper.fromDetailsDTO(details);
-        this.loadDetailsImage(id);
-      },
-    });
-  }
-
-  closeDetails(): void {
-    this.detailsVisible = false;
-    this.itemDetails = null;
-    this.detailsImageUrl = undefined;
-    this.detailsImage.clear();
-  }
-
-  getActiveLabel(active?: boolean): string {
-    if (active === undefined || active === null) {
-      return '-';
-    }
-
-    return active ? 'Sim' : 'Não';
+    this.router.navigate(['/catalog', id]);
   }
 
   private loadImages(): void {
@@ -134,23 +103,4 @@ export class CatalogListComponent implements OnInit, OnDestroy {
     });
   }
 
-  private loadDetailsImage(id: number): void {
-    this.detailsImageUrl = undefined;
-    this.detailsImage.clear();
-
-    this.catalogService
-      .getItemImage(id)
-      .pipe(
-        catchError(() => {
-          return EMPTY;
-        }),
-      )
-      .subscribe((blob: Blob) => {
-        if (!blob || blob.size === 0) {
-          return;
-        }
-
-        this.detailsImageUrl = this.detailsImage.create(blob) ?? undefined;
-      });
-  }
 }

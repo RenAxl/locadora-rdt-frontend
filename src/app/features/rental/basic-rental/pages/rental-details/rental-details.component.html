@@ -1,0 +1,16 @@
+<div class="details-page" *ngIf="rental; else loading">
+  <div class="header"><div><small>{{ rental.rentalNumber }}</small><h2>Detalhes da locação</h2></div><a class="btn btn-outline-secondary" routerLink="/rentals">Voltar</a></div>
+  <section class="card-grid">
+    <div><span>Cliente</span><strong>{{ rental.customerName }}</strong></div>
+    <div><span>Tipo</span><strong>{{ rental.rentalTypeName }}</strong></div>
+    <div><span>Status</span><strong>{{ statusLabel(rental.status) }}</strong></div>
+    <div><span>Forma de pagamento</span><strong>{{ rental.paymentMethodName || "-" }}</strong></div>
+    <div><span>Data inicial</span><strong>{{ rental.startDate | date: "dd/MM/yyyy HH:mm" }}</strong></div>
+    <div><span>Devolução prevista</span><strong>{{ rental.expectedReturnDate | date: "dd/MM/yyyy HH:mm" }}</strong></div>
+    <div><span>Endereço</span><strong>{{ rental.deliveryAddress || "-" }}</strong></div>
+    <div><span>Observações</span><strong>{{ rental.notes || "-" }}</strong></div>
+  </section>
+  <section class="details-card"><h4>Itens</h4><div class="table-responsive"><table class="table"><thead><tr><th>Item</th><th>Qtd.</th><th>Preço</th><th>Desconto</th><th>Acréscimo</th><th>Subtotal</th></tr></thead><tbody><tr *ngFor="let item of rental.items"><td>{{ item.itemName }}</td><td>{{ item.quantity }}</td><td>{{ item.unitPrice | currency: "BRL" }}</td><td>{{ item.discount | currency: "BRL" }}</td><td>{{ item.additionalFee | currency: "BRL" }}</td><td>{{ item.subtotal | currency: "BRL" }}</td></tr></tbody></table></div></section>
+  <section class="summary"><div><span>Subtotal</span><strong>{{ rental.subtotal | currency: "BRL" }}</strong></div><div><span>Desconto</span><strong>{{ rental.discount | currency: "BRL" }}</strong></div><div><span>Frete</span><strong>{{ rental.shippingFee | currency: "BRL" }}</strong></div><div><span>Acréscimos</span><strong>{{ rental.additionalFee | currency: "BRL" }}</strong></div><div class="total"><span>Total</span><strong>{{ rental.totalAmount | currency: "BRL" }}</strong></div></section>
+</div>
+<ng-template #loading><div class="loading">Carregando...</div></ng-template>

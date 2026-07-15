@@ -1,12 +1,15 @@
 <div class="details-page">
-  <button
-    pButton
-    type="button"
-    class="p-button-text back-button"
-    icon="pi pi-arrow-left"
-    label="Voltar ao catálogo"
-    (click)="goBack()"
-  ></button>
+  <div class="details-toolbar">
+    <button
+      pButton
+      type="button"
+      class="p-button-text back-button"
+      icon="pi pi-arrow-left"
+      label="Voltar ao catálogo"
+      (click)="goBack()"
+    ></button>
+    <app-rental-cart-summary></app-rental-cart-summary>
+  </div>
 
   <div class="loading" *ngIf="loading">Carregando...</div>
 
@@ -41,6 +44,53 @@
       <div class="description">
         <span>Descrição</span>
         <p>{{ item.description || "Sem descrição." }}</p>
+      </div>
+
+      <div class="rental-selection" *ngIf="item.active !== false && canCreateRental">
+        <label for="rentalQuantity">Quantidade</label>
+        <div class="quantity-actions">
+          <input
+            id="rentalQuantity"
+            type="number"
+            min="1"
+            class="form-control"
+            [(ngModel)]="quantity"
+          />
+          <button
+            pButton
+            type="button"
+            icon="pi pi-plus"
+            label="Adicionar à locação"
+            (click)="addToRental()"
+          ></button>
+        </div>
+
+        <div class="selected-items" *ngIf="selectedItemsQuantity > 0">
+          <span>
+            {{ selectedItemsQuantity }} item(ns) selecionado(s)
+          </span>
+          <div>
+            <button
+              pButton
+              type="button"
+              class="p-button-outlined"
+              label="Escolher mais itens"
+              (click)="goBack()"
+            ></button>
+            <button
+              pButton
+              type="button"
+              class="p-button-success"
+              icon="pi pi-check"
+              label="Finalizar locação"
+              (click)="finishRental()"
+            ></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="inactive-message" *ngIf="item.active === false">
+        Este item não está disponível para locação.
       </div>
     </section>
   </main>

@@ -1,0 +1,47 @@
+<div class="page-header">
+  <h2>Locações</h2>
+  <a *ngIf="canCreateRental" routerLink="/catalog" class="btn btn-primary">Nova locação</a>
+</div>
+
+<div class="filter-card">
+  <input class="form-control" placeholder="Número" [(ngModel)]="filter.number" />
+  <input class="form-control" placeholder="Cliente" [(ngModel)]="filter.customer" />
+  <select class="form-select" [(ngModel)]="filter.status">
+    <option value="">Todos os status</option>
+    <option value="DRAFT">Rascunho</option>
+    <option value="CONFIRMED">Confirmada</option>
+  </select>
+  <select class="form-select" [(ngModel)]="filter.rentalTypeId">
+    <option [ngValue]="null">Todos os tipos</option>
+    <option *ngFor="let type of rentalTypes" [ngValue]="type.id">{{ type.name }}</option>
+  </select>
+  <input type="date" class="form-control" [(ngModel)]="filter.dateFrom" />
+  <input type="date" class="form-control" [(ngModel)]="filter.dateTo" />
+  <button class="btn btn-primary" (click)="list()">Filtrar</button>
+  <button class="btn btn-outline-secondary" (click)="clearFilters()">Limpar</button>
+</div>
+
+<div class="table-card">
+  <p-table [value]="rentals" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr><th>Número</th><th>Cliente</th><th>Tipo</th><th>Data</th><th>Status</th><th>Total</th><th>Ações</th></tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rental>
+      <tr>
+        <td>{{ rental.rentalNumber }}</td>
+        <td>{{ rental.customerName }}</td>
+        <td>{{ rental.rentalTypeName }}</td>
+        <td>{{ rental.rentalDate | date: "dd/MM/yyyy" }}</td>
+        <td>{{ statusLabel(rental.status) }}</td>
+        <td>{{ rental.totalAmount | currency: "BRL" }}</td>
+        <td class="actions">
+          <button pButton icon="pi pi-eye" class="p-button-text" (click)="details(rental)"></button>
+          <button *ngIf="rental.status === 'DRAFT'" pButton icon="pi pi-pencil" class="p-button-text" (click)="edit(rental)"></button>
+          <button *ngIf="rental.status === 'DRAFT'" pButton icon="pi pi-check" class="p-button-text p-button-success" (click)="confirm(rental)"></button>
+          <button *ngIf="rental.status === 'DRAFT'" pButton icon="pi pi-trash" class="p-button-text p-button-danger" (click)="delete(rental)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <p-paginator [rows]="pagination.linesPerPage" [totalRecords]="totalElements" (onPageChange)="changePage($event)"></p-paginator>
+</div>

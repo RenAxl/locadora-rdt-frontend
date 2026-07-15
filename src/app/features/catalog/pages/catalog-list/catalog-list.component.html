@@ -1,5 +1,8 @@
-<div class="catalog-filter-container">
+<div class="catalog-page-toolbar">
+  <div class="catalog-filter-container">
   <app-catalog-filter (search)="searchCatalog($event)"></app-catalog-filter>
+  </div>
+  <app-rental-cart-summary></app-rental-cart-summary>
 </div>
 
 <div class="catalog-grid" *ngIf="items.length > 0; else emptyCatalog">

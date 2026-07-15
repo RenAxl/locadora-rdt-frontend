@@ -9,6 +9,7 @@ import { TokenService } from './token.service';
 import { User } from 'src/app/features/users/models/user';
 import { environment } from 'src/environments/environment';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { RentalCartService } from 'src/app/features/rental/basic-rental/services/rental-cart.service';
 
 type OAuthTokenResponse = {
   access_token: string;
@@ -27,6 +28,7 @@ export class AuthService {
     private http: HttpClient,
     private tokenService: TokenService,
     private jwtHelper: JwtHelperService,
+    private rentalCartService: RentalCartService,
   ) {
     this.loadDecodedTokenFromStorage();
   }
@@ -54,12 +56,14 @@ export class AuthService {
         if (data?.access_token) {
           this.tokenService.setToken(data.access_token);
           this.decodedToken = this.jwtHelper.decodeToken(data.access_token);
+          this.rentalCartService.clear();
         }
       }),
     );
   }
 
   logout(): void {
+    this.rentalCartService.clear();
     this.tokenService.clearToken();
     this.decodedToken = null;
   }

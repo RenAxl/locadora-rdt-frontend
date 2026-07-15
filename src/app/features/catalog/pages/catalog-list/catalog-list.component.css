@@ -1,8 +1,13 @@
-.catalog-filter-container {
+.catalog-page-toolbar {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
   max-width: 1580px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 20px;
+  margin: 0 auto 20px;
+}
+
+.catalog-filter-container {
+  flex: 1;
 }
 
 :host ::ng-deep .catalog-filter-container .filter-container {
@@ -90,6 +95,7 @@
 
 @media (max-width: 1199px) {
   .catalog-filter-container,
+  .catalog-page-toolbar,
   .catalog-grid,
   .catalog-paginator {
     max-width: 100%;
@@ -98,6 +104,13 @@
   .catalog-grid {
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     min-height: 0;
+  }
+}
+
+@media (max-width: 575px) {
+  .catalog-page-toolbar {
+    align-items: flex-end;
+    flex-direction: column-reverse;
   }
 }
 

@@ -6,6 +6,9 @@ import { PhotoPreview } from 'src/app/core/utils/photo-preview.util';
 import { ItemMapper } from 'src/app/features/items/mapper/item.mapper';
 import { Item } from 'src/app/features/items/models/Item';
 import { CatalogService } from '../../services/catalog.service';
+import { MessageService } from 'primeng/api';
+import { RentalCartService } from 'src/app/features/rental/basic-rental/services/rental-cart.service';
+import { AuthService } from 'src/app/core/auth/services/auth.service';
 
 @Component({
   selector: 'app-catalog-item-details',
@@ -17,6 +20,9 @@ export class CatalogItemDetailsComponent implements OnInit, OnDestroy {
   imageUrl?: SafeUrl;
   loading = true;
   itemNotFound = false;
+  quantity = 1;
+  selectedItemsQuantity = 0;
+  canCreateRental = false;
 
   private imagePreview: PhotoPreview;
 
@@ -24,12 +30,19 @@ export class CatalogItemDetailsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private catalogService: CatalogService,
+    private rentalCartService: RentalCartService,
+    private messageService: MessageService,
+    private authService: AuthService,
     sanitizer: DomSanitizer,
   ) {
     this.imagePreview = new PhotoPreview(sanitizer);
   }
 
   ngOnInit(): void {
+    this.canCreateRental = this.authService.hasAnyAuthority([
+      'ROLE_ADMINISTRADOR',
+      'ROLE_CLIENTE',
+    ]);
     const itemId = Number(this.route.snapshot.paramMap.get('itemId'));
 
     if (!itemId) {
@@ -49,12 +62,47 @@ export class CatalogItemDetailsComponent implements OnInit, OnDestroy {
     this.router.navigate(['/catalog']);
   }
 
+  addToRental(): void {
+    if (!this.item?.id || this.item.price == null || this.quantity < 1) {
+      return;
+    }
+
+    this.rentalCartService.addItem({
+      itemId: this.item.id,
+      itemName: this.item.name,
+      quantity: this.quantity,
+      unitPrice: Number(this.item.price),
+      discount: 0,
+      additionalFee: 0,
+    });
+
+    this.selectedItemsQuantity = this.rentalCartService.getTotalQuantity();
+    this.quantity = 1;
+    this.messageService.add({
+      severity: 'success',
+      detail: 'Item adicionado à locação.',
+    });
+  }
+
+  finishRental(): void {
+    if (this.selectedItemsQuantity === 0) {
+      this.messageService.add({
+        severity: 'warn',
+        detail: 'Adicione pelo menos um item.',
+      });
+      return;
+    }
+
+    this.router.navigate(['/rentals/create']);
+  }
+
   private loadItem(itemId: number): void {
     this.catalogService.findById(itemId).subscribe({
       next: (dto) => {
         this.item = ItemMapper.fromDetailsDTO(dto);
         this.loading = false;
         this.loadImage(itemId);
+        this.selectedItemsQuantity = this.rentalCartService.getTotalQuantity();
       },
       error: () => {
         this.loading = false;

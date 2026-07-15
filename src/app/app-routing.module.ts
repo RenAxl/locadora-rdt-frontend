@@ -200,6 +200,21 @@ const routes: Routes = [
     component: MainComponent,
     children: [
       {
+        path: 'rentals',
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+          import('./features/rental/basic-rental/basic-rental.module').then(
+            (m) => m.BasicRentalModule,
+          ),
+      },
+    ],
+  },
+
+  {
+    path: '',
+    component: MainComponent,
+    children: [
+      {
         path: 'items',
         loadChildren: () =>
           import('./features/items/items.module').then(

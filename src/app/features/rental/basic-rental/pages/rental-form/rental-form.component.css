@@ -1,0 +1,9 @@
+:host { display: block; padding: 24px; }
+.rental-form-page { max-width: 1200px; margin: auto; }
+.form-card { padding: 20px; margin: 16px 0; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #00000012; }
+.form-grid, .totals { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+label { display: block; font-weight: 600; } label .form-control, label .form-select { margin-top: 6px; font-weight: 400; }
+.add-item { display: flex; gap: 10px; margin-bottom: 16px; }.number { width: 85px; }.money { width: 120px; }
+.totals div { display: flex; flex-direction: column; justify-content: center; }.totals strong { font-size: 22px; }
+.buttons { display: flex; gap: 10px; justify-content: flex-end; margin-bottom: 30px; }
+@media (max-width: 700px) { .form-grid, .totals { grid-template-columns: 1fr; } }

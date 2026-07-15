@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
 import { PaginatorModule } from 'primeng/paginator';
 import { TooltipModule } from 'primeng/tooltip';
 
@@ -12,6 +13,7 @@ import { CatalogFilterComponent } from './components/catalog-filter/catalog-filt
 import { CatalogItemCardComponent } from './components/catalog-item-card/catalog-item-card.component';
 import { CatalogListComponent } from './pages/catalog-list/catalog-list.component';
 import { CatalogItemDetailsComponent } from './pages/catalog-item-details/catalog-item-details.component';
+import { RentalCartSummaryComponent } from './components/rental-cart-summary/rental-cart-summary.component';
 
 @NgModule({
   declarations: [
@@ -19,11 +21,13 @@ import { CatalogItemDetailsComponent } from './pages/catalog-item-details/catalo
     CatalogItemCardComponent,
     CatalogFilterComponent,
     CatalogItemDetailsComponent,
+    RentalCartSummaryComponent,
   ],
   imports: [
     CommonModule,
     FormsModule,
     ButtonModule,
+    DialogModule,
     TooltipModule,
     PaginatorModule,
     SharedModule,

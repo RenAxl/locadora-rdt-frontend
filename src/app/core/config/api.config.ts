@@ -15,6 +15,13 @@ export const API = {
     IMAGE: (id: number | string) => `${BASE_URL}/catalog/${id}/image`,
   },
 
+  RENTALS: {
+    ROOT: `${BASE_URL}/rentals`,
+    BY_ID: (id: number | string) => `${BASE_URL}/rentals/${id}`,
+    CONFIRM: (id: number | string) => `${BASE_URL}/rentals/${id}/confirm`,
+    CURRENT_CUSTOMER: `${BASE_URL}/rentals/current-customer`,
+  },
+
   USERS: {
     ROOT: `${BASE_URL}/users`,
     BY_ID: (id: number | string) => `${BASE_URL}/users/${id}`,

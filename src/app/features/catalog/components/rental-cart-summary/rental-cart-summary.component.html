@@ -1,0 +1,40 @@
+<button
+  type="button"
+  class="cart-button"
+  aria-label="Itens selecionados para locação"
+  (click)="open()"
+>
+  <i class="pi pi-shopping-cart"></i>
+  <span class="cart-count">{{ totalQuantity }}</span>
+</button>
+
+<p-dialog
+  header="Itens selecionados"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '560px', maxWidth: '95vw' }"
+>
+  <div class="selected-list">
+    <div class="selected-item" *ngFor="let item of items">
+      <span>{{ item.itemName }}</span>
+      <strong>Quantidade: {{ item.quantity }}</strong>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      class="p-button-text"
+      label="Continuar escolhendo"
+      (click)="visible = false"
+    ></button>
+    <button
+      pButton
+      type="button"
+      icon="pi pi-check"
+      label="Finalizar locação"
+      (click)="finishRental()"
+    ></button>
+  </ng-template>
+</p-dialog>

@@ -16,6 +16,7 @@ import { UserSessionService } from '../../services/user-session.service';
 export class NavbarComponent implements OnInit, OnDestroy {
   photoPreviewUrl?: SafeUrl;
   profile: Profile = new Profile();
+  canAccessSystemSettings = false;
 
   private objectUrl?: string;
   private subs: Subscription[] = [];
@@ -29,6 +30,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.canAccessSystemSettings = this.authService.hasAuthority('ROLE_ADMINISTRADOR');
     this.userSessionService.loadSession();
 
     this.subscribeToProfile();

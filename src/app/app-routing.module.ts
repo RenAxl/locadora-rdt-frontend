@@ -257,6 +257,22 @@ const routes: Routes = [
     component: MainComponent,
     children: [
       {
+        path: 'system-settings',
+        canActivate: [AuthGuard],
+        data: { authorities: ['ROLE_ADMINISTRADOR'] },
+        loadChildren: () =>
+          import('./features/system-settings/system-settings.module').then(
+            (m) => m.SystemSettingsModule,
+          ),
+      },
+    ],
+  },
+
+  {
+    path: '',
+    component: MainComponent,
+    children: [
+      {
         path: 'financial-settings',
         loadChildren: () =>
           import('./features/financial-settings/financial-settings.module').then(

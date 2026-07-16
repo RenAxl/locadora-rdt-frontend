@@ -6,6 +6,7 @@ import { PageResponse } from 'src/app/core/models/page-response';
 import { Pagination } from 'src/app/core/models/Pagination';
 import { Rental } from '../models/rental';
 import { CustomerDTO } from 'src/app/features/customers/dtos/customer.dto';
+import { Address } from 'src/app/features/customers/models/address';
 
 export interface RentalFilter {
   number?: string;
@@ -14,6 +15,12 @@ export interface RentalFilter {
   rentalTypeId?: number | null;
   dateFrom?: string;
   dateTo?: string;
+}
+
+export interface ShippingPrice {
+  price: number;
+  distanceKm: number;
+  deliveryAvailable: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -41,6 +48,10 @@ export class RentalService {
 
   findCurrentCustomer(): Observable<CustomerDTO> {
     return this.http.get<CustomerDTO>(API.RENTALS.CURRENT_CUSTOMER);
+  }
+
+  calculateShipping(address: Address): Observable<ShippingPrice> {
+    return this.http.post<ShippingPrice>(API.RENTALS.CALCULATE_SHIPPING, address);
   }
 
   insert(rental: Rental): Observable<Rental> {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Pagination } from 'src/app/core/models/Pagination';
@@ -13,9 +13,10 @@ import { Rental, RentalItem } from '../../models/rental';
 import { RentalService } from '../../services/rental.service';
 import { AuthService } from 'src/app/core/auth/services/auth.service';
 import { RentalCartService } from '../../services/rental-cart.service';
+import { Subscription } from 'rxjs';
 
 @Component({ selector: 'app-rental-form', templateUrl: './rental-form.component.html', styleUrls: ['./rental-form.component.css'] })
-export class RentalFormComponent implements OnInit {
+export class RentalFormComponent implements OnInit, OnDestroy {
   rental: Rental = this.emptyRental();
   currentCustomer?: CustomerDTO;
   rentalTypes: RentalTypeDTO[] = [];
@@ -24,6 +25,12 @@ export class RentalFormComponent implements OnInit {
   selectedItemId?: number;
   editing = false;
   canChangePrice = false;
+  calculatingShipping = false;
+  shippingCalculated = false;
+  shippingError = '';
+  shippingDistanceKm?: number;
+  private shippingTimer: any;
+  private shippingSubscription?: Subscription;
 
   constructor(private rentalService: RentalService,
     private rentalTypeService: RentalTypeService, private paymentMethodService: PaymentMethodService,
@@ -64,6 +71,11 @@ export class RentalFormComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(): void {
+    clearTimeout(this.shippingTimer);
+    this.shippingSubscription?.unsubscribe();
+  }
+
   addItem(): void {
     const item = this.availableItems.find((value) => value.id === Number(this.selectedItemId));
     if (!item) return;
@@ -72,10 +84,10 @@ export class RentalFormComponent implements OnInit {
     else this.rental.items.push({ itemId: item.id, itemName: item.name, quantity: 1,
       unitPrice: Number(item.price || 0), discount: 0, additionalFee: 0 });
     this.selectedItemId = undefined;
-    this.calculate();
+    this.calculate(true);
   }
 
-  removeItem(index: number): void { this.rental.items.splice(index, 1); this.calculate(); }
+  removeItem(index: number): void { this.rental.items.splice(index, 1); this.calculate(true); }
 
   changeRentalType(rentalTypeId?: number): void {
     this.rental.rentalTypeId = rentalTypeId;
@@ -87,18 +99,25 @@ export class RentalFormComponent implements OnInit {
     this.calculateExpectedReturnDate();
   }
 
-  calculate(): void {
+  calculate(recalculateShipping = false): void {
     this.rental.items.forEach((item) => item.subtotal = Math.max(0,
       item.quantity * Number(item.unitPrice || 0) - Number(item.discount || 0) + Number(item.additionalFee || 0)));
     this.rental.subtotal = this.rental.items.reduce((sum, item) => sum + Number(item.subtotal || 0), 0);
     this.rental.totalAmount = Math.max(0, Number(this.rental.subtotal) - Number(this.rental.discount || 0)
       + Number(this.rental.shippingFee || 0) + Number(this.rental.additionalFee || 0));
     this.rental.remainingAmount = Math.max(0, Number(this.rental.totalAmount) - Number(this.rental.downPayment || 0));
+    if (recalculateShipping) {
+      this.scheduleShippingCalculation();
+    }
   }
 
   save(): void {
     if (!this.rental.customerId || !this.rental.rentalTypeId || !this.rental.startDate || !this.rental.expectedReturnDate) {
       this.messageService.add({ severity: 'warn', detail: 'Informe cliente, tipo e período.' });
+      return;
+    }
+    if (!this.editing && this.rental.items.length > 0 && !this.shippingCalculated) {
+      this.messageService.add({ severity: 'warn', detail: 'Aguarde o cálculo do frete antes de salvar.' });
       return;
     }
     const payload: Rental = { ...this.rental, startDate: new Date(this.rental.startDate).toISOString(),
@@ -128,6 +147,7 @@ export class RentalFormComponent implements OnInit {
         this.rental.customerId = customer.id;
         this.rental.customerName = customer.name;
         this.rental.deliveryAddress = this.formatDeliveryAddress(customer);
+        this.scheduleShippingCalculation();
       },
       error: () => {
         this.currentCustomer = undefined;
@@ -180,5 +200,61 @@ export class RentalFormComponent implements OnInit {
     const hour = String(date.getHours()).padStart(2, '0');
     const minute = String(date.getMinutes()).padStart(2, '0');
     return `${year}-${month}-${day}T${hour}:${minute}`;
+  }
+
+  private scheduleShippingCalculation(): void {
+    if (this.editing) return;
+    clearTimeout(this.shippingTimer);
+    this.shippingSubscription?.unsubscribe();
+    this.shippingCalculated = false;
+    this.shippingError = '';
+    this.shippingDistanceKm = undefined;
+    this.shippingTimer = setTimeout(() => this.calculateShipping(), 400);
+  }
+
+  private calculateShipping(): void {
+    const address = this.currentCustomer?.address;
+    const quantity = this.rental.items.reduce((total, item) => total + Number(item.quantity || 0), 0);
+
+    if (!address || !address.zipCode || quantity < 1) {
+      this.rental.shippingFee = 0;
+      this.shippingCalculated = quantity < 1;
+      this.shippingError = address?.zipCode || quantity < 1 ? '' : 'O cliente não possui endereço completo cadastrado.';
+      this.calculate();
+      return;
+    }
+
+    this.calculatingShipping = true;
+    this.shippingSubscription = this.rentalService.calculateShipping(address).subscribe({
+      next: (result) => {
+        this.shippingDistanceKm = Number(result.distanceKm);
+        if (!result.deliveryAvailable) {
+          this.rental.shippingFee = 0;
+          this.calculatingShipping = false;
+          this.shippingCalculated = false;
+          this.shippingError = 'Não realizamos entregas acima de 40 km.';
+          this.calculate();
+          this.messageService.add({ severity: 'warn', detail: this.shippingError });
+          return;
+        }
+        this.rental.shippingFee = Number(result.price || 0);
+        this.calculatingShipping = false;
+        this.shippingCalculated = true;
+        this.shippingError = '';
+        this.calculate();
+      },
+      error: (error) => {
+        this.rental.shippingFee = 0;
+        this.calculatingShipping = false;
+        this.shippingCalculated = false;
+        this.shippingDistanceKm = undefined;
+        this.shippingError = error?.error?.message || 'Não foi possível calcular a distância da entrega.';
+        this.calculate();
+        this.messageService.add({
+          severity: 'warn',
+          detail: this.shippingError,
+        });
+      },
+    });
   }
 }

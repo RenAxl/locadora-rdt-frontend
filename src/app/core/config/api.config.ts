@@ -20,6 +20,7 @@ export const API = {
     BY_ID: (id: number | string) => `${BASE_URL}/rentals/${id}`,
     CONFIRM: (id: number | string) => `${BASE_URL}/rentals/${id}/confirm`,
     CURRENT_CUSTOMER: `${BASE_URL}/rentals/current-customer`,
+    CALCULATE_SHIPPING: `${BASE_URL}/rentals/shipping/calculate`,
   },
 
   USERS: {
@@ -155,6 +156,10 @@ export const API = {
 
   FINANCIAL_SETTINGS: {
     ROOT: `${BASE_URL}/financial-settings`,
+  },
+
+  SYSTEM_SETTINGS: {
+    ROOT: `${BASE_URL}/system-settings`,
   },
 
   RECEIVABLES: {

@@ -1,0 +1,49 @@
+<div class="system-setting-container">
+  <div class="system-setting-card">
+    <form #settingForm="ngForm" (ngSubmit)="save(settingForm)">
+      <h1>Configurações do Sistema</h1>
+      <div *ngIf="loading" class="loading">Carregando configurações...</div>
+
+      <div *ngIf="!loading" class="row g-3">
+        <div class="col-12">
+          <label>Nome da locadora</label>
+          <input class="form-control" name="companyName" [(ngModel)]="setting.companyName" required maxlength="120" />
+        </div>
+
+        <div class="col-12"><h4>Endereço da locadora</h4></div>
+        <div class="col-12 col-lg-3">
+          <label>CEP</label>
+          <input class="form-control" name="zipCode" [(ngModel)]="setting.address.zipCode" required maxlength="10" />
+        </div>
+        <div class="col-12 col-lg-6">
+          <label>Rua</label>
+          <input class="form-control" name="street" [(ngModel)]="setting.address.street" required maxlength="100" />
+        </div>
+        <div class="col-12 col-lg-3">
+          <label>Número</label>
+          <input class="form-control" name="number" [(ngModel)]="setting.address.number" required maxlength="20" />
+        </div>
+        <div class="col-12 col-lg-6">
+          <label>Complemento</label>
+          <input class="form-control" name="complement" [(ngModel)]="setting.address.complement" maxlength="100" />
+        </div>
+        <div class="col-12 col-lg-6">
+          <label>Bairro</label>
+          <input class="form-control" name="neighborhood" [(ngModel)]="setting.address.neighborhood" required maxlength="80" />
+        </div>
+        <div class="col-12 col-lg-6">
+          <label>Cidade</label>
+          <input class="form-control" name="city" [(ngModel)]="setting.address.city" required maxlength="80" />
+        </div>
+        <div class="col-12 col-lg-3">
+          <label>UF</label>
+          <input class="form-control" name="state" [(ngModel)]="setting.address.state" required minlength="2" maxlength="2" />
+        </div>
+      </div>
+
+      <div class="buttons" *ngIf="!loading">
+        <button class="btn btn-primary" type="submit" [disabled]="settingForm.invalid || saving">SALVAR</button>
+      </div>
+    </form>
+  </div>
+</div>

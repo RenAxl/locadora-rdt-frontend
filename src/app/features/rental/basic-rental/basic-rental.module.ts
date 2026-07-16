@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { PaginatorModule } from 'primeng/paginator';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { TableModule } from 'primeng/table';
 import { BasicRentalRoutingModule } from './basic-rental-routing.module';
 import { RentalDetailsComponent } from './pages/rental-details/rental-details.component';
@@ -11,6 +12,6 @@ import { RentalListComponent } from './pages/rental-list/rental-list.component';
 
 @NgModule({
   declarations: [RentalListComponent, RentalFormComponent, RentalDetailsComponent],
-  imports: [CommonModule, FormsModule, ButtonModule, PaginatorModule, TableModule, BasicRentalRoutingModule],
+  imports: [CommonModule, FormsModule, ButtonModule, InputNumberModule, PaginatorModule, TableModule, BasicRentalRoutingModule],
 })
 export class BasicRentalModule {}

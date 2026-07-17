@@ -75,6 +75,17 @@
             </td>
             <td class="col-actions">
               <div class="actions-wrap">
+                <a
+                  [routerLink]="['/items/stock-balances', balance.itemId, 'units']"
+                  pTooltip="Ver unidades físicas"
+                  tooltipPosition="top"
+                >
+                  <button
+                    pButton
+                    class="p-button-rounded p-button-text"
+                    icon="pi pi-box"
+                  ></button>
+                </a>
                 <button
                   pButton
                   class="p-button-rounded p-button-text"

@@ -16,6 +16,7 @@ import { ItemListComponent } from './pages/item-list/item-list.component';
 import { StockBalanceListComponent } from './pages/stock-balance-list/stock-balance-list.component';
 import { StockMovementFormComponent } from './pages/stock-movement-form/stock-movement-form.component';
 import { StockMovementListComponent } from './pages/stock-movement-list/stock-movement-list.component';
+import { ItemUnitListComponent } from './pages/item-unit-list/item-unit-list.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { StockMovementListComponent } from './pages/stock-movement-list/stock-mo
     StockBalanceListComponent,
     StockMovementListComponent,
     StockMovementFormComponent,
+    ItemUnitListComponent,
   ],
   imports: [
     CommonModule,

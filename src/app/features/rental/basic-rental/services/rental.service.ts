@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { API } from 'src/app/core/config/api.config';
 import { PageResponse } from 'src/app/core/models/page-response';
 import { Pagination } from 'src/app/core/models/Pagination';
-import { Rental } from '../models/rental';
+import { ItemAvailability, ItemUnit, Rental, RentalItemUnit, RentalStatusHistory } from '../models/rental';
 import { CustomerDTO } from 'src/app/features/customers/dtos/customer.dto';
 import { Address } from 'src/app/features/customers/models/address';
 
@@ -64,6 +64,30 @@ export class RentalService {
 
   confirm(id: number): Observable<Rental> {
     return this.http.patch<Rental>(API.RENTALS.CONFIRM(id), {});
+  }
+
+  start(id: number): Observable<Rental> {
+    return this.http.patch<Rental>(API.RENTALS.START(id), {});
+  }
+
+  cancel(id: number): Observable<Rental> {
+    return this.http.patch<Rental>(API.RENTALS.CANCEL(id), {});
+  }
+
+  findAvailability(itemId: number): Observable<ItemAvailability> {
+    return this.http.get<ItemAvailability>(API.RENTALS.ITEM_AVAILABILITY(itemId));
+  }
+
+  findAvailableUnits(itemId: number): Observable<ItemUnit[]> {
+    return this.http.get<ItemUnit[]>(API.RENTALS.AVAILABLE_UNITS(itemId));
+  }
+
+  findRentalUnits(id: number | string): Observable<RentalItemUnit[]> {
+    return this.http.get<RentalItemUnit[]>(API.RENTALS.UNITS(id));
+  }
+
+  findHistory(id: number | string): Observable<RentalStatusHistory[]> {
+    return this.http.get<RentalStatusHistory[]>(API.RENTALS.HISTORY(id));
   }
 
   delete(id: number): Observable<void> {

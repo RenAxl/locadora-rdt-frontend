@@ -25,7 +25,7 @@ export class StockBalanceListComponent {
   totalElements: number = 0;
   filterName: string = '';
   editingBalance: StockBalance | null = null;
-  editField: StockBalanceEditField = 'available';
+  editField: StockBalanceEditField = 'total';
   editQuantity: number = 0;
 
   editFieldOptions = [
@@ -83,25 +83,15 @@ export class StockBalanceListComponent {
 
     if (this.editField === 'total') {
       this.editQuantity = this.editingBalance.totalQuantity ?? 0;
-      return;
-    }
-
-    if (this.editField === 'available') {
+    } else if (this.editField === 'available') {
       this.editQuantity = this.editingBalance.availableQuantity ?? 0;
-      return;
-    }
-
-    if (this.editField === 'reserved') {
+    } else if (this.editField === 'reserved') {
       this.editQuantity = this.editingBalance.reservedQuantity ?? 0;
-      return;
-    }
-
-    if (this.editField === 'unavailable') {
+    } else if (this.editField === 'unavailable') {
       this.editQuantity = this.editingBalance.unavailableQuantity ?? 0;
-      return;
+    } else {
+      this.editQuantity = this.editingBalance.minimumQuantity ?? 0;
     }
-
-    this.editQuantity = this.editingBalance.minimumQuantity ?? 0;
   }
 
   updateEditedQuantity(): void {
@@ -113,19 +103,46 @@ export class StockBalanceListComponent {
 
     if (this.editField === 'total') {
       this.editingBalance.totalQuantity = quantity;
-    }
-
-    if (this.editField === 'available') {
+    } else if (this.editField === 'available') {
       this.editingBalance.availableQuantity = quantity;
     } else if (this.editField === 'reserved') {
       this.editingBalance.reservedQuantity = quantity;
     } else if (this.editField === 'unavailable') {
       this.editingBalance.unavailableQuantity = quantity;
-    } else if (this.editField === 'minimum') {
+    } else {
       this.editingBalance.minimumQuantity = quantity;
     }
 
     this.updateQuantities();
+  }
+
+  private updateQuantities(): void {
+    if (!this.editingBalance) {
+      return;
+    }
+
+    const total = this.toPositiveNumber(this.editingBalance.totalQuantity);
+    const available = this.toPositiveNumber(this.editingBalance.availableQuantity);
+    const reserved = this.toPositiveNumber(this.editingBalance.reservedQuantity);
+    const unavailable = this.toPositiveNumber(this.editingBalance.unavailableQuantity);
+
+    if (this.editField === 'minimum') {
+      return;
+    }
+
+    if (this.editField === 'available') {
+      this.editingBalance.totalQuantity = available + reserved + unavailable;
+      return;
+    }
+
+    const used = reserved + unavailable;
+    const correctedTotal = total < used ? used : total;
+    this.editingBalance.totalQuantity = correctedTotal;
+    this.editingBalance.availableQuantity = correctedTotal - used;
+
+    if (this.editField === 'total') {
+      this.editQuantity = correctedTotal;
+    }
   }
 
   saveBalance(): void {
@@ -145,40 +162,6 @@ export class StockBalanceListComponent {
         });
       },
     });
-  }
-
-  private updateQuantities(): void {
-    if (!this.editingBalance) {
-      return;
-    }
-
-    const total = this.toPositiveNumber(this.editingBalance.totalQuantity);
-    const available = this.toPositiveNumber(this.editingBalance.availableQuantity);
-    const reserved = this.toPositiveNumber(this.editingBalance.reservedQuantity);
-    const unavailable = this.toPositiveNumber(this.editingBalance.unavailableQuantity);
-    const minimum = this.toPositiveNumber(this.editingBalance.minimumQuantity);
-
-    this.editingBalance.reservedQuantity = reserved;
-    this.editingBalance.unavailableQuantity = unavailable;
-    this.editingBalance.minimumQuantity = minimum;
-
-    if (this.editField === 'minimum') {
-      this.editQuantity = minimum;
-      return;
-    }
-
-    if (this.editField === 'available') {
-      this.editingBalance.availableQuantity = available;
-      this.editingBalance.totalQuantity = available + reserved + unavailable;
-      return;
-    }
-
-    const minimumTotal = reserved + unavailable;
-    const correctedTotal = total < minimumTotal ? minimumTotal : total;
-
-    this.editingBalance.totalQuantity = correctedTotal;
-    this.editingBalance.availableQuantity = correctedTotal - reserved - unavailable;
-    this.editQuantity = this.editField === 'total' ? correctedTotal : this.editQuantity;
   }
 
   private toPositiveNumber(value: number | undefined): number {

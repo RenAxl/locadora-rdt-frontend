@@ -58,9 +58,31 @@ export class RentalListComponent implements OnInit {
   confirm(rental: Rental): void {
     if (!rental.id) return;
     this.confirmationService.confirm({
-      message: 'Deseja confirmar esta locação?',
+      message: 'Deseja alugar os itens desta locação?',
       accept: () => this.rentalService.confirm(rental.id!).subscribe(() => {
-        this.messageService.add({ severity: 'success', detail: 'Locação confirmada!' });
+        this.messageService.add({ severity: 'success', detail: 'Locação alugada!' });
+        this.list(this.pagination.page);
+      }),
+    });
+  }
+
+  start(rental: Rental): void {
+    if (!rental.id) return;
+    this.confirmationService.confirm({
+      message: 'Deseja marcar esta locação como entregue?',
+      accept: () => this.rentalService.start(rental.id!).subscribe(() => {
+        this.messageService.add({ severity: 'success', detail: 'Locação entregue!' });
+        this.list(this.pagination.page);
+      }),
+    });
+  }
+
+  cancel(rental: Rental): void {
+    if (!rental.id) return;
+    this.confirmationService.confirm({
+      message: 'Deseja cancelar esta locação e liberar as unidades reservadas?',
+      accept: () => this.rentalService.cancel(rental.id!).subscribe(() => {
+        this.messageService.add({ severity: 'success', detail: 'Locação cancelada e unidades liberadas!' });
         this.list(this.pagination.page);
       }),
     });
@@ -78,7 +100,9 @@ export class RentalListComponent implements OnInit {
   }
 
   statusLabel(status?: string): string {
-    return status === 'DRAFT' ? 'Rascunho' : status === 'CONFIRMED' ? 'Confirmada' : status || '-';
+    if (status === 'RENTED') return 'Alugada';
+    if (status === 'DELIVERED') return 'Entregue';
+    return status || '-';
   }
 
   private loadRentalTypes(): void {

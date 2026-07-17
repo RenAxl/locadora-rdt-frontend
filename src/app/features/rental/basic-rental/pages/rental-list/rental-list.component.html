@@ -8,8 +8,8 @@
   <input class="form-control" placeholder="Cliente" [(ngModel)]="filter.customer" />
   <select class="form-select" [(ngModel)]="filter.status">
     <option value="">Todos os status</option>
-    <option value="DRAFT">Rascunho</option>
-    <option value="CONFIRMED">Confirmada</option>
+    <option value="RENTED">Alugada</option>
+    <option value="DELIVERED">Entregue</option>
   </select>
   <select class="form-select" [(ngModel)]="filter.rentalTypeId">
     <option [ngValue]="null">Todos os tipos</option>
@@ -36,9 +36,7 @@
         <td>{{ rental.totalAmount | currency: "BRL" }}</td>
         <td class="actions">
           <button pButton icon="pi pi-eye" class="p-button-text" (click)="details(rental)"></button>
-          <button *ngIf="rental.status === 'DRAFT'" pButton icon="pi pi-pencil" class="p-button-text" (click)="edit(rental)"></button>
-          <button *ngIf="rental.status === 'DRAFT'" pButton icon="pi pi-check" class="p-button-text p-button-success" (click)="confirm(rental)"></button>
-          <button *ngIf="rental.status === 'DRAFT'" pButton icon="pi pi-trash" class="p-button-text p-button-danger" (click)="delete(rental)"></button>
+          <button *ngIf="rental.status === 'RENTED'" pButton icon="pi pi-truck" class="p-button-text p-button-success" (click)="start(rental)"></button>
         </td>
       </tr>
     </ng-template>

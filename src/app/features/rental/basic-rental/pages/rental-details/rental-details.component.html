@@ -11,6 +11,19 @@
     <div><span>Observações</span><strong>{{ rental.notes || "-" }}</strong></div>
   </section>
   <section class="details-card"><h4>Itens</h4><div class="table-responsive"><table class="table"><thead><tr><th>Item</th><th>Qtd.</th><th>Preço</th><th>Desconto</th><th>Acréscimo</th><th>Subtotal</th></tr></thead><tbody><tr *ngFor="let item of rental.items"><td>{{ item.itemName }}</td><td>{{ item.quantity }}</td><td>{{ item.unitPrice | currency: "BRL" }}</td><td>{{ item.discount | currency: "BRL" }}</td><td>{{ item.additionalFee | currency: "BRL" }}</td><td>{{ item.subtotal | currency: "BRL" }}</td></tr></tbody></table></div></section>
+  <section class="details-card" *ngIf="units.length > 0">
+    <h4>Unidades vinculadas</h4>
+    <div class="table-responsive"><table class="table"><thead><tr><th>Item</th><th>Código patrimonial</th><th>Status</th><th>Reserva</th><th>Entrega</th></tr></thead><tbody>
+      <tr *ngFor="let unit of units"><td>{{ unit.itemName }}</td><td>{{ unit.assetCode }}</td><td>{{ statusLabel(unit.status) }}</td><td>{{ unit.reservedAt | date: "dd/MM/yyyy HH:mm" }}</td><td>{{ unit.deliveredAt ? (unit.deliveredAt | date: "dd/MM/yyyy HH:mm") : "-" }}</td></tr>
+    </tbody></table></div>
+  </section>
+  <section class="details-card">
+    <h4>Histórico de status</h4>
+    <div class="empty-message" *ngIf="history.length === 0">Nenhuma alteração de status registrada.</div>
+    <div class="table-responsive" *ngIf="history.length > 0"><table class="table"><thead><tr><th>Data</th><th>Status anterior</th><th>Novo status</th><th>Motivo</th><th>Responsável</th></tr></thead><tbody>
+      <tr *ngFor="let entry of history"><td>{{ entry.changedAt | date: "dd/MM/yyyy HH:mm" }}</td><td>{{ statusLabel(entry.previousStatus) }}</td><td>{{ statusLabel(entry.newStatus) }}</td><td>{{ entry.reason || "-" }}</td><td>{{ entry.changedBy }}</td></tr>
+    </tbody></table></div>
+  </section>
   <section class="summary"><div><span>Subtotal</span><strong>{{ rental.subtotal | currency: "BRL" }}</strong></div><div><span>Desconto</span><strong>{{ rental.discount | currency: "BRL" }}</strong></div><div><span>Frete</span><strong>{{ rental.shippingFee | currency: "BRL" }}</strong></div><div><span>Acréscimos</span><strong>{{ rental.additionalFee | currency: "BRL" }}</strong></div><div class="total"><span>Total</span><strong>{{ rental.totalAmount | currency: "BRL" }}</strong></div></section>
 </div>
 <ng-template #loading><div class="loading">Carregando...</div></ng-template>

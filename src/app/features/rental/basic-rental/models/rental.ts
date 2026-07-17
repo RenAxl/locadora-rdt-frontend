@@ -37,3 +37,43 @@ export interface Rental {
   updatedBy?: string;
   items: RentalItem[];
 }
+
+export interface ItemAvailability {
+  itemId: number;
+  itemName: string;
+  availableQuantity: number;
+  reservedQuantity: number;
+  rentedQuantity: number;
+}
+
+export interface ItemUnit {
+  id: number;
+  itemId: number;
+  itemName: string;
+  assetCode: string;
+  serialNumber?: string;
+  status: string;
+  conditionStatus: string;
+  active: boolean;
+}
+
+export interface RentalItemUnit {
+  id: number;
+  rentalItemId: number;
+  itemUnitId: number;
+  itemName: string;
+  assetCode: string;
+  status: string;
+  reservedAt?: string;
+  deliveredAt?: string;
+  returnedAt?: string;
+}
+
+export interface RentalStatusHistory {
+  id: number;
+  previousStatus?: string;
+  newStatus: string;
+  reason?: string;
+  changedAt: string;
+  changedBy: string;
+}

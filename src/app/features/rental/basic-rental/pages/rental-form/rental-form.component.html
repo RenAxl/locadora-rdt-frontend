@@ -7,19 +7,19 @@
       <label>Tipo de locação<select class="form-select" [ngModel]="rental.rentalTypeId" (ngModelChange)="changeRentalType($event)"><option [ngValue]="undefined">Selecione</option><option *ngFor="let t of rentalTypes" [ngValue]="t.id">{{ t.name }}</option></select></label>
       <label *ngIf="rental.rentalTypeId">Data inicial<input type="datetime-local" class="form-control" [ngModel]="rental.startDate" (ngModelChange)="changeStartDate($event)" /></label>
       <label *ngIf="rental.rentalTypeId">Devolução prevista<input type="datetime-local" class="form-control" [(ngModel)]="rental.expectedReturnDate" readonly /></label>
-      <label *ngIf="rental.rentalTypeId">Forma de pagamento<select class="form-select" [(ngModel)]="rental.paymentMethodId"><option [ngValue]="null">Não informada</option><option *ngFor="let p of paymentMethods" [ngValue]="p.id">{{ p.name }}</option></select></label>
-      <label *ngIf="rental.rentalTypeId">Endereço de entrega<input class="form-control" [(ngModel)]="rental.deliveryAddress" readonly /></label>
+      <label *ngIf="rental.rentalTypeId" class="full-width">Endereço de entrega<input class="form-control" [(ngModel)]="rental.deliveryAddress" readonly /></label>
     </div>
   </section>
 
   <section class="form-card">
     <h4>Itens</h4>
     <div class="table-responsive">
-      <table class="table align-middle"><thead><tr><th>Item</th><th>Quantidade</th><th>Preço</th><th>Desconto</th><th>Acréscimo</th><th>Subtotal</th><th></th></tr></thead>
+      <table class="table align-middle"><thead><tr><th>Item</th><th>Quantidade</th><th>Preço</th><th>Dias</th><th>Desconto</th><th>Acréscimo</th><th>Subtotal</th><th></th></tr></thead>
       <tbody><tr *ngFor="let item of rental.items; let i = index">
         <td>{{ item.itemName }}</td>
-        <td><input type="number" class="form-control number" [value]="item.quantity" readonly /></td>
+        <td><input type="number" class="form-control number" [(ngModel)]="item.quantity" min="1" step="1" (ngModelChange)="changeItemQuantity(item)" /></td>
         <td><input class="form-control money" [value]="item.unitPrice | currency: 'BRL'" readonly /></td>
+        <td><input class="form-control days" [value]="getRentalDays()" readonly /></td>
         <td><input class="form-control money" [value]="item.discount | currency: 'BRL'" readonly /></td>
         <td><input class="form-control money" [value]="item.additionalFee | currency: 'BRL'" readonly /></td>
         <td>{{ item.subtotal | currency: "BRL" }}</td><td><button pButton icon="pi pi-trash" class="p-button-text p-button-danger" (click)="removeItem(i)"></button></td>
@@ -28,13 +28,17 @@
   </section>
 
   <section class="form-card totals">
-    <label>Desconto geral<p-inputNumber [(ngModel)]="rental.discount" mode="currency" currency="BRL" locale="pt-BR" [min]="0" [minFractionDigits]="2" [maxFractionDigits]="2" (ngModelChange)="calculate()"></p-inputNumber></label>
-    <label>Frete<p-inputNumber [(ngModel)]="rental.shippingFee" mode="currency" currency="BRL" locale="pt-BR" [minFractionDigits]="2" [maxFractionDigits]="2" [readonly]="true"></p-inputNumber><small *ngIf="calculatingShipping">Calculando distância...</small><span class="shipping-info" *ngIf="shippingDistanceKm !== undefined"><small>Distância: {{ shippingDistanceKm | number: "1.2-2" }} km</small><small class="text-danger" *ngIf="shippingError">{{ shippingError }}</small></span><small class="text-danger" *ngIf="shippingError && shippingDistanceKm === undefined">{{ shippingError }}</small></label>
-    <label>Outros acréscimos<p-inputNumber [(ngModel)]="rental.additionalFee" mode="currency" currency="BRL" locale="pt-BR" [min]="0" [minFractionDigits]="2" [maxFractionDigits]="2" (ngModelChange)="calculate()"></p-inputNumber></label>
-    <label>Entrada<p-inputNumber [(ngModel)]="rental.downPayment" mode="currency" currency="BRL" locale="pt-BR" [min]="0" [minFractionDigits]="2" [maxFractionDigits]="2" (ngModelChange)="calculate()"></p-inputNumber></label>
-    <div><span>Subtotal</span><strong>{{ rental.subtotal | currency: "BRL" }}</strong></div>
-    <div><span>Total</span><strong>{{ rental.totalAmount | currency: "BRL" }}</strong></div>
+    <h4>Resumo financeiro</h4>
+    <div class="total-item"><span>Subtotal</span><strong>{{ rental.subtotal | currency: "BRL" }}</strong></div>
+    <div class="total-item">
+      <span>Frete</span>
+      <strong>{{ rental.shippingFee | currency: "BRL" }}</strong>
+      <small *ngIf="calculatingShipping">Calculando distância...</small>
+      <span class="shipping-info" *ngIf="shippingDistanceKm !== undefined"><small>Distância: {{ shippingDistanceKm | number: "1.2-2" }} km</small><small class="text-danger" *ngIf="shippingError">{{ shippingError }}</small></span>
+      <small class="text-danger" *ngIf="shippingError && shippingDistanceKm === undefined">{{ shippingError }}</small>
+    </div>
+    <div class="total-item total-highlight"><span>Total</span><strong>{{ rental.totalAmount | currency: "BRL" }}</strong></div>
   </section>
   <section class="form-card"><label>Observações<textarea class="form-control" rows="3" [(ngModel)]="rental.notes"></textarea></label></section>
-  <div class="buttons"><button class="btn btn-primary" (click)="save()" [disabled]="calculatingShipping">Salvar rascunho</button><a class="btn btn-outline-secondary" routerLink="/rentals">Cancelar</a></div>
+  <div class="buttons"><button class="btn btn-primary" (click)="save()" [disabled]="calculatingShipping">Alugar</button><a class="btn btn-outline-secondary" routerLink="/rentals">Cancelar</a></div>
 </div>

@@ -9,6 +9,7 @@ import { CatalogService } from '../../services/catalog.service';
 import { MessageService } from 'primeng/api';
 import { RentalCartService } from 'src/app/features/rental/basic-rental/services/rental-cart.service';
 import { AuthService } from 'src/app/core/auth/services/auth.service';
+import { RentalService } from 'src/app/features/rental/basic-rental/services/rental.service';
 
 @Component({
   selector: 'app-catalog-item-details',
@@ -31,6 +32,7 @@ export class CatalogItemDetailsComponent implements OnInit, OnDestroy {
     private router: Router,
     private catalogService: CatalogService,
     private rentalCartService: RentalCartService,
+    private rentalService: RentalService,
     private messageService: MessageService,
     private authService: AuthService,
     sanitizer: DomSanitizer,
@@ -67,20 +69,36 @@ export class CatalogItemDetailsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.rentalCartService.addItem({
-      itemId: this.item.id,
-      itemName: this.item.name,
-      quantity: this.quantity,
-      unitPrice: Number(this.item.price),
-      discount: 0,
-      additionalFee: 0,
-    });
+    const itemId = this.item.id;
+    const requestedQuantity = Math.floor(Number(this.quantity));
+    const existingItem = this.rentalCartService.getItems().find((item) => item.itemId === itemId);
+    const quantityInCart = existingItem ? existingItem.quantity : 0;
+    const totalRequestedQuantity = quantityInCart + requestedQuantity;
 
-    this.selectedItemsQuantity = this.rentalCartService.getTotalQuantity();
-    this.quantity = 1;
-    this.messageService.add({
-      severity: 'success',
-      detail: 'Item adicionado à locação.',
+    this.rentalService.findAvailability(itemId).subscribe((availability) => {
+      if (totalRequestedQuantity > availability.availableQuantity) {
+        this.messageService.add({
+          severity: 'warn',
+          detail: `Não há quantidade suficiente do item ${this.item?.name}. Disponível: ${availability.availableQuantity}.`,
+        });
+        return;
+      }
+
+      this.rentalCartService.addItem({
+        itemId,
+        itemName: this.item!.name,
+        quantity: requestedQuantity,
+        unitPrice: Number(this.item!.price),
+        discount: 0,
+        additionalFee: 0,
+      });
+
+      this.selectedItemsQuantity = this.rentalCartService.getTotalQuantity();
+      this.quantity = 1;
+      this.messageService.add({
+        severity: 'success',
+        detail: 'Item adicionado à locação.',
+      });
     });
   }
 

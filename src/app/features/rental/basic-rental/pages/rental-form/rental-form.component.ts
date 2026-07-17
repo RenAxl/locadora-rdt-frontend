@@ -5,8 +5,6 @@ import { Pagination } from 'src/app/core/models/Pagination';
 import { CustomerDTO } from 'src/app/features/customers/dtos/customer.dto';
 import { ItemDTO } from 'src/app/features/items/dtos/item.dto';
 import { ItemService } from 'src/app/features/items/services/item.service';
-import { PaymentMethodDTO } from 'src/app/features/payment-methods/dtos/payment-method.dto';
-import { PaymentMethodService } from 'src/app/features/payment-methods/services/payment-method.service';
 import { RentalTypeDTO } from '../../../rentaltypes/dtos/rental-type.dto';
 import { RentalTypeService } from '../../../rentaltypes/services/rental-type.service';
 import { Rental, RentalItem } from '../../models/rental';
@@ -20,7 +18,6 @@ export class RentalFormComponent implements OnInit, OnDestroy {
   rental: Rental = this.emptyRental();
   currentCustomer?: CustomerDTO;
   rentalTypes: RentalTypeDTO[] = [];
-  paymentMethods: PaymentMethodDTO[] = [];
   availableItems: ItemDTO[] = [];
   selectedItemId?: number;
   editing = false;
@@ -31,9 +28,10 @@ export class RentalFormComponent implements OnInit, OnDestroy {
   shippingDistanceKm?: number;
   private shippingTimer: any;
   private shippingSubscription?: Subscription;
+  private validItemQuantities = new Map<number, number>();
 
   constructor(private rentalService: RentalService,
-    private rentalTypeService: RentalTypeService, private paymentMethodService: PaymentMethodService,
+    private rentalTypeService: RentalTypeService,
     private itemService: ItemService, private route: ActivatedRoute, private router: Router,
     private messageService: MessageService, private authService: AuthService,
     private rentalCartService: RentalCartService) {}
@@ -63,9 +61,11 @@ export class RentalFormComponent implements OnInit, OnDestroy {
         this.rental = rental;
         this.rental.startDate = this.toLocalDate(rental.startDate);
         this.rental.expectedReturnDate = this.toLocalDate(rental.expectedReturnDate);
+        this.saveValidItemQuantities();
       });
     } else {
       this.rental.items = this.rentalCartService.getItems();
+      this.saveValidItemQuantities();
       this.calculate();
       this.loadCurrentCustomer();
     }
@@ -89,9 +89,31 @@ export class RentalFormComponent implements OnInit, OnDestroy {
 
   removeItem(index: number): void { this.rental.items.splice(index, 1); this.calculate(true); }
 
+  changeItemQuantity(item: RentalItem): void {
+    const previousQuantity = this.validItemQuantities.get(item.itemId) || 1;
+    const requestedQuantity = Math.max(1, Math.floor(Number(item.quantity) || 1));
+    item.quantity = requestedQuantity;
+
+    this.rentalService.findAvailability(item.itemId).subscribe((availability) => {
+      if (requestedQuantity > availability.availableQuantity) {
+        item.quantity = previousQuantity;
+        this.messageService.add({
+          severity: 'warn',
+          detail: `Não há quantidade suficiente do item ${item.itemName}. Disponível: ${availability.availableQuantity}.`,
+        });
+        this.calculate(true);
+        return;
+      }
+
+      this.validItemQuantities.set(item.itemId, requestedQuantity);
+      this.calculate(true);
+    });
+  }
+
   changeRentalType(rentalTypeId?: number): void {
     this.rental.rentalTypeId = rentalTypeId;
     this.calculateExpectedReturnDate();
+    this.calculate();
   }
 
   changeStartDate(startDate: string): void {
@@ -100,15 +122,25 @@ export class RentalFormComponent implements OnInit, OnDestroy {
   }
 
   calculate(recalculateShipping = false): void {
+    const rentalDays = this.getRentalDays();
     this.rental.items.forEach((item) => item.subtotal = Math.max(0,
-      item.quantity * Number(item.unitPrice || 0) - Number(item.discount || 0) + Number(item.additionalFee || 0)));
+      item.quantity * Number(item.unitPrice || 0) * rentalDays
+      - Number(item.discount || 0) + Number(item.additionalFee || 0)));
     this.rental.subtotal = this.rental.items.reduce((sum, item) => sum + Number(item.subtotal || 0), 0);
+    this.rental.discount = 0;
     this.rental.totalAmount = Math.max(0, Number(this.rental.subtotal) - Number(this.rental.discount || 0)
       + Number(this.rental.shippingFee || 0) + Number(this.rental.additionalFee || 0));
     this.rental.remainingAmount = Math.max(0, Number(this.rental.totalAmount) - Number(this.rental.downPayment || 0));
     if (recalculateShipping) {
       this.scheduleShippingCalculation();
     }
+  }
+
+  getRentalDays(): number {
+    const rentalType = this.rentalTypes.find(
+      (type) => type.id === Number(this.rental.rentalTypeId),
+    );
+    return Math.max(1, Number(rentalType?.days) || 1);
   }
 
   save(): void {
@@ -128,15 +160,17 @@ export class RentalFormComponent implements OnInit, OnDestroy {
       if (!this.editing) {
         this.rentalCartService.clear();
       }
-      this.messageService.add({ severity: 'success', detail: 'Rascunho salvo com sucesso!' });
+      this.messageService.add({ severity: 'success', detail: 'Locação realizada com sucesso!' });
       this.router.navigate(['/rentals']);
     });
   }
 
   private loadOptions(): void {
     const page = new Pagination(0, 100);
-    this.rentalTypeService.list(page, '').subscribe((data) => this.rentalTypes = data.content.filter((x) => x.active !== false));
-    this.paymentMethodService.list(page, '').subscribe((data) => this.paymentMethods = data.content);
+    this.rentalTypeService.list(page, '').subscribe((data) => {
+      this.rentalTypes = data.content.filter((x) => x.active !== false);
+      this.calculate();
+    });
     this.itemService.list(page, '').subscribe((data) => this.availableItems = data.content.filter((x) => x.active !== false));
   }
 
@@ -156,6 +190,12 @@ export class RentalFormComponent implements OnInit, OnDestroy {
   }
 
   private emptyRental(): Rental { return { discount: 0, shippingFee: 0, additionalFee: 0, downPayment: 0, items: [] }; }
+
+  private saveValidItemQuantities(): void {
+    for (const item of this.rental.items) {
+      this.validItemQuantities.set(item.itemId, item.quantity);
+    }
+  }
   private toLocalDate(value?: string): string { return value ? value.substring(0, 16) : ''; }
 
   private formatDeliveryAddress(customer: CustomerDTO): string {

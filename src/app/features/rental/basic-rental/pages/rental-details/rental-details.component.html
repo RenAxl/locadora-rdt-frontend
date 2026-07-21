@@ -7,6 +7,8 @@
     <div><span>Forma de pagamento</span><strong>{{ rental.paymentMethodName || "-" }}</strong></div>
     <div><span>Data inicial</span><strong>{{ rental.startDate | date: "dd/MM/yyyy HH:mm" }}</strong></div>
     <div><span>Devolução prevista</span><strong>{{ rental.expectedReturnDate | date: "dd/MM/yyyy HH:mm" }}</strong></div>
+    <div><span>Devolução</span><strong>{{ rental.actualReturnDate ? (rental.actualReturnDate | date: "dd/MM/yyyy HH:mm") : "-" }}</strong></div>
+    <div><span>Pago</span><strong>{{ rental.paid ? "SIM" : "NÃO" }}</strong></div>
     <div><span>Endereço</span><strong>{{ rental.deliveryAddress || "-" }}</strong></div>
     <div><span>Observações</span><strong>{{ rental.notes || "-" }}</strong></div>
   </section>

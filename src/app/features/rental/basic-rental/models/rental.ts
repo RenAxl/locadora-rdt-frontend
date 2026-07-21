@@ -29,6 +29,13 @@ export interface Rental {
   totalAmount?: number;
   downPayment: number;
   remainingAmount?: number;
+  actualReturnDate?: string;
+  paid?: boolean;
+  whatsappSent?: boolean;
+  overdueDays?: number;
+  lateFeePerDay?: number;
+  calculatedLateFee?: number;
+  totalWithLateFee?: number;
   deliveryAddress?: string;
   notes?: string;
   createdAt?: string;

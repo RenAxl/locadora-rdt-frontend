@@ -1,0 +1,30 @@
+.checkout-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.checkout-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.checkout-grid .full-width {
+  grid-column: 1 / -1;
+}
+
+.checkout-grid .total {
+  font-weight: 700;
+}
+
+.alert {
+  margin: 0;
+}
+
+@media (max-width: 479px) {
+  .checkout-grid {
+    grid-template-columns: 1fr;
+  }
+}

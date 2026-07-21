@@ -28,6 +28,8 @@ export const API = {
     ITEM_UNITS: (itemId: number | string) => `${BASE_URL}/rentals/availability/items/${itemId}/all-units`,
     CURRENT_CUSTOMER: `${BASE_URL}/rentals/current-customer`,
     CALCULATE_SHIPPING: `${BASE_URL}/rentals/shipping/calculate`,
+    RECEIPT: (id: number | string) => `${BASE_URL}/rentals/${id}/receipt`,
+    FISCAL_COUPON: (id: number | string) => `${BASE_URL}/rentals/${id}/fiscal-coupon`,
   },
 
   USERS: {

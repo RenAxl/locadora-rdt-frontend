@@ -66,8 +66,8 @@ export class RentalService {
     return this.http.patch<Rental>(API.RENTALS.CONFIRM(id), {});
   }
 
-  start(id: number): Observable<Rental> {
-    return this.http.patch<Rental>(API.RENTALS.START(id), {});
+  start(id: number, paymentMethodId: number): Observable<Rental> {
+    return this.http.patch<Rental>(API.RENTALS.START(id), { paymentMethodId });
   }
 
   cancel(id: number): Observable<Rental> {
@@ -88,6 +88,14 @@ export class RentalService {
 
   findHistory(id: number | string): Observable<RentalStatusHistory[]> {
     return this.http.get<RentalStatusHistory[]>(API.RENTALS.HISTORY(id));
+  }
+
+  receipt(id: number): Observable<Blob> {
+    return this.http.get(API.RENTALS.RECEIPT(id), { responseType: 'blob' });
+  }
+
+  fiscalCoupon(id: number): Observable<Blob> {
+    return this.http.get(API.RENTALS.FISCAL_COUPON(id), { responseType: 'blob' });
   }
 
   delete(id: number): Observable<void> {

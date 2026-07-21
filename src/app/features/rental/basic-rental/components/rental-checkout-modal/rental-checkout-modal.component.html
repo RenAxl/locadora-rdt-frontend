@@ -1,0 +1,23 @@
+<p-dialog header="Baixar locação" [visible]="visible" (visibleChange)="visibleChange.emit($event)"
+  [modal]="true" [style]="{ width: '500px', maxWidth: '95vw' }">
+  <div class="checkout-grid" *ngIf="rental">
+    <label><span>Valor</span><input class="form-control" [value]="rentalValue | currency: 'BRL'" readonly /></label>
+    <label><span>Multa</span><input class="form-control" [value]="lateFee | currency: 'BRL'" readonly /></label>
+    <label class="full-width">
+      <span>Forma de pagamento</span>
+      <select class="form-select" [ngModel]="paymentMethodId" (ngModelChange)="changePaymentMethod($event)">
+        <option [ngValue]="undefined">Selecione</option>
+        <option *ngFor="let paymentMethod of paymentMethods" [ngValue]="paymentMethod.id">{{ paymentMethod.name }}</option>
+      </select>
+    </label>
+    <div class="alert alert-warning full-width" *ngIf="hasLateFeeDiscountWarning">
+      Não há desconto porque a locação possui multa.
+    </div>
+    <label><span>Data da baixa</span><input class="form-control" [value]="today | date: 'dd/MM/yyyy'" readonly /></label>
+    <label><span>Total</span><input class="form-control total" [value]="total | currency: 'BRL'" readonly /></label>
+  </div>
+  <ng-template pTemplate="footer">
+    <button class="btn btn-outline-secondary" type="button" (click)="close()">Cancelar</button>
+    <button class="btn btn-primary" type="button" [disabled]="!paymentMethodId || saving" (click)="confirm.emit()">Baixar</button>
+  </ng-template>
+</p-dialog>

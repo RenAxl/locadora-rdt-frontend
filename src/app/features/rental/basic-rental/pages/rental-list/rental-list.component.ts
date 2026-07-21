@@ -7,6 +7,9 @@ import { RentalTypeService } from '../../../rentaltypes/services/rental-type.ser
 import { Rental } from '../../models/rental';
 import { RentalFilter, RentalService } from '../../services/rental.service';
 import { AuthService } from 'src/app/core/auth/services/auth.service';
+import { PaymentMethodDTO } from 'src/app/features/payment-methods/dtos/payment-method.dto';
+import { PaymentMethodService } from 'src/app/features/payment-methods/services/payment-method.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-rental-list',
@@ -20,6 +23,13 @@ export class RentalListComponent implements OnInit {
   totalElements = 0;
   filter: RentalFilter = {};
   canCreateRental = false;
+  overdueVisible = false;
+  overdueRental: Rental | null = null;
+  checkoutVisible = false;
+  checkoutRental: Rental | null = null;
+  paymentMethods: PaymentMethodDTO[] = [];
+  paymentMethodId?: number;
+  savingCheckout = false;
 
   constructor(
     private rentalService: RentalService,
@@ -28,6 +38,7 @@ export class RentalListComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private authService: AuthService,
+    private paymentMethodService: PaymentMethodService,
   ) {}
 
   ngOnInit(): void {
@@ -36,6 +47,7 @@ export class RentalListComponent implements OnInit {
       'ROLE_CLIENTE',
     ]);
     this.loadRentalTypes();
+    this.loadPaymentMethods();
     this.list();
   }
 
@@ -53,6 +65,10 @@ export class RentalListComponent implements OnInit {
   changePage(event: any): void { this.list(event.page ?? 0); }
   clearFilters(): void { this.filter = {}; this.list(); }
   details(rental: Rental): void { this.router.navigate(['/rentals', rental.id]); }
+  openOverdueDetails(rental: Rental): void {
+    this.overdueRental = rental;
+    this.overdueVisible = true;
+  }
   edit(rental: Rental): void { this.router.navigate(['/rentals', rental.id, 'edit']); }
 
   confirm(rental: Rental): void {
@@ -67,13 +83,47 @@ export class RentalListComponent implements OnInit {
   }
 
   start(rental: Rental): void {
-    if (!rental.id) return;
-    this.confirmationService.confirm({
-      message: 'Deseja marcar esta locação como entregue?',
-      accept: () => this.rentalService.start(rental.id!).subscribe(() => {
-        this.messageService.add({ severity: 'success', detail: 'Locação entregue!' });
+    this.checkoutRental = rental;
+    this.paymentMethodId = undefined;
+    this.checkoutVisible = true;
+  }
+
+  confirmCheckout(): void {
+    if (!this.checkoutRental?.id || !this.paymentMethodId) return;
+    this.savingCheckout = true;
+    this.rentalService.start(this.checkoutRental.id, this.paymentMethodId).subscribe({
+      next: () => {
+        this.savingCheckout = false;
+        this.checkoutVisible = false;
+        this.messageService.add({
+          severity: 'success',
+          detail: 'Locação baixada! Mensagem, recibo e cupom fiscal enviados ao WhatsApp do cliente.',
+        });
         this.list(this.pagination.page);
-      }),
+      },
+      error: () => this.savingCheckout = false,
+    });
+  }
+
+  generateReceipt(rental: Rental): void {
+    if (!rental.id) return;
+    this.openPdfPreview(this.rentalService.receipt(rental.id), 'Erro ao gerar recibo.');
+  }
+
+  generateFiscalCoupon(rental: Rental): void {
+    if (!rental.id) return;
+    this.openPdfPreview(this.rentalService.fiscalCoupon(rental.id), 'Erro ao gerar cupom fiscal.');
+  }
+
+  private openPdfPreview(request: Observable<Blob>, errorMessage: string): void {
+    request.subscribe({
+      next: (pdf) => {
+        const blob = new Blob([pdf], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+        setTimeout(() => URL.revokeObjectURL(url), 60000);
+      },
+      error: () => this.messageService.add({ severity: 'error', detail: errorMessage }),
     });
   }
 
@@ -108,6 +158,12 @@ export class RentalListComponent implements OnInit {
   private loadRentalTypes(): void {
     this.rentalTypeService.list(new Pagination(0, 100), '').subscribe((data) => {
       this.rentalTypes = data.content;
+    });
+  }
+
+  private loadPaymentMethods(): void {
+    this.paymentMethodService.list(new Pagination(0, 100), '').subscribe((data) => {
+      this.paymentMethods = data.content;
     });
   }
 }

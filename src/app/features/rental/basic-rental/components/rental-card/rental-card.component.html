@@ -1,0 +1,104 @@
+<article
+  class="rental-item"
+  [ngClass]="{
+    delivered: rental.status === 'DELIVERED',
+    rented: rental.status === 'RENTED'
+  }"
+>
+  <div class="rental-main">
+    <div class="rental-heading">
+      <div class="rental-title-wrap">
+        <span class="rental-id">#{{ rental.id }}</span>
+        <h2>{{ rental.rentalNumber || '-' }}</h2>
+      </div>
+
+      <span class="status-chip" [ngClass]="statusClass()">
+        {{ statusLabel() }}
+      </span>
+    </div>
+
+    <div class="rental-meta">
+      <span>
+        <i class="fa-solid fa-user"></i>
+        {{ rental.customerName || 'Sem cliente' }}
+      </span>
+      <span>
+        <i class="fa-solid fa-calendar-days"></i>
+        {{ rental.rentalTypeName || 'Sem tipo' }}
+      </span>
+    </div>
+  </div>
+
+  <div class="rental-summary">
+    <div class="summary-block">
+      <span>Data inicial</span>
+      <strong>{{ rental.startDate ? (rental.startDate | date: 'dd/MM/yyyy HH:mm') : '-' }}</strong>
+    </div>
+    <div class="summary-block return-date">
+      <span>Devolução prevista</span>
+      <button
+        *ngIf="isOverdue(); else expectedReturnText"
+        type="button"
+        class="return-date-button overdue"
+        pTooltip="Ver multa por atraso"
+        tooltipPosition="top"
+        (click)="overdueDetails.emit(rental)"
+      >
+        {{ rental.expectedReturnDate ? (rental.expectedReturnDate | date: 'dd/MM/yyyy HH:mm') : '-' }}
+      </button>
+      <ng-template #expectedReturnText>
+        <strong>{{ rental.expectedReturnDate ? (rental.expectedReturnDate | date: 'dd/MM/yyyy HH:mm') : '-' }}</strong>
+      </ng-template>
+    </div>
+    <div class="summary-block actual-return-date">
+      <span>Devolução</span>
+      <strong>{{ rental.actualReturnDate ? (rental.actualReturnDate | date: 'dd/MM/yyyy HH:mm') : '-' }}</strong>
+    </div>
+    <div class="summary-block paid">
+      <span>Pago</span>
+      <strong>{{ rental.paid ? 'SIM' : 'NÃO' }}</strong>
+    </div>
+    <div class="summary-block total-amount">
+      <span>Total</span>
+      <strong>{{ rental.totalAmount | currency: 'BRL' }}</strong>
+    </div>
+  </div>
+
+  <div class="actions-wrap">
+    <button
+      pButton
+      class="p-button-rounded p-button-text"
+      icon="pi pi-eye"
+      pTooltip="Detalhes da locação"
+      tooltipPosition="top"
+      (click)="details.emit(rental)"
+    ></button>
+    <button
+      *ngIf="rental.status === 'RENTED'"
+      pButton
+      class="p-button-rounded p-button-text p-button-success"
+      icon="pi pi-download"
+      pTooltip="Baixar locação"
+      tooltipPosition="top"
+      (click)="start.emit(rental)"
+    ></button>
+    <button
+      *ngIf="rental.status === 'DELIVERED'"
+      pButton
+      class="p-button-rounded p-button-text"
+      icon="pi pi-file"
+      pTooltip="Recibo"
+      tooltipPosition="top"
+      (click)="receipt.emit(rental)"
+    ></button>
+    <button
+      *ngIf="rental.status === 'DELIVERED'"
+      pButton
+      class="p-button-rounded p-button-text"
+      icon="pi pi-print"
+      pTooltip="Cupom fiscal"
+      tooltipPosition="top"
+      (click)="fiscalCoupon.emit(rental)"
+    ></button>
+  </div>
+</article>

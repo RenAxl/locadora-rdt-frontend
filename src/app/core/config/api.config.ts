@@ -9,6 +9,12 @@ export const API = {
     TOKEN: `${BASE_URL}/oauth/token`,
   },
 
+  CUSTOMER_ACCOUNT: {
+    REGISTER: `${BASE_URL}/customer-accounts`,
+    CREATE_PASSWORD: `${BASE_URL}/customer-accounts/create-password`,
+    RESEND_ACTIVATION: `${BASE_URL}/customer-accounts/resend-activation`,
+  },
+
   CATALOG: {
     ROOT: `${BASE_URL}/catalog`,
     BY_ID: (id: number | string) => `${BASE_URL}/catalog/${id}`,

@@ -27,6 +27,20 @@ const routes: Routes = [
 
   {
     path: '',
+    component: AuthComponent,
+    children: [
+      {
+        path: 'customer-account',
+        loadChildren: () =>
+          import('./features/customer-account/customer-account.module').then(
+            (m) => m.CustomerAccountModule,
+          ),
+      },
+    ],
+  },
+
+  {
+    path: '',
     component: MainComponent,
     children: [
       {

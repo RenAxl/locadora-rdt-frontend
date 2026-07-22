@@ -4,6 +4,7 @@ import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { RentalItem } from 'src/app/features/rental/basic-rental/models/rental';
 import { RentalCartService } from 'src/app/features/rental/basic-rental/services/rental-cart.service';
+import { RentalService } from 'src/app/features/rental/basic-rental/services/rental.service';
 
 @Component({
   selector: 'app-rental-cart-summary',
@@ -19,6 +20,7 @@ export class RentalCartSummaryComponent implements OnInit, OnDestroy {
 
   constructor(
     private rentalCartService: RentalCartService,
+    private rentalService: RentalService,
     private messageService: MessageService,
     private router: Router,
   ) {}
@@ -50,7 +52,17 @@ export class RentalCartSummaryComponent implements OnInit, OnDestroy {
   }
 
   finishRental(): void {
-    this.visible = false;
-    this.router.navigate(['/rentals/create']);
+    this.rentalService.findCurrentCustomer().subscribe({
+      next: () => {
+        this.visible = false;
+        this.router.navigate(['/rentals/create']);
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          detail: 'Você não é um cliente da Locadora RDT.',
+        });
+      },
+    });
   }
 }

@@ -1,0 +1,38 @@
+.account-page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 16px;
+  background: #f4f7fb;
+}
+
+.account-card {
+  width: 100%;
+  max-width: 460px;
+  padding: 28px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 12px 32px rgba(13, 42, 77, 0.14);
+}
+
+.register-card { max-width: 720px; }
+.account-header { margin-bottom: 22px; text-align: center; }
+.account-header h1 { margin: 0 0 6px; color: #0d2a4d; font-size: 27px; }
+.account-header p { margin: 0; color: #6c757d; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 15px; }
+.form-grid .field { margin-bottom: 0; }
+.field.full { grid-column: 1 / -1; }
+.field label { color: #182536; font-weight: 600; }
+.field input { width: 100%; }
+.action-button { width: 100%; margin-top: 22px; }
+.back-link { display: block; margin-top: 16px; text-align: center; }
+.field-error { display: block; margin: 8px 0; color: #dc3545; }
+
+@media (max-width: 600px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .field.full { grid-column: auto; }
+  .account-card { padding: 22px 18px; }
+}

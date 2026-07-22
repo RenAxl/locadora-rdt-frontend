@@ -8,7 +8,6 @@ import { Item } from 'src/app/features/items/models/Item';
 import { CatalogService } from '../../services/catalog.service';
 import { MessageService } from 'primeng/api';
 import { RentalCartService } from 'src/app/features/rental/basic-rental/services/rental-cart.service';
-import { AuthService } from 'src/app/core/auth/services/auth.service';
 import { RentalService } from 'src/app/features/rental/basic-rental/services/rental.service';
 
 @Component({
@@ -23,7 +22,6 @@ export class CatalogItemDetailsComponent implements OnInit, OnDestroy {
   itemNotFound = false;
   quantity = 1;
   selectedItemsQuantity = 0;
-  canCreateRental = false;
 
   private imagePreview: PhotoPreview;
 
@@ -34,17 +32,12 @@ export class CatalogItemDetailsComponent implements OnInit, OnDestroy {
     private rentalCartService: RentalCartService,
     private rentalService: RentalService,
     private messageService: MessageService,
-    private authService: AuthService,
     sanitizer: DomSanitizer,
   ) {
     this.imagePreview = new PhotoPreview(sanitizer);
   }
 
   ngOnInit(): void {
-    this.canCreateRental = this.authService.hasAnyAuthority([
-      'ROLE_ADMINISTRADOR',
-      'ROLE_CLIENTE',
-    ]);
     const itemId = Number(this.route.snapshot.paramMap.get('itemId'));
 
     if (!itemId) {
@@ -111,7 +104,15 @@ export class CatalogItemDetailsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.router.navigate(['/rentals/create']);
+    this.rentalService.findCurrentCustomer().subscribe({
+      next: () => this.router.navigate(['/rentals/create']),
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          detail: 'Você não é um cliente da Locadora RDT.',
+        });
+      },
+    });
   }
 
   private loadItem(itemId: number): void {

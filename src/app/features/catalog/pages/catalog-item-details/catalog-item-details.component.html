@@ -46,7 +46,7 @@
         <p>{{ item.description || "Sem descrição." }}</p>
       </div>
 
-      <div class="rental-selection" *ngIf="item.active !== false && canCreateRental">
+      <div class="rental-selection" *ngIf="item.active !== false">
         <label for="rentalQuantity">Quantidade</label>
         <div class="quantity-actions">
           <input

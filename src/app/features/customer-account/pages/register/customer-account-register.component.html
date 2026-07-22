@@ -1,0 +1,29 @@
+<div class="account-page">
+  <div class="account-card register-card">
+    <div class="account-header">
+      <h1>Cadastro de cliente</h1>
+      <p>Preencha seus dados para criar sua conta.</p>
+    </div>
+
+    <form #registerForm="ngForm" (ngSubmit)="register(registerForm)">
+      <div class="form-grid">
+        <div class="field full"><label>Nome completo</label><input pInputText name="name" [(ngModel)]="registration.name" required maxlength="100" /></div>
+        <div class="field"><label>CPF</label><input pInputText name="cpf" [(ngModel)]="registration.cpf" required /></div>
+        <div class="field"><label>Telefone</label><input pInputText name="phone" [(ngModel)]="registration.phone" required /></div>
+        <div class="field full"><label>E-mail</label><input pInputText type="email" name="email" [(ngModel)]="registration.email" required email /></div>
+        <div class="field"><label>Rua</label><input pInputText name="street" [(ngModel)]="registration.street" required /></div>
+        <div class="field"><label>Número</label><input pInputText name="number" [(ngModel)]="registration.number" required /></div>
+        <div class="field full"><label>Complemento</label><input pInputText name="complement" [(ngModel)]="registration.complement" /></div>
+        <div class="field"><label>Bairro</label><input pInputText name="neighborhood" [(ngModel)]="registration.neighborhood" required /></div>
+        <div class="field"><label>Cidade</label><input pInputText name="city" [(ngModel)]="registration.city" required /></div>
+        <div class="field"><label>Estado</label><input pInputText name="state" [(ngModel)]="registration.state" required minlength="2" maxlength="2" /></div>
+        <div class="field"><label>CEP</label><input pInputText name="zipCode" [(ngModel)]="registration.zipCode" required /></div>
+      </div>
+
+      <button type="submit" class="btn btn-primary action-button" [disabled]="registerForm.invalid || loading">
+        {{ loading ? 'CADASTRANDO...' : 'Cadastrar' }}
+      </button>
+      <a class="back-link" routerLink="/auth/login">Voltar para o login</a>
+    </form>
+  </div>
+</div>

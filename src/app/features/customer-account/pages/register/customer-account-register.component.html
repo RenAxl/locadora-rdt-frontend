@@ -8,7 +8,7 @@
     <form #registerForm="ngForm" (ngSubmit)="register(registerForm)">
       <div class="form-grid">
         <div class="field full"><label>Nome completo</label><input pInputText name="name" [(ngModel)]="registration.name" required maxlength="100" /></div>
-        <div class="field"><label>CPF</label><input pInputText name="cpf" [(ngModel)]="registration.cpf" required /></div>
+        <div class="field"><label>CPF</label><input pInputText name="cpf" [(ngModel)]="registration.cpf" required minlength="11" maxlength="11" pattern="[0-9]{11}" inputmode="numeric" /></div>
         <div class="field"><label>Telefone</label><input pInputText name="phone" [(ngModel)]="registration.phone" required /></div>
         <div class="field full"><label>E-mail</label><input pInputText type="email" name="email" [(ngModel)]="registration.email" required email /></div>
         <div class="field"><label>Rua</label><input pInputText name="street" [(ngModel)]="registration.street" required /></div>

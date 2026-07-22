@@ -97,7 +97,7 @@ export class RentalListComponent implements OnInit {
         this.checkoutVisible = false;
         this.messageService.add({
           severity: 'success',
-          detail: 'Locação baixada! Mensagem, recibo e cupom fiscal enviados ao WhatsApp do cliente.',
+          detail: 'Locação baixada e registrada em contas a receber! Mensagem, recibo e cupom fiscal enviados ao WhatsApp do cliente.',
         });
         this.list(this.pagination.page);
       },

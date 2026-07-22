@@ -31,7 +31,7 @@ export class ItemUnitListComponent implements OnInit {
   getStatusLabel(status: string): string {
     const labels: { [key: string]: string } = {
       AVAILABLE: 'Disponível',
-      RESERVED: 'Reservada',
+      RESERVED: 'Alugada',
       RENTED: 'Alugada',
       MAINTENANCE: 'Em manutenção',
     };

@@ -11,7 +11,6 @@ type StockBalanceEditField =
   | 'total'
   | 'available'
   | 'reserved'
-  | 'unavailable'
   | 'minimum';
 
 @Component({
@@ -31,8 +30,7 @@ export class StockBalanceListComponent {
   editFieldOptions = [
     { value: 'total', label: 'Total' },
     { value: 'available', label: 'Disponível' },
-    { value: 'reserved', label: 'Reservado' },
-    { value: 'unavailable', label: 'Indisponível' },
+    { value: 'reserved', label: 'Alugado' },
     { value: 'minimum', label: 'Estoque mínimo' },
   ];
 
@@ -87,8 +85,6 @@ export class StockBalanceListComponent {
       this.editQuantity = this.editingBalance.availableQuantity ?? 0;
     } else if (this.editField === 'reserved') {
       this.editQuantity = this.editingBalance.reservedQuantity ?? 0;
-    } else if (this.editField === 'unavailable') {
-      this.editQuantity = this.editingBalance.unavailableQuantity ?? 0;
     } else {
       this.editQuantity = this.editingBalance.minimumQuantity ?? 0;
     }
@@ -107,8 +103,6 @@ export class StockBalanceListComponent {
       this.editingBalance.availableQuantity = quantity;
     } else if (this.editField === 'reserved') {
       this.editingBalance.reservedQuantity = quantity;
-    } else if (this.editField === 'unavailable') {
-      this.editingBalance.unavailableQuantity = quantity;
     } else {
       this.editingBalance.minimumQuantity = quantity;
     }

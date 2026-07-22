@@ -33,7 +33,7 @@
             <th>Item</th>
             <th>Total</th>
             <th>Disponível</th>
-            <th>Reservado</th>
+            <th>Alugado</th>
             <th>Indisponível</th>
             <th>Mínimo</th>
             <th>Alerta</th>
@@ -56,12 +56,12 @@
               {{ balance.availableQuantity ?? 0 }}
             </td>
             <td class="columns">
-              <span class="p-column-title">Reservado:</span>
+              <span class="p-column-title">Alugado:</span>
               {{ balance.reservedQuantity ?? 0 }}
             </td>
             <td class="columns">
               <span class="p-column-title">Indisponível:</span>
-              {{ balance.unavailableQuantity ?? 0 }}
+              {{ balance.reservedQuantity ?? 0 }}
             </td>
             <td class="columns">
               <span class="p-column-title">Mínimo:</span>
@@ -128,12 +128,12 @@
         <strong>{{ editingBalance.availableQuantity ?? 0 }}</strong>
       </div>
       <div>
-        <span>Reservado</span>
+        <span>Alugado</span>
         <strong>{{ editingBalance.reservedQuantity ?? 0 }}</strong>
       </div>
       <div>
         <span>Indisponível</span>
-        <strong>{{ editingBalance.unavailableQuantity ?? 0 }}</strong>
+        <strong>{{ editingBalance.reservedQuantity ?? 0 }}</strong>
       </div>
       <div>
         <span>Estoque mínimo</span>

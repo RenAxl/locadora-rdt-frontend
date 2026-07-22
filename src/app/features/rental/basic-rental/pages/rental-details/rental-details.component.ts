@@ -21,6 +21,7 @@ export class RentalDetailsComponent implements OnInit {
     if (status === 'RENTED') return 'Alugada';
     if (status === 'RESERVED') return 'Reservada';
     if (status === 'DELIVERED') return 'Entregue';
+    if (status === 'RETURNED') return 'Devolvida';
     return status || '-';
   }
 }

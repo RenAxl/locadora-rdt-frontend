@@ -1,5 +1,4 @@
 import { StockBalanceDetailsDTO } from '../dtos/stock/stock-balance-details.dto';
-import { StockBalanceUpdateDTO } from '../dtos/stock/stock-balance-update.dto';
 import { StockBalanceDTO } from '../dtos/stock/stock-balance.dto';
 import { StockBalance } from '../models/stock/StockBalance';
 
@@ -27,13 +26,4 @@ export class StockBalanceMapper {
     return balance;
   }
 
-  static toUpdateDTO(balance: StockBalance): StockBalanceUpdateDTO {
-    return {
-      id: balance.id!,
-      totalQuantity: balance.totalQuantity ?? 0,
-      reservedQuantity: balance.reservedQuantity ?? 0,
-      unavailableQuantity: balance.unavailableQuantity ?? 0,
-      minimumQuantity: balance.minimumQuantity ?? 0,
-    };
-  }
 }

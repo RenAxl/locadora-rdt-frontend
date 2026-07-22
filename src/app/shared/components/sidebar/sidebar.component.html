@@ -54,6 +54,17 @@
 
       <li class="treeview">
         <a
+          routerLink="/rentals"
+          routerLinkActive="active"
+          class="d-flex align-items-center nav-link px-3"
+        >
+          <i class="fa-solid fa-file-signature me-2"></i>
+          <span>Locações</span>
+        </a>
+      </li>
+
+      <li class="treeview">
+        <a
           class="d-flex align-items-center justify-content-between nav-link px-3 collapsed"
           data-bs-toggle="collapse"
           data-bs-target="#submenuAdministracaoDesktop"
@@ -178,40 +189,6 @@
             >
               <i class="fa-solid fa-clock me-2"></i>
               <span>Tipos de locação</span>
-            </a>
-          </li>
-        </ul>
-      </li>
-
-      <li class="treeview">
-        <a
-          class="d-flex align-items-center justify-content-between nav-link px-3 collapsed"
-          data-bs-toggle="collapse"
-          data-bs-target="#submenuLocacoesDesktop"
-        >
-          <span class="d-flex align-items-center">
-            <i class="fa-solid fa-gamepad me-2"></i>
-            <span>Locações</span>
-          </span>
-
-          <span>
-            <i class="fa-solid fa-caret-right submenu-toggle-icon closed"></i>
-            <i class="fa-solid fa-caret-down submenu-toggle-icon open"></i>
-          </span>
-        </a>
-
-        <ul
-          class="treeview-menu collapse list-unstyled mb-0"
-          id="submenuLocacoesDesktop"
-        >
-          <li>
-            <a
-              routerLink="/rentals"
-              routerLinkActive="active"
-              class="d-flex align-items-center nav-link px-4"
-            >
-              <i class="fa-solid fa-file-signature me-2"></i>
-              <span>Locações</span>
             </a>
           </li>
         </ul>
@@ -435,6 +412,18 @@
 
       <li class="treeview">
         <a
+          routerLink="/rentals"
+          routerLinkActive="active"
+          class="d-flex align-items-center nav-link px-3"
+          data-bs-dismiss="offcanvas"
+        >
+          <i class="fa-solid fa-file-signature me-2"></i>
+          <span>Locações</span>
+        </a>
+      </li>
+
+      <li class="treeview">
+        <a
           class="d-flex align-items-center justify-content-between nav-link px-3 collapsed"
           data-bs-toggle="collapse"
           data-bs-target="#submenuAdministracaoMobile"
@@ -559,40 +548,6 @@
             >
               <i class="fa-solid fa-clock me-2"></i>
               <span>Tipos de locação</span>
-            </a>
-          </li>
-        </ul>
-      </li>
-
-      <li class="treeview">
-        <a
-          class="d-flex align-items-center justify-content-between nav-link px-3 collapsed"
-          data-bs-toggle="collapse"
-          data-bs-target="#submenuLocacoesMobile"
-        >
-          <span class="d-flex align-items-center">
-            <i class="fa-solid fa-gamepad me-2"></i>
-            <span>Locações</span>
-          </span>
-
-          <span>
-            <i class="fa-solid fa-caret-right submenu-toggle-icon closed"></i>
-            <i class="fa-solid fa-caret-down submenu-toggle-icon open"></i>
-          </span>
-        </a>
-
-        <ul
-          class="treeview-menu collapse list-unstyled mb-0"
-          id="submenuLocacoesMobile"
-        >
-          <li>
-            <a
-              routerLink="/rentals"
-              routerLinkActive="active"
-              class="d-flex align-items-center nav-link px-4"
-            >
-              <i class="fa-solid fa-file-signature me-2"></i>
-              <span>Locações</span>
             </a>
           </li>
         </ul>

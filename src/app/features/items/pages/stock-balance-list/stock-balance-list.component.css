@@ -53,6 +53,17 @@
   font-weight: 700;
 }
 
+.minimum-quantity-input {
+  width: 82px;
+  height: 36px;
+  padding: 4px 8px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  background: #fff;
+  color: #263445;
+  text-align: center;
+}
+
 .stock-balance-modal {
   display: grid;
   gap: 18px;

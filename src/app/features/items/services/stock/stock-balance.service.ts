@@ -7,7 +7,6 @@ import { PageResponse } from 'src/app/core/models/page-response';
 import { buildPaginationParams } from 'src/app/core/utils/pagination-params.util';
 
 import { StockBalanceDetailsDTO } from '../../dtos/stock/stock-balance-details.dto';
-import { StockBalanceUpdateDTO } from '../../dtos/stock/stock-balance-update.dto';
 import { StockBalanceDTO } from '../../dtos/stock/stock-balance.dto';
 
 @Injectable({
@@ -34,10 +33,17 @@ export class StockBalanceService {
     );
   }
 
-  update(dto: StockBalanceUpdateDTO): Observable<StockBalanceDTO> {
-    return this.http.put<StockBalanceDTO>(
-      API.RENTAL.STOCK_BALANCES.BY_ID(dto.id),
-      dto,
+  findByItemId(itemId: number | string): Observable<StockBalanceDetailsDTO> {
+    return this.http.get<StockBalanceDetailsDTO>(
+      API.RENTAL.STOCK_BALANCES.BY_ITEM(itemId),
     );
   }
+
+  updateMinimum(id: number, minimumQuantity: number): Observable<StockBalanceDTO> {
+    return this.http.patch<StockBalanceDTO>(
+      `${API.RENTAL.STOCK_BALANCES.BY_ID(id)}/minimum`,
+      { minimumQuantity },
+    );
+  }
+
 }

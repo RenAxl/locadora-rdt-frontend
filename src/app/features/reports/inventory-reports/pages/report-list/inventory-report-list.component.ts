@@ -40,11 +40,6 @@ export class InventoryReportListComponent implements OnInit {
       label: 'Histórico de Movimentações',
       fileName: 'historico-movimentacoes',
     },
-    {
-      value: 'manual-adjustments',
-      label: 'Ajustes Manuais',
-      fileName: 'ajustes-manuais',
-    },
   ];
 
   constructor(
@@ -71,7 +66,7 @@ export class InventoryReportListComponent implements OnInit {
   }
 
   showMovementFilters(): boolean {
-    return ['movement-history', 'manual-adjustments'].includes(this.selectedReportType);
+    return this.selectedReportType === 'movement-history';
   }
 
   showMovementTypeFilter(): boolean {

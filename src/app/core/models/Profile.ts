@@ -1,4 +1,4 @@
-import { Address } from '../../features/users/models/address';
+import { Address } from '../../features/identity/users/models/address';
 
 export class Profile {
   name: string = '';

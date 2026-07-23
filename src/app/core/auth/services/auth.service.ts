@@ -6,10 +6,10 @@ import { tap, catchError } from 'rxjs/operators';
 import { API } from '../../config/api.config';
 import { TokenService } from './token.service';
 
-import { User } from 'src/app/features/users/models/user';
+import { User } from 'src/app/features/identity/users/models/user';
 import { environment } from 'src/environments/environment';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { RentalCartService } from 'src/app/features/rental/basic-rental/services/rental-cart.service';
+import { RentalCartService } from 'src/app/features/rentals/rental/services/rental-cart.service';
 
 type OAuthTokenResponse = {
   access_token: string;

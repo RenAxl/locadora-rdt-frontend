@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Pagination } from 'src/app/core/models/Pagination';
-import { ItemDTO } from 'src/app/features/items/dtos/item.dto';
-import { ItemService } from 'src/app/features/items/services/item.service';
+import { ItemDTO } from 'src/app/features/stocks/items/dtos/item.dto';
+import { ItemService } from 'src/app/features/stocks/items/services/item.service';
 
 import { InventoryReportFilterDTO } from '../../dtos/inventory-report-filter.dto';
 import { InventoryReportService } from '../../services/inventory-report.service';

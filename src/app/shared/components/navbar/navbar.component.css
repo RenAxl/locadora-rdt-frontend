@@ -116,8 +116,8 @@
 }
 
 .user-overlay-small {
-  width: 160px !important;
-  min-width: 160px !important;
+  width: 220px !important;
+  min-width: 220px !important;
   max-width: calc(100vw - 16px) !important;
 }
 

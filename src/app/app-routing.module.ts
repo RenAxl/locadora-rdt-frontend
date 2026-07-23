@@ -20,7 +20,7 @@ const routes: Routes = [
       {
         path: 'auth',
         loadChildren: () =>
-          import('./features/auth/auth.module').then((m) => m.AuthModule),
+          import('./features/identity/auth/auth.module').then((m) => m.AuthModule),
       },
     ],
   },
@@ -32,7 +32,7 @@ const routes: Routes = [
       {
         path: 'customer-account',
         loadChildren: () =>
-          import('./features/customer-account/customer-account.module').then(
+          import('./features/identity/customer-account/customer-account.module').then(
             (m) => m.CustomerAccountModule,
           ),
       },
@@ -68,7 +68,7 @@ const routes: Routes = [
           ],
         },
         loadChildren: () =>
-          import('./features/users/users.module').then((m) => m.UsersModule),
+          import('./features/identity/users/users.module').then((m) => m.UsersModule),
       },
     ],
   },
@@ -82,7 +82,7 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         data: { authorities: ['ROLE_READ', 'ROLE_WRITE'] },
         loadChildren: () =>
-          import('./features/roles/roles.module').then((m) => m.RolesModule),
+          import('./features/identity/roles/roles.module').then((m) => m.RolesModule),
       },
     ],
   },
@@ -95,7 +95,7 @@ const routes: Routes = [
         path: 'profile',
         canActivate: [AuthGuard],
         loadChildren: () =>
-          import('./features/profile/profile.module').then(
+          import('./features/identity/profile/profile.module').then(
             (m) => m.ProfileModule,
           ),
       },
@@ -109,7 +109,7 @@ const routes: Routes = [
       {
         path: 'positions',
         loadChildren: () =>
-          import('./features/positions/positions.module').then(
+          import('./features/organization/positions/positions.module').then(
             (m) => m.PositionsModule,
           ),
       },
@@ -123,7 +123,7 @@ const routes: Routes = [
       {
         path: 'departments',
         loadChildren: () =>
-          import('./features/departments/departments.module').then(
+          import('./features/organization/departments/departments.module').then(
             (m) => m.DepartmentsModule,
           ),
       },
@@ -146,7 +146,7 @@ const routes: Routes = [
           ],
         },
         loadChildren: () =>
-          import('./features/customers/customers.module').then(
+          import('./features/organization/customers/customers.module').then(
             (m) => m.CustomersModule,
           ),
       },
@@ -160,7 +160,7 @@ const routes: Routes = [
       {
         path: 'employees',
         loadChildren: () =>
-          import('./features/employees/employees.module').then(
+          import('./features/organization/employees/employees.module').then(
             (m) => m.EmployeesModule,
           ),
       },
@@ -174,7 +174,7 @@ const routes: Routes = [
       {
         path: 'rental/categories',
         loadChildren: () =>
-          import('./features/rental/categories/categories.module').then(
+          import('./features/stocks/categories/categories.module').then(
             (m) => m.CategoriesModule,
           ),
       },
@@ -188,7 +188,7 @@ const routes: Routes = [
       {
         path: 'rental/rentaltypes',
         loadChildren: () =>
-          import('./features/rental/rentaltypes/rentaltypes.module').then(
+          import('./features/rentals/rentaltypes/rentaltypes.module').then(
             (m) => m.RentalTypesModule,
           ),
       },
@@ -202,7 +202,7 @@ const routes: Routes = [
       {
         path: 'catalog',
         loadChildren: () =>
-          import('./features/catalog/catalog.module').then(
+          import('./features/rentals/catalog/catalog.module').then(
             (m) => m.CatalogModule,
           ),
       },
@@ -217,7 +217,7 @@ const routes: Routes = [
         path: 'rentals',
         canActivate: [AuthGuard],
         loadChildren: () =>
-          import('./features/rental/basic-rental/basic-rental.module').then(
+          import('./features/rentals/rental/basic-rental.module').then(
             (m) => m.BasicRentalModule,
           ),
       },
@@ -231,7 +231,7 @@ const routes: Routes = [
       {
         path: 'items',
         loadChildren: () =>
-          import('./features/items/items.module').then(
+          import('./features/stocks/items/items.module').then(
             (m) => m.ItemsModule,
           ),
       },
@@ -245,7 +245,7 @@ const routes: Routes = [
       {
         path: 'payment-methods',
         loadChildren: () =>
-          import('./features/payment-methods/payment-methods.module').then(
+          import('./features/financial/payment/payment-methods/payment-methods.module').then(
             (m) => m.PaymentMethodsModule,
           ),
       },
@@ -259,7 +259,7 @@ const routes: Routes = [
       {
         path: 'payment-frequencies',
         loadChildren: () =>
-          import('./features/payment-frequencies/payment-frequencies.module').then(
+          import('./features/financial/payment/payment-frequencies/payment-frequencies.module').then(
             (m) => m.PaymentFrequenciesModule,
           ),
       },
@@ -275,7 +275,7 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         data: { authorities: ['ROLE_ADMINISTRADOR'] },
         loadChildren: () =>
-          import('./features/system-settings/system-settings.module').then(
+          import('./features/settings/system-settings/system-settings.module').then(
             (m) => m.SystemSettingsModule,
           ),
       },
@@ -289,7 +289,7 @@ const routes: Routes = [
       {
         path: 'financial-settings',
         loadChildren: () =>
-          import('./features/financial-settings/financial-settings.module').then(
+          import('./features/settings/financial-settings/financial-settings.module').then(
             (m) => m.FinancialSettingsModule,
           ),
       },
@@ -303,7 +303,7 @@ const routes: Routes = [
       {
         path: 'receivables',
         loadChildren: () =>
-          import('./features/receivables/receivables.module').then(
+          import('./features/financial/receivables/receivables.module').then(
             (m) => m.ReceivablesModule,
           ),
       },
@@ -317,7 +317,7 @@ const routes: Routes = [
       {
         path: 'payables',
         loadChildren: () =>
-          import('./features/payables/payables.module').then(
+          import('./features/financial/payables/payables.module').then(
             (m) => m.PayablesModule,
           ),
       },
@@ -346,7 +346,7 @@ const routes: Routes = [
         path: 'suppliers',
         canActivate: [AuthGuard],
         loadChildren: () =>
-          import('./features/suppliers/suppliers.module').then(
+          import('./features/organization/suppliers/suppliers.module').then(
             (m) => m.SuppliersModule,
           ),
       },
